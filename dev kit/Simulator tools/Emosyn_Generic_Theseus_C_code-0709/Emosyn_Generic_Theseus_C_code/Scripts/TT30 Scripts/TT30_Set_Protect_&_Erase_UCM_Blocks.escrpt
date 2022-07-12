@@ -1,0 +1,401 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;*******************************************************************************
+; TT30_Set_Protect_&_Erase_UCM_Blocks.escrpt
+; ===========================================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/09 17:32:39 $
+;
+;  ------------------------------------------------------
+;  |Block index |R6 | R7  | Block size | Logical Address|
+;  |----------------------------------------------------|
+;  |     1      | 00 | 01  |    8k     |   0400 – 23FF  |
+;  |     2      | 00 | 02  |    4k     |   2400 – 33FF  |
+;  |     3      | 00 | 04  |    2k     |   3400 – 3BFF  |
+;  |     4      | 00 | 08  |    2k     |   3C00 – 43FF  |
+;  |     5      | 00 | 10  |    4k     |   4400 – 53FF  |
+;  |     6      | 00 | 20  |    4k     |   5400 – 63FF  |
+;  |     7      | 00 | 40  |    4k     |   6400 – 73FF  |
+;  |     8      | 00 | 80  |    1k     |   7400 – 77FF  |
+;  |     9      | 01 | 00  |    1k     |   7800 – 7BFF  |
+;  ------------------------------------------------------
+;
+;  Test starts at block3 as the Generic as code finishes before this point
+;  Last block not tested as bootloader resides here
+;
+;
+;
+;  WARNING
+;
+;  THE Erase_UCM_Blocks__R6R7_Passing APDU WILL ALWAYS RETURN 9000
+;  NO CHECKS ARE MADE IN FIRMWARE TO SEE IF ANY BLOCKS FAILED TO ERASE
+;  ALSO THE STATE MACHINE ALWAYS RETURNS SUCCESS IN THE NVFSMCON SFR
+;
+;
+;
+; TT30 Set Protect & Erase UCM blocks test
+; 1. Loads in TT30 memory defaults
+; 2. Offers user selection of terminal to run the scripter at
+; 3. Gets the ATR and compares it to the expected preset ATR value
+; 4. Loads in APDU commands values
+; 5. Ensure 3400h to 7800h is clear
+; 6. Write 55 AA 55 AA 55 AA 55 AA to block boundaries
+; 7. Protect block 3400 – 3BFF, 5400 – 63FF & 7400 – 77FF
+; 8. Attempt to erase blocks 3 to 8
+; 9. Read back block boundary data, protected blocks should have data intact
+; 10. Reset the chip, it should lose the temporary set protect settings
+; 11. Erase blocks 3 through to block 8
+; 12. Write 55 AA 55 AA 55 AA 55 AA to block boundaries
+; 13. Protect block 3400 – 3BFF, 5400 – 63FF & 7400 – 77FF permanently
+; 14. Attempt to erase blocks 3 to 8
+; 15. Read back block boundary data, protected blocks should have data intact
+;*******************************************************************************
+
+$Include: ..\Support\TT30_Definitions.escrpt					; Load in the chip specific addresses
+
+$Include: ..\Support\Select_Terminal.escrpt					; Select the terminal to run the scripter at
+
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+$Include: ..\Support\Generic_Code_INS_Values.escrpt				; Load in the APDU command INS values
+
+>SETVW: wAddress = 3400
+>SETVW: UCM_END_ADDRESS = 7800							; Address of last block of UCM before the bootloader
+
+;******************************************************************************
+; 5. Read UCM area checking it is all FFh
+;******************************************************************************
+>DISPLAY0: Checking UCM bytes are all FFh 
+
+>WHILE: (wAddress) <> (UCM_END_ADDRESS)
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 00
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0100						; Point to the next address
+>LOOP
+
+>SETVW: wAddress = 3400								; Reset start address to 3400 (block 3)
+>SETVW: WBlock_Start_Address = 3400
+>SETVW: WBlock_End_Address = 3BF8
+>SETVB: bBlock_Count = 03
+>SETVB: bNumberBytesWritten = 0							; Variable to remember number of bytes written
+
+;******************************************************************************
+; 6. Write 55 AA 55 AA 55 AA 55 AA to block boundaries
+;******************************************************************************
+>WHILE: (wAddress) < (UCM_END_ADDRESS)
+
+    >DISPLAY0: Writing pattern 55 AA 55 AA 55 AA 55 AA at address (wAddress)h boundaries
+
+    >WHILE: (bNumberBytesWritten) < 10						; This loop writes 16 bytes per page
+
+        >APDU: E5 (Write_Byte_UCM_Flash_Mode) (wAddress) 01 -- 55		; Write 55h to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+        >APDU: E5 (Write_Byte_UCM_Flash_Mode) (wAddress) 01 -- AA		; Write AAh to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+
+        >CALC: bNumberBytesWritten = (bNumberBytesWritten) + 2			; Increment number of bytes written in page
+
+        >IF: (bNumberBytesWritten) = 8						; After writing the pattern at the start point to the
+            >SETVW: wAddress = (WBlock_End_Address)				; end of the page offset, by 8 so pattern can be written
+        >ENDIF
+    >LOOP
+
+    >CALC: bBlock_Count = (bBlock_Count) + 1
+    >SETVB: bNumberBytesWritten = 0						; Reset the number of bytes written
+
+    >IF: (bBlock_Count) = 01
+        >SETVW: wAddress = 0400							; Set wAddress to block 1's start address
+        >CALC: WBlock_End_Address = 23F8					; Set wBlock_End_Address to block 1's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 02
+        >SETVW: wAddress = 2400							; Set wAddress to block 2's start address
+        >CALC: WBlock_End_Address = 33F8					; Set wBlock_End_Address to block 2's end address - 8
+    >ENDIF
+ 
+    >IF: (bBlock_Count) = 03
+        >SETVW: wAddress = 3400							; Set wAddress to block 3's start address
+        >CALC: WBlock_End_Address = 3BF8					; Set wBlock_End_Address to block 3's end address - 8
+    >ENDIF
+ 
+    >IF: (bBlock_Count) = 04
+        >SETVW: wAddress = 3C00							; Set wAddress to block 4's start address
+        >CALC: WBlock_End_Address = 43F8					; Set wBlock_End_Address to block 4's end address - 8
+    >ENDIF
+ 
+    >IF: (bBlock_Count) = 05
+        >SETVW: wAddress = 4400							; Set wAddress to block 5's start address
+        >CALC: WBlock_End_Address = 53F8					; Set wBlock_End_Address to block 5's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 06
+        >SETVW: wAddress = 5400							; Set wAddress to block 6's start address
+        >CALC: WBlock_End_Address = 63F8					; Set wBlock_End_Address to block 6's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 07
+        >SETVW: wAddress = 6400							; Set wAddress to block 7's start address
+        >CALC: WBlock_End_Address = 73F8					; Set wBlock_End_Address to block 7's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 08
+        >SETVW: wAddress = 7400							; Set wAddress to block 8's start address
+        >CALC: WBlock_End_Address = 77F8					; Set wBlock_End_Address to block 8's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 09
+        >SETVW: wAddress = 7800							; Set wAddress to block 9's start address
+        >CALC: WBlock_End_Address = 7BF8					; Set wBlock_End_Address to block 9's end address - 8
+    >ENDIF
+
+>LOOP
+
+;******************************************************************************
+; 7. Protect block 3400 – 3BFF, 5400 – 63FF & 7400 – 77FF
+;    Para2 is 0, Temp setting
+;    00 54 is block 3 3400 - 3BFF
+;             block 5 4400 - 53FF
+;             block 7 6400 - 73FF
+;******************************************************************************
+>APDU: E5 (Set_Protection_Status) 00 00 02 -- 00 54
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 8. Attempt to erase blocks 3 to 8
+;    Attempt to erase blocks 3 through to 7
+;    00 FC is block 3 3400 - 3BFF
+;             block 4 3C00 - 43FF
+;             block 5 4400 - 53FF
+;             block 6 5400 - 63FF
+;             block 7 6400 - 73FF
+;             block 8 7400 - 77FF
+;******************************************************************************
+>APDU: E5 (Erase_UCM_Blocks__R6R7_Passing) 00 FC -- --
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 9. Read back block boundary data, protected blocks should have data intact
+;    Data within block 3 (3400 - 3BFF), block 5 (4400 - 53FF) & block 7 (6400 - 73FF)
+;    should still have the written pattern present as these blocks were protected
+;******************************************************************************
+>DISPLAY0: Checking block boundaries for written pattern 55 AA 55 AA 55 AA 55 AA
+>APDU: E5 (XDATA_Space_Memory_Dump) 34 00 -- 08					; Read 8 bytes of block 3 start, pattern should be
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA						; intact as block is protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 3B F8 -- 10					; Read 16 bytes of block 3 - block 4 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 4 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 43 F8 -- 10					; Read 16 bytes of block 4 - block 5 boundary
+>COMP: RAPDU = FF FF FF FF FF FF FF FF 55 AA 55 AA 55 AA 55 AA			; End of block 4 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 53 F8 -- 10					; Read 16 bytes of block 5 - block 6 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 6 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 63 F8 -- 10					; Read 16 bytes of block 6 - block 7 boundary
+>COMP: RAPDU = FF FF FF FF FF FF FF FF 55 AA 55 AA 55 AA 55 AA			; End of block 6 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 73 F8 -- 10					; Read 16 bytes of block 7 - block 8 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 8 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 77 F8 -- 08					; Read 8 bytes of block 3 end, pattern should be
+>COMP: RAPDU = FF FF FF FF FF FF FF FF						; clear as it is not protected
+
+;******************************************************************************
+; 10. Reset the chip, it should lose the temporary set protect settings
+;******************************************************************************
+>TERM: GetATR									; Reset the chip - it will lose the Set Protect settings
+
+;******************************************************************************
+; 11. Erase blocks 3 through to block 8
+;******************************************************************************
+>APDU: E5 (Erase_UCM_Blocks__R6R7_Passing) 00 FC -- --				; Erase UCM blocks - from block 3 to block 8
+>COMP: SW1SW2 = 9000
+
+
+>SETVW: wAddress = 3400								; Reset start address to 3400 (block 3)
+>SETVW: WBlock_Start_Address = 3400
+>SETVW: WBlock_End_Address = 3BF8
+>SETVB: bBlock_Count = 03
+>SETVB: bNumberBytesWritten = 0							; Variable to remember number of bytes written
+
+;******************************************************************************
+; 12. Write 55 AA 55 AA 55 AA 55 AA to block boundaries
+;******************************************************************************
+>WHILE: (wAddress) < (UCM_END_ADDRESS)
+
+    >DISPLAY0: Writing pattern 55 AA 55 AA 55 AA 55 AA at address (wAddress)h boundaries
+
+    >WHILE: (bNumberBytesWritten) < 10						; This loop writes 16 bytes per page
+
+        >APDU: E5 (Write_Byte_UCM_Flash_Mode) (wAddress) 01 -- 55		; Write 55h to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+        >APDU: E5 (Write_Byte_UCM_Flash_Mode) (wAddress) 01 -- AA		; Write AAh to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+
+        >CALC: bNumberBytesWritten = (bNumberBytesWritten) + 2			; Increment number of bytes written in page
+
+        >IF: (bNumberBytesWritten) = 8						; After writing the pattern at the start point to the
+            >SETVW: wAddress = (WBlock_End_Address)				; end of the page offset, by 8 so pattern can be written
+        >ENDIF
+    >LOOP
+
+    >CALC: bBlock_Count = (bBlock_Count) + 1
+    >SETVB: bNumberBytesWritten = 0						; Reset the number of bytes written
+
+    >IF: (bBlock_Count) = 01
+        >SETVW: wAddress = 0400							; Set wAddress to block 1's start address
+        >CALC: WBlock_End_Address = 23F8					; Set wBlock_End_Address to block 1's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 02
+        >SETVW: wAddress = 2400							; Set wAddress to block 2's start address
+        >CALC: WBlock_End_Address = 33F8					; Set wBlock_End_Address to block 2's end address - 8
+    >ENDIF
+ 
+    >IF: (bBlock_Count) = 03
+        >SETVW: wAddress = 3400							; Set wAddress to block 3's start address
+        >CALC: WBlock_End_Address = 3BF8					; Set wBlock_End_Address to block 3's end address - 8
+    >ENDIF
+ 
+    >IF: (bBlock_Count) = 04
+        >SETVW: wAddress = 3C00							; Set wAddress to block 4's start address
+        >CALC: WBlock_End_Address = 43F8					; Set wBlock_End_Address to block 4's end address - 8
+    >ENDIF
+ 
+    >IF: (bBlock_Count) = 05
+        >SETVW: wAddress = 4400							; Set wAddress to block 5's start address
+        >CALC: WBlock_End_Address = 53F8					; Set wBlock_End_Address to block 5's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 06
+        >SETVW: wAddress = 5400							; Set wAddress to block 6's start address
+        >CALC: WBlock_End_Address = 63F8					; Set wBlock_End_Address to block 6's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 07
+        >SETVW: wAddress = 6400							; Set wAddress to block 7's start address
+        >CALC: WBlock_End_Address = 73F8					; Set wBlock_End_Address to block 7's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 08
+        >SETVW: wAddress = 7400							; Set wAddress to block 8's start address
+        >CALC: WBlock_End_Address = 77F8					; Set wBlock_End_Address to block 8's end address - 8
+    >ENDIF
+
+    >IF: (bBlock_Count) = 09
+        >SETVW: wAddress = 7800							; Set wAddress to block 9's start address
+        >CALC: WBlock_End_Address = 7BF8					; Set wBlock_End_Address to block 9's end address - 8
+    >ENDIF
+
+>LOOP
+
+;******************************************************************************
+; 13. Protect block 3400 – 3BFF, 5400 – 63FF & 7400 – 77FF
+;     Para2 is 1, Permanent setting
+;     00 54 is block 3 3400 - 3BFF
+;              block 5 4400 - 53FF
+;              block 7 6400 - 73FF
+;******************************************************************************
+>APDU: E5 (Set_Protection_Status) 00 01 02 -- 00 54
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 14. Attempt to erase blocks 3 to 8
+;     Attempt to erase blocks 3 through to 7
+;     00 FC is block 3 3400 - 3BFF
+;              block 4 3C00 - 43FF
+;              block 5 4400 - 53FF
+;              block 6 5400 - 63FF
+;              block 7 6400 - 73FF
+;              block 8 7400 - 77FF
+;******************************************************************************
+>APDU: E5 (Erase_UCM_Blocks__R6R7_Passing) 00 FC -- --
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 15. Read back block boundary data, protected blocks should have data intact
+;     Data within block 3 (3400 - 3BFF), block 5 (4400 - 53FF) & block 7 (6400 - 73FF)
+;     should still have the written pattern present as these blocks were protected
+;******************************************************************************
+>DISPLAY0: Checking block boundaries for written pattern 55 AA 55 AA 55 AA 55 AA
+>APDU: E5 (XDATA_Space_Memory_Dump) 34 00 -- 08					; Read 8 bytes of block 3 start, pattern should be
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA						; intact as block is protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 3B F8 -- 10					; Read 16 bytes of block 3 - block 4 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 4 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 43 F8 -- 10					; Read 16 bytes of block 4 - block 5 boundary
+>COMP: RAPDU = FF FF FF FF FF FF FF FF 55 AA 55 AA 55 AA 55 AA			; End of block 4 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 53 F8 -- 10					; Read 16 bytes of block 5 - block 6 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 6 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 63 F8 -- 10					; Read 16 bytes of block 6 - block 7 boundary
+>COMP: RAPDU = FF FF FF FF FF FF FF FF 55 AA 55 AA 55 AA 55 AA			; End of block 6 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 73 F8 -- 10					; Read 16 bytes of block 7 - block 8 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 8 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 77 F8 -- 08					; Read 8 bytes of block 3 end, pattern should be
+>COMP: RAPDU = FF FF FF FF FF FF FF FF	
+
+
+;******************************************************************************
+; 16. Reset the chip, it should retain the set protect settings as its permanent
+;******************************************************************************
+>TERM: GetATR									; Reset the chip - it should retain the Set Protect settings
+
+;******************************************************************************
+; 17. Attempt to erase blocks 3 to 8
+;     Attempt to erase blocks 3 through to 7
+;     00 FC is block 3 3400 - 3BFF
+;              block 4 3C00 - 43FF
+;              block 5 4400 - 53FF
+;              block 6 5400 - 63FF
+;              block 7 6400 - 73FF
+;              block 8 7400 - 77FF
+;******************************************************************************
+>APDU: E5 (Erase_UCM_Blocks__R6R7_Passing) 00 FC -- --				; Erase UCM blocks - from block 3 to block 8
+>COMP: SW1SW2 = 90 00
+
+;******************************************************************************
+; 18. Read back block boundary data, protected blocks should have data intact
+;     Data within block 3 (3400 - 3BFF), block 5 (4400 - 53FF) & block 7 (6400 - 73FF)
+;     should still have the written pattern present as these blocks were protected
+;******************************************************************************
+>APDU: E5 (XDATA_Space_Memory_Dump) 34 00 -- 08					; Read 8 bytes of block 3 start, pattern should be
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA						; intact as block is protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 3B F8 -- 10					; Read 16 bytes of block 3 - block 4 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 4 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 43 F8 -- 10					; Read 16 bytes of block 4 - block 5 boundary
+>COMP: RAPDU = FF FF FF FF FF FF FF FF 55 AA 55 AA 55 AA 55 AA			; End of block 4 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 53 F8 -- 10					; Read 16 bytes of block 5 - block 6 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 6 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 63 F8 -- 10					; Read 16 bytes of block 6 - block 7 boundary
+>COMP: RAPDU = FF FF FF FF FF FF FF FF 55 AA 55 AA 55 AA 55 AA			; End of block 6 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 73 F8 -- 10					; Read 16 bytes of block 7 - block 8 boundary
+>COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA FF FF FF FF FF FF FF FF			; Start of block 8 should be clear as it is not protected
+
+>APDU: E5 (XDATA_Space_Memory_Dump) 77 F8 -- 08					; Read 8 bytes of block 3 end, pattern should be
+>COMP: RAPDU = FF FF FF FF FF FF FF FF	
+
+
+
+>DISPLAY2: Test completed for Set Protect and Erase UCM Blocks
+
+>ENDL

@@ -1,0 +1,46 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Get_Diagnostic_Data.escrpt
+; ==========================
+;
+; $Revision: 1.2 $
+; $Author: chin $ 
+; $Date: 2005/11/01 18:49:39 $
+;
+; Generic script that checks the Get Diagnstic Data call functions correctly
+; The Diagnostic data is actually HAGE data namely:
+; : HAGE_Analog_Test
+; : HAGE_Analog_Current_Ref
+; : HAGE_Oscillator_Trim
+; : HAGE_Analog_Band_Gap
+; : HAGE_Analog_Voltage_Ref
+; : HAGE_Analog_Temperature (not on TT30)
+; : HAGE_TrimVolFreqLimit
+; : HAGE_Sense_Control
+; 
+; 1. Get Diagnostic Data making sure it is not all FF's
+; 2. Try the same command with invalid parameters
+;******************************************************************************
+
+>APDU: E5 (Get_Diagnostic_Data) 00 00 -- 08					; Get Diagnostic Data APDU command
+>SETVA: DiagArray = RAPDU							; Save the diagnostic data into an array
+
+>IF: (Terminal) = (Rania)							; If this test is using the simulator the ID is known
+    >COMP: RAPDU = 00 01 02 03 04 05 06 07
+>ELSE
+    >IF: (DiagArray) = 00							; Make sure that the diagnostic data is not all 00h's
+        >MESSAGE: Chip ID is all 00's						; If it is all 00h's it suggests the Chip's HAGE has not
+    >ENDIF									; been programmed in correctly
+>ENDIF
+
+>APDU: E5 (Get_Diagnostic_Data) FF 00 -- 08					; Get Diagnostic Data APDU command with set PARA1 value
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_Diagnostic_Data) 00 FF -- 08					; Get Diagnostic DataAPDU command with set PARA2 value
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_Diagnostic_Data) FF FF -- 08					; Get Diagnostic Data APDU command with set PARA1 & PARA2 value
+>COMP: SW1SW2 = 9000

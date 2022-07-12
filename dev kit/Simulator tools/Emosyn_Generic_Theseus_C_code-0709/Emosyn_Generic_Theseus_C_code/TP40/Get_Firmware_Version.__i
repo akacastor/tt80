@@ -1,0 +1,1 @@
+"..\Common\Get_Firmware_Version.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Get_Firmware_Version.lst) OBJECT(.\Get_Firmware_Version.obj)

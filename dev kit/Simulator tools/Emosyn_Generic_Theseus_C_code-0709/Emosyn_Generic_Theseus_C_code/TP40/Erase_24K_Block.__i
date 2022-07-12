@@ -1,0 +1,1 @@
+"..\Common\Erase_24K_Block.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Erase_24K_Block.lst) OBJECT(.\Erase_24K_Block.obj)

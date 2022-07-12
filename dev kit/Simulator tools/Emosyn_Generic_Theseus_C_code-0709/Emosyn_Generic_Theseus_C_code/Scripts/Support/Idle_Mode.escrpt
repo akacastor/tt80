@@ -1,0 +1,51 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Idle_Mode.escrpt
+; =================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/08 17:59:59 $
+;
+; Generic script that checks the Idle Mode functions correctly
+;
+; 1. Get the current idle mode after the ATR
+; 2. Loop round setting the chip to normal idle and deep idle
+;******************************************************************************
+
+>SETVB: bLoop_Count = 00
+
+;******************************************************************************
+; 1. Get the current idle mode after the ATR
+;******************************************************************************
+>APDU: E5 (Get_Idle_Mode) 00 00 -- 01							; The idle mode should be set to deep idle
+>COMP: RAPDU = 01									; The chip should be using the ISO CLK
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 2. Loop round setting the chip to normal idle and deep idle
+;******************************************************************************
+>DISPLAY0: Set and get the idle mode alternating between normal idle and deep idle modes
+
+>WHILE: (bLoop_Count) < 20
+
+    >APDU: E5 (Set_Idle_Mode) 00 00 -- --						; Set the chip to normal idle mode
+    >COMP: SW1SW2 = 9000
+
+    >APDU: E5 (Get_Idle_Mode) 00 00 -- 01						; Check the idle mode has been set correctly
+    >COMP: RAPDU = 00
+    >COMP: SW1SW2 = 9000
+
+    >APDU: E5 (Set_Idle_Mode) 01 00 -- --						; Set the chip to deep idle mode
+    >COMP: SW1SW2 = 9000
+
+    >APDU: E5 (Get_Idle_Mode) 00 00 -- 01						; Check the idle mode has been set correctly
+    >COMP: RAPDU = 01
+    >COMP: SW1SW2 = 9000
+
+    >CALC: bLoop_Count = (bLoop_Count) + 1						; Increment the loop count
+
+>LOOP

@@ -1,0 +1,1 @@
+"..\Common\Get_Chip_ID.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Get_Chip_ID.lst) OBJECT(.\Get_Chip_ID.obj)

@@ -1,0 +1,521 @@
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     1
+
+
+MACRO ASSEMBLER AX51 V2.14
+OBJECT MODULE PLACED IN TT80_STARTUP.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\AX51.EXE TT80_STARTUP.A51 SET(SMALL) DEBUG EP
+
+LOC    OBJ             LINE     SOURCE
+
+                          1     ;***************************************************************************************
+                               *****************
+                          2     ;
+                          3     ; Name:         TT80_Startup.A51
+                          4     ; Description:  Modified startup code based on Keil's Startup.a51
+                          5     ; Copyright:    Emosyn Inc. 2006
+                          6     ; 
+                          7     ;***************************************************************************************
+                               *****************
+                          8     ; The Example Code hereinbelow is provided "AS IS" and at your sole risk.  
+                          9     ; As to this Code, EMOSYN expressly disclaims all Warranties, including, but not limited
+                                to the implied 
+                         10     ; warranties of merchantability and fitness for a particular purpose. EMOSYN does not wa
+                               rrant that the 
+                         11     ; functions contained in this code will meet your requirements, or that the operation of
+                                the code will 
+                         12     ; be accurate, error-free, or non-infringing.  No oral or written information or advice 
+                               given by EMOSYN 
+                         13     ; or an authorized representative shall create or affect any Warranty.
+                         14     ;***************************************************************************************
+                               *****************
+                         15     ; $Revision: 1.2 $
+                         16     ; $Author: chin $ 
+                         17     ; $Date: 2006/02/22 16:18:29 $
+                         18     ;***************************************************************************************
+                               *****************
+                         19     
+                         20     ;$include (Firmware_API_JumpTable.inc) ; External declarations for API Jumptable library
+                    +1   21     
+                    +1   22     
+                    +1   23     
+                    +1   24     
+                    +1   25     
+                    +1   26     
+                    +1   27     
+                    +1   28     
+                    +1   29     
+                    +1   30     
+                    +1   31     
+                    +1   32     
+                    +1   33     
+                    +1   34     
+                    +1   35     
+                    +1   36     
+                    +1   37     
+                    +1   38     
+                    +1   39     
+                    +1   40     
+                    +1   41     
+                    +1   42     
+                    +1   43     ;$include (../Common_Titanium/Theseus_Titanium_Family.h)
+                    +2   44     
+                    +2   45     
+                    +2   46     
+                    +2   47     
+                    +2   48     
+                    +2   49     
+                    +2   50     
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     2
+
+                    +2   51     
+                    +2   52     
+                    +2   53     
+                    +2   54     
+                    +2   55     
+                    +2   56     
+                    +2   57     
+                    +2   58     
+                    +2   59     
+                    +2   60     
+                    +2   61     
+                    +2   62     
+                    +2   63     
+                    +2   64     
+                    +2   65     
+                    +2   66     
+                    +2   67     
+                    +2   68     
+                    +2   69     
+                    +2   70     
+                    +2   71     
+                    +2   72     
+                    +2   73     
+                    +2   74     
+                    +2   75     
+                    +2   76     
+  0080              +2   77     sfr NVFSMCON       = 0x80;
+  0081              +2   78     sfr SP             = 0x81;
+  0082              +2   79     sfr DPL            = 0x82;
+  0083              +2   80     sfr DPH            = 0x83;
+  0082              +2   81     sfr DPL0           = 0x82;
+  0083              +2   82     sfr DPH0           = 0x83;
+  0084              +2   83     sfr DPL1           = 0x84;
+  0085              +2   84     sfr DPH1           = 0x85;
+  0086              +2   85     sfr DPS            = 0x86;
+  0087              +2   86     sfr PCON           = 0x87;
+  0088              +2   87     sfr TCON           = 0x88;
+  0089              +2   88     sfr TMOD           = 0x89;
+  008A              +2   89     sfr TL0            = 0x8A;
+  008B              +2   90     sfr TL1            = 0x8B;
+  008C              +2   91     sfr TH0            = 0x8C;
+  008D              +2   92     sfr TH1            = 0x8D;
+                    +2   93     
+                    +2   94     
+                    +2   95     
+                    +2   96     
+  0093              +2   97     sfr DPX            = 0x93;
+  0093              +2   98     sfr DPX0           = 0x93;
+  0095              +2   99     sfr DPX1           = 0x95;
+                    +2  100     
+                    +2  101     
+                    +2  102     
+                    +2  103     
+  0098              +2  104     sfr SCON           = 0x98;
+  0099              +2  105     sfr SBUF           = 0x99;
+                    +2  106     
+  00A1              +2  107     sfr CBSL           = 0xA1;
+  00A2              +2  108     sfr MPTR           = 0xA2;
+  00A8              +2  109     sfr IE             = 0xA8;
+                    +2  110     
+  00B0              +2  111     sfr SECURITYSTATUS = 0xB0;
+  00B2              +2  112     sfr ISOCON         = 0xB2;
+  00B4              +2  113     sfr ISOTMR         = 0xB4;
+  00B8              +2  114     sfr IP             = 0xB8;
+                    +2  115     
+  00C0              +2  116     sfr PROGIO         = 0xC0;
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     3
+
+                    +2  117     
+  00C9              +2  118     sfr NvFsmMode      = 0xC9;
+                    +2  119     
+  00D0              +2  120     sfr PSW            = 0xD0;
+  00D8              +2  121     sfr SPSW           = 0xD8;
+                    +2  122     
+  00E0              +2  123     sfr ACC            = 0xE0;
+  00E8              +2  124     sfr EPSW           = 0xE8;
+                    +2  125     
+  00EA              +2  126     sfr MPTRX          = 0xEA;
+                    +2  127     
+  00F0              +2  128     sfr B              = 0xF0;
+                    +2  129     
+                    +2  130     
+                    +2  131     
+                    +2  132     
+  00F7              +2  133     sfr MFCON          = 0xF7;
+                    +2  134     
+                    +2  135     
+                    +2  136     
+                    +2  137     
+                    +2  138     
+                    +2  139     
+                    +2  140     
+                    +2  141     
+                    +2  142     
+                    +2  143     
+00D0.7              +2  144     sbit CY            = PSW^7;
+00D0.6              +2  145     sbit AC            = PSW^6;
+00D0.5              +2  146     sbit F0            = PSW^5;
+00D0.4              +2  147     sbit RS1           = PSW^4;
+00D0.3              +2  148     sbit RS0           = PSW^3;
+00D0.2              +2  149     sbit OV            = PSW^2;
+                    +2  150     
+00D0.0              +2  151     sbit P             = PSW^0; 
+                    +2  152     
+                    +2  153     
+                    +2  154     
+                    +2  155     
+0098.1              +2  156     sbit TI            = SCON^1;
+0098.0              +2  157     sbit RI            = SCON^0;
+                    +2  158     
+                    +2  159     
+                    +2  160     
+                    +2  161     
+0088.7              +2  162     sbit TF1           = TCON^7;
+0088.6              +2  163     sbit TR1           = TCON^6;
+0088.5              +2  164     sbit TF0           = TCON^5;
+0088.4              +2  165     sbit TR0           = TCON^4;
+0088.3              +2  166     sbit MFLT          = TCON^3;
+0088.1              +2  167     sbit SINT          = TCON^1;
+0088.1              +2  168     sbit USINT         = TCON^1;
+0088.0              +2  169     sbit SSINT         = TCON^0;
+                    +2  170     
+                    +2  171     
+                    +2  172     
+                    +2  173     
+00E8.0              +2  174     sbit AM            = EPSW^0;
+00E8.1              +2  175     sbit F1            = EPSW^1;
+                    +2  176     
+                    +2  177     
+                    +2  178     
+                    +2  179     
+                    +2  180     
+0080.0              +2  181     sbit FSM_FINISH    = NVFSMCON^0;
+0080.1              +2  182     sbit FSM_START     = NVFSMCON^1;
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     4
+
+0080.5              +2  183     sbit FSM_RESULT    = NVFSMCON^5;
+                    +2  184     
+                    +2  185     
+                    +2  186     
+                    +2  187     
+00C0.0              +2  188     sbit PULLUP_RES_STATE = PROGIO^0;
+                    +2  189     
+                    +2  190     
+                    +2  191     
+                    +2  192     
+                    +2  193     
+                    +2  194     
+                    +2  195     
+                    +2  196     
+                    +2  197     
+                    +1  198     
+                    +1  199     
+ 0003               +1  200     APDU_JUMPTABLE_SIZE     equ     0x03
+ 0400               +1  201     XRAM_START_ADDRESS      equ     0x0400
+                    +1  202     
+                    +1  203     ; Firmware API's / FSM Interface
+                    +1  204     extrn code (Firmware_WriteByteUCM)
+                    +1  205     extrn code (Firmware_MassEraseUCM)
+                    +1  206     extrn code (Firmware_GetChipID)
+                    +1  207     extrn code (Firmware_GetClockSourceSelectSFR)
+                    +1  208     extrn code (Firmware_SetClock)
+                    +1  209     extrn code (Firmware_GetFirmwareVersion)
+                    +1  210     extrn code (Firmware_SetSecurityAction)
+                    +1  211     extrn code (Firmware_SetSecurityMask)
+                    +1  212     extrn code (Firmware_GetClockControlSFR)
+                    +1  213     extrn code (Firmware_SetProtectStatus)
+                    +1  214     extrn code (Firmware_EraseUCM256Bytes)
+                    +1  215     extrn code (Firmware_EraseUCM512Bytes)
+                    +1  216     extrn code (Firmware_SetExecuteOnlyStatus)
+                    +1  217     extrn code (Firmware_EraseUCMBlock)
+                    +1  218     extrn code (Firmware_ErasePageUCM)
+                    +1  219     extrn code (Firmware_GetDiagnosticData)
+                    +1  220     
+                    +1  221     ; Software simulated API's
+                    +1  222     extrn code (Firmware_WriteUCM)
+                        223     
+                        224     ;
+                        225     ;------------------------------------------------------------------------------
+                        226     ;
+                        227     ;  User-defined Power-On Initialization of Memory
+                        228     ;
+                        229     ;  With the following EQU statements the initialization of memory
+                        230     ;  at processor reset can be defined:
+                        231     ;
+                        232     ;               ; the absolute start-address of IDATA memory is always 0
+ 0100                   233     IDATALEN        EQU     100H    ; the length of IDATA memory in bytes.
+                        234     ;
+ 0400                   235     XDATASTART      EQU     0400H   ; the absolute start-address of XDATA memory
+ 0400                   236     XDATALEN        EQU     0400H   ; the length of XDATA memory in bytes.
+                        237     ;
+ 0000                   238     PDATASTART      EQU     0H      ; the absolute start-address of PDATA memory
+ 0000                   239     PDATALEN        EQU     0H      ; the length of PDATA memory in bytes.
+                        240     ;
+                        241     ;  Notes:  The IDATA space overlaps physically the DATA and BIT areas of the
+                        242     ;          8051 CPU. At minimum the memory space occupied from the C51 
+                        243     ;          run-time routines must be set to zero.
+                        244     ;------------------------------------------------------------------------------
+                        245     ; 
+                        246     ;  Reentrant Stack Initilization
+                        247     ;
+                        248     ;  The following EQU statements define the stack pointer for reentrant
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     5
+
+                        249     ;  functions and initialized it:
+                        250     ;
+                        251     ;  Stack Space for reentrant functions in the SMALL model.
+ 0000                   252     IBPSTACK        EQU     0       ; set to 1 if small reentrant is used.
+ 0100                   253     IBPSTACKTOP     EQU     0FFH+1  ; set top of stack to highest location+1.
+                        254     ; 
+                        255     ;  Stack Space for reentrant functions in the LARGE model.      
+ 0000                   256     XBPSTACK        EQU     0       ; set to 1 if large reentrant is used.
+ 00010000               257     XBPSTACKTOP     EQU     0FFFFH+1; set top of stack to highest location+1.
+                        258     ;
+                        259     ;  Stack Space for reentrant functions in the COMPACT model.    
+ 0000                   260     PBPSTACK        EQU     0       ; set to 1 if compact reentrant is used.
+ 00010000               261     PBPSTACKTOP     EQU     0FFFFH+1; set top of stack to highest location+1.
+                        262     ;
+                        263     ;------------------------------------------------------------------------------
+                        264     ;
+                        265     ;  Page Definition for Using the Compact Model with 64 KByte xdata RAM
+                        266     ;
+                        267     ;  The following EQU statements define the xdata page used for pdata
+                        268     ;  variables. The EQU PPAGE must conform with the PPAGE control used
+                        269     ;  in the linker invocation.
+                        270     ;
+ 0000                   271     PPAGEENABLE     EQU     0       ; set to 1 if pdata object are used.
+ 0000                   272     PPAGE           EQU     0       ; define PPAGE number.
+                        273     ;
+                        274     ;------------------------------------------------------------------------------
+                        275     
+                        276     
+                        277                     NAME    ?C_STARTUP
+                        278     
+                        279     
+                        280     ; Declare C_C51STARTUP segment in code memory
+------                  281     ?C_C51STARTUP   SEGMENT   CODE
+                        282     
+                        283     ; Declare STACK as a relocateable code segment of 15 bytes
+------                  284     ?STACK          SEGMENT   IDATA 
+------                  285                     RSEG    ?STACK
+000000                  286                     DS      15
+                        287     
+                        288     ; Keil specific definition of main function
+                        289                     EXTRN CODE (?C_START)
+                        290     
+                        291     ; Declare C_STARTUP in code segment at 0800h 
+                        292                     PUBLIC  ?C_STARTUP
+                        293     
+000800                  294                     CSEG    AT      0800h
+000800 020000     F     295     ?C_STARTUP:     LJMP    STARTUP1
+                        296     
+                        297     ; Declare C_C51STARTUP as a reloacateable segment
+------                  298                     RSEG    ?C_C51STARTUP
+                        299     
+000000                  300     STARTUP1: ; Initialise IDATA, XDATA (SRAM) and PDATA to zero 
+                        301     ; Initialise iData to zero
+                        302     IF IDATALEN <> 0
+000000 78FF             303                     MOV     R0,#IDATALEN - 1; Initialise R0 with the start address (0) + len
+                               gth of IDATA and clear backwards 
+000002 E4               304                     CLR     A               ; Clear the accumulator
+000003 F6               305     IDATALOOP:      MOV     @R0,A           ; Copy 0 into the address where R0 is pointing a
+                               nd... 
+000004 D8FD             306                     DJNZ    R0,IDATALOOP    ; ... decrement and jump to IDATALOOP if R0 is n
+                               on zero
+                        307     ENDIF
+                        308     
+                        309     ; Initialise the SRAM to zero
+                        310     IF XDATALEN <> 0
+000006 900400           311                     MOV     DPTR,#XDATASTART        ; Initialise the data pointer with SRAM 
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     6
+
+                               start address
+000009 7F00             312                     MOV     R7,#LOW (XDATALEN)      ; Copy the low byte of XDATALEN into R7
+                        313     
+                        314     ; Convert e.g 0x101 to 0x201 to make the upcoming loop work correctly below 0x100
+                        315       IF (LOW (XDATALEN)) <> 0
+                                                MOV     R6,#(HIGH XDATALEN) +1
+                                  ELSE
+00000B 7E04             318                     MOV     R6,#HIGH (XDATALEN)
+                        319       ENDIF
+                        320     
+00000D E4               321                     CLR     A                       ; Clear the accumulator
+00000E F0               322     XDATALOOP:      MOVX    @DPTR,A                 ; Clear the address pointed to by data p
+                               ointer
+00000F A3               323                     INC     DPTR                    ; Increment the data pointer
+000010 DFFC             324                     DJNZ    R7,XDATALOOP            ; Decrement R7 and jump to XDATALOOP if 
+                               R7 is non zero 
+000012 DEFA             325                     DJNZ    R6,XDATALOOP            ; Decrement R6 and jump to XDATALOOP if 
+                               R6 is non zero
+                        326     ENDIF
+                        327     
+                        328     ; Assign the xData page used for pData variables if paged memroy is used 
+                        329     IF PPAGEENABLE <> 0
+                                                MOV     P2,#PPAGE
+                                ENDIF
+                        332     
+                        333     ; Initialise page memory to zero
+                        334     IF PDATALEN <> 0
+                                                MOV     R0,#PDATASTART          ; Copy PDATASTART into R0
+                                                MOV     R7,#LOW (PDATALEN)      ; Copy the low byte of PDATALEN into R7
+                                                CLR     A                       ; Clear the accumulator
+                                PDATALOOP:      MOVX    @R0,A                   ; Copy the contents of Accumulator into 
+                               the address pointed to by R0
+                                                INC     R0                      ; Increment R0 
+                                                DJNZ    R7,PDATALOOP            ; Decrement R7 and jump to PDATALOOP if 
+                               R7 is non zero
+                                ENDIF
+                        342     
+                        343     ; Initialise the iData stack
+                        344     IF IBPSTACK <> 0
+                                EXTRN DATA (?C_IBP)
+                                
+                                                MOV     ?C_IBP,#LOW IBPSTACKTOP
+                                ENDIF
+                        349     
+                        350     ; Initialise the xData stack
+                        351     IF XBPSTACK <> 0
+                                EXTRN DATA (?C_XBP)
+                                
+                                                MOV     ?C_XBP,#HIGH XBPSTACKTOP
+                                                MOV     ?C_XBP+1,#LOW XBPSTACKTOP
+                                ENDIF
+                        357     
+                        358     ; Initialise the pData stack
+                        359     IF PBPSTACK <> 0
+                                EXTRN DATA (?C_PBP)
+                                                MOV     ?C_PBP,#LOW PBPSTACKTOP
+                                ENDIF
+                        363     
+                        364     ; Load the stack pointer and execute main
+000014 758100     F     365                     MOV     SP,#?STACK-1
+000017 020000     E     366                     LJMP    ?C_START
+                        367     
+                        368                     END
+                        369     
+                        370     
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                             T Y P E  V A L U E     ATTRIBUTES
+
+?C_C51STARTUP. . . . . . . . . . .  C  SEG   00001AH       REL=UNIT, ALN=BYTE
+?C_START . . . . . . . . . . . . .  C  ADDR  -------       EXT
+?C_STARTUP . . . . . . . . . . . .  C  ADDR  0800H     R   SEG=?CO?TT80_STARTUP?3
+?STACK . . . . . . . . . . . . . .  I  SEG   00000FH       REL=UNIT, ALN=BYTE
+AC . . . . . . . . . . . . . . . .  B  ADDR  00D0H.6   A   
+ACC. . . . . . . . . . . . . . . .  D  ADDR  00E0H     A   
+AM . . . . . . . . . . . . . . . .  B  ADDR  00E8H.0   A   
+APDU_JUMPTABLE_SIZE. . . . . . . .  N  NUMB  0003H     A   
+B. . . . . . . . . . . . . . . . .  D  ADDR  00F0H     A   
+CBSL . . . . . . . . . . . . . . .  D  ADDR  00A1H     A   
+CY . . . . . . . . . . . . . . . .  B  ADDR  00D0H.7   A   
+DPH. . . . . . . . . . . . . . . .  D  ADDR  0083H     A   
+DPH0 . . . . . . . . . . . . . . .  D  ADDR  0083H     A   
+DPH1 . . . . . . . . . . . . . . .  D  ADDR  0085H     A   
+DPL. . . . . . . . . . . . . . . .  D  ADDR  0082H     A   
+DPL0 . . . . . . . . . . . . . . .  D  ADDR  0082H     A   
+DPL1 . . . . . . . . . . . . . . .  D  ADDR  0084H     A   
+DPS. . . . . . . . . . . . . . . .  D  ADDR  0086H     A   
+DPX. . . . . . . . . . . . . . . .  D  ADDR  0093H     A   
+DPX0 . . . . . . . . . . . . . . .  D  ADDR  0093H     A   
+DPX1 . . . . . . . . . . . . . . .  D  ADDR  0095H     A   
+EPSW . . . . . . . . . . . . . . .  D  ADDR  00E8H     A   
+F0 . . . . . . . . . . . . . . . .  B  ADDR  00D0H.5   A   
+F1 . . . . . . . . . . . . . . . .  B  ADDR  00E8H.1   A   
+FIRMWARE_ERASEPAGEUCM. . . . . . .  C  ADDR  -------       EXT
+FIRMWARE_ERASEUCM256BYTES. . . . .  C  ADDR  -------       EXT
+FIRMWARE_ERASEUCM512BYTES. . . . .  C  ADDR  -------       EXT
+FIRMWARE_ERASEUCMBLOCK . . . . . .  C  ADDR  -------       EXT
+FIRMWARE_GETCHIPID . . . . . . . .  C  ADDR  -------       EXT
+FIRMWARE_GETCLOCKCONTROLSFR. . . .  C  ADDR  -------       EXT
+FIRMWARE_GETCLOCKSOURCESELECTSFR .  C  ADDR  -------       EXT
+FIRMWARE_GETDIAGNOSTICDATA . . . .  C  ADDR  -------       EXT
+FIRMWARE_GETFIRMWAREVERSION. . . .  C  ADDR  -------       EXT
+FIRMWARE_MASSERASEUCM. . . . . . .  C  ADDR  -------       EXT
+FIRMWARE_SETCLOCK. . . . . . . . .  C  ADDR  -------       EXT
+FIRMWARE_SETEXECUTEONLYSTATUS. . .  C  ADDR  -------       EXT
+FIRMWARE_SETPROTECTSTATUS. . . . .  C  ADDR  -------       EXT
+FIRMWARE_SETSECURITYACTION . . . .  C  ADDR  -------       EXT
+FIRMWARE_SETSECURITYMASK . . . . .  C  ADDR  -------       EXT
+FIRMWARE_WRITEBYTEUCM. . . . . . .  C  ADDR  -------       EXT
+FIRMWARE_WRITEUCM. . . . . . . . .  C  ADDR  -------       EXT
+FSM_FINISH . . . . . . . . . . . .  B  ADDR  0080H.0   A   
+FSM_RESULT . . . . . . . . . . . .  B  ADDR  0080H.5   A   
+FSM_START. . . . . . . . . . . . .  B  ADDR  0080H.1   A   
+IBPSTACK . . . . . . . . . . . . .  N  NUMB  0000H     A   
+IBPSTACKTOP. . . . . . . . . . . .  N  NUMB  0100H     A   
+IDATALEN . . . . . . . . . . . . .  N  NUMB  0100H     A   
+IDATALOOP. . . . . . . . . . . . .  C  ADDR  0003H     R   SEG=?C_C51STARTUP
+IE . . . . . . . . . . . . . . . .  D  ADDR  00A8H     A   
+IP . . . . . . . . . . . . . . . .  D  ADDR  00B8H     A   
+ISOCON . . . . . . . . . . . . . .  D  ADDR  00B2H     A   
+ISOTMR . . . . . . . . . . . . . .  D  ADDR  00B4H     A   
+MFCON. . . . . . . . . . . . . . .  D  ADDR  00F7H     A   
+MFLT . . . . . . . . . . . . . . .  B  ADDR  0088H.3   A   
+MPTR . . . . . . . . . . . . . . .  D  ADDR  00A2H     A   
+MPTRX. . . . . . . . . . . . . . .  D  ADDR  00EAH     A   
+NVFSMCON . . . . . . . . . . . . .  D  ADDR  0080H     A   
+NVFSMMODE. . . . . . . . . . . . .  D  ADDR  00C9H     A   
+OV . . . . . . . . . . . . . . . .  B  ADDR  00D0H.2   A   
+P. . . . . . . . . . . . . . . . .  B  ADDR  00D0H.0   A   
+AX51 MACRO ASSEMBLER  TT80_STARTUP                                                          12/28/06 17:29:38 PAGE     8
+
+PBPSTACK . . . . . . . . . . . . .  N  NUMB  0000H     A   
+PBPSTACKTOP. . . . . . . . . . . .  N  NUMB  00010000H A   
+PCON . . . . . . . . . . . . . . .  D  ADDR  0087H     A   
+PDATALEN . . . . . . . . . . . . .  N  NUMB  0000H     A   
+PDATASTART . . . . . . . . . . . .  N  NUMB  0000H     A   
+PPAGE. . . . . . . . . . . . . . .  N  NUMB  0000H     A   
+PPAGEENABLE. . . . . . . . . . . .  N  NUMB  0000H     A   
+PROGIO . . . . . . . . . . . . . .  D  ADDR  00C0H     A   
+PSW. . . . . . . . . . . . . . . .  D  ADDR  00D0H     A   
+PULLUP_RES_STATE . . . . . . . . .  B  ADDR  00C0H.0   A   
+RI . . . . . . . . . . . . . . . .  B  ADDR  0098H.0   A   
+RS0. . . . . . . . . . . . . . . .  B  ADDR  00D0H.3   A   
+RS1. . . . . . . . . . . . . . . .  B  ADDR  00D0H.4   A   
+SBUF . . . . . . . . . . . . . . .  D  ADDR  0099H     A   
+SCON . . . . . . . . . . . . . . .  D  ADDR  0098H     A   
+SECURITYSTATUS . . . . . . . . . .  D  ADDR  00B0H     A   
+SINT . . . . . . . . . . . . . . .  B  ADDR  0088H.1   A   
+SP . . . . . . . . . . . . . . . .  D  ADDR  0081H     A   
+SPSW . . . . . . . . . . . . . . .  D  ADDR  00D8H     A   
+SSINT. . . . . . . . . . . . . . .  B  ADDR  0088H.0   A   
+STARTUP1 . . . . . . . . . . . . .  C  ADDR  0000H     R   SEG=?C_C51STARTUP
+TCON . . . . . . . . . . . . . . .  D  ADDR  0088H     A   
+TF0. . . . . . . . . . . . . . . .  B  ADDR  0088H.5   A   
+TF1. . . . . . . . . . . . . . . .  B  ADDR  0088H.7   A   
+TH0. . . . . . . . . . . . . . . .  D  ADDR  008CH     A   
+TH1. . . . . . . . . . . . . . . .  D  ADDR  008DH     A   
+TI . . . . . . . . . . . . . . . .  B  ADDR  0098H.1   A   
+TL0. . . . . . . . . . . . . . . .  D  ADDR  008AH     A   
+TL1. . . . . . . . . . . . . . . .  D  ADDR  008BH     A   
+TMOD . . . . . . . . . . . . . . .  D  ADDR  0089H     A   
+TR0. . . . . . . . . . . . . . . .  B  ADDR  0088H.4   A   
+TR1. . . . . . . . . . . . . . . .  B  ADDR  0088H.6   A   
+USINT. . . . . . . . . . . . . . .  B  ADDR  0088H.1   A   
+XBPSTACK . . . . . . . . . . . . .  N  NUMB  0000H     A   
+XBPSTACKTOP. . . . . . . . . . . .  N  NUMB  00010000H A   
+XDATALEN . . . . . . . . . . . . .  N  NUMB  0400H     A   
+XDATALOOP. . . . . . . . . . . . .  C  ADDR  000EH     R   SEG=?C_C51STARTUP
+XDATASTART . . . . . . . . . . . .  N  NUMB  0400H     A   
+XRAM_START_ADDRESS . . . . . . . .  N  NUMB  0400H     A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S).

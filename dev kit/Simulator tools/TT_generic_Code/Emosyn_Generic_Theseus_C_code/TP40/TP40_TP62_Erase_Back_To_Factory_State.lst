@@ -1,0 +1,411 @@
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.10
+OBJECT MODULE PLACED IN .\TP40_TP62_Erase_Back_To_Factory_State.obj
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE ..\Common_TP40_TP62\TP40_TP62_Erase_Back_To_Factory_State.A51 NOMOD51 SET(
+                      SMALL) DEBUG PRINT(.\TP40_TP62_Erase_Back_To_Factory_State.lst) OBJECT(.\TP40_TP62_Erase_Back_To_Factory_State.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;******************************************************************************************
+                             **************
+                       2     ;
+                       3     ; Name:         Erase_Back_To_Factory_State.A51
+                       4     ; Description:  Clears all of the EEPROM and UCM back to factory state
+                       5     ; Copyright:    Emosyn Inc. 2005
+                       6     ; 
+                       7     ;******************************************************************************************
+                             **************
+                       8     ; The Example Code hereinbelow is provided "AS IS" and at your sole risk.  
+                       9     ; As to this Code, EMOSYN expressly disclaims all Warranties, including, but not limited to
+                              the implied 
+                      10     ; warranties of merchantability and fitness for a particular purpose. EMOSYN does not warra
+                             nt that the 
+                      11     ; functions contained in this code will meet your requirements, or that the operation of th
+                             e code will 
+                      12     ; be accurate, error-free, or non-infringing.  No oral or written information or advice giv
+                             en by EMOSYN 
+                      13     ; or an authorized representative shall create or affect any Warranty.
+                      14     ;******************************************************************************************
+                             **************
+                      15     ; $Revision: 1.1 $
+                      16     ; $Author: chin $ 
+                      17     ; $Date: 2005/08/30 15:14:55 $
+                      18     ;******************************************************************************************
+                             **************
+                      19     
+                      20     ;$include (Firmware_API_JumpTable.inc) ; External declarations for jumptable library
+                +1    21     
+                +1    22     
+                +1    23     
+                +1    24     
+                +1    25     
+                +1    26     
+                +1    27     
+                +1    28     
+                +1    29     
+                +1    30     
+                +1    31     
+                +1    32     
+                +1    33     
+                +1    34     
+                +1    35     
+                +1    36     
+                +1    37     
+                +1    38     
+                +1    39     
+                +1    40     
+                +1    41     
+                +1    42     
+                +1    43     ;$include (../Common_Platinum/Theseus_Platinum_Family.h)
+                +2    44     
+                +2    45     
+                +2    46     
+                +2    47     
+                +2    48     
+                +2    49     
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     2
+
+                +2    50     
+                +2    51     
+                +2    52     
+                +2    53     
+                +2    54     
+                +2    55     
+                +2    56     
+                +2    57     
+                +2    58     
+                +2    59     
+                +2    60     
+                +2    61     
+                +2    62     
+                +2    63     
+                +2    64     
+                +2    65     
+                +2    66     
+                +2    67     
+                +2    68     
+                +2    69     
+                +2    70     
+                +2    71     
+                +2    72     
+                +2    73     
+                +2    74     
+                +2    75     
+  0080          +2    76     sfr NVFSMCON            = 0x80;
+  0081          +2    77     sfr SP                  = 0x81;
+  0082          +2    78     sfr DPL                 = 0x82;
+  0083          +2    79     sfr DPH                 = 0x83;
+  0082          +2    80     sfr DPL0                = 0x82;
+  0083          +2    81     sfr DPH0                = 0x83;
+  0084          +2    82     sfr DPL1                = 0x84;
+  0085          +2    83     sfr DPH1                = 0x85;
+  0086          +2    84     sfr DPS                 = 0x86;
+  0087          +2    85     sfr PCON                = 0x87;
+  0088          +2    86     sfr TCON                = 0x88;
+  0089          +2    87     sfr TMOD                = 0x89;
+  008A          +2    88     sfr TL0                 = 0x8A;
+  008B          +2    89     sfr TL1                 = 0x8B;
+  008C          +2    90     sfr TH0                 = 0x8C;
+  008D          +2    91     sfr TH1                 = 0x8D;
+                +2    92     
+                +2    93     
+                +2    94     
+                +2    95     
+  0098          +2    96     sfr SCON                = 0x98;
+  0099          +2    97     sfr SBUF                = 0x99;
+                +2    98     
+  00A1          +2    99     sfr CBSL                = 0xA1;
+                +2   100     
+                +2           
+                +2           
+  00A2          +2   103     sfr MPTR                = 0xA2;
+                +2   104     
+                +2   105     
+                +2   106     
+  00B0          +2   107     sfr SECURITYSTATUS      = 0xB0;
+  00B2          +2   108     sfr ISOCON              = 0xB2;
+  00B4          +2   109     sfr ISOTMR              = 0xB4;
+                +2   110     
+  00C0          +2   111     sfr PROGIO              = 0xC0;
+                +2   112     
+  00D0          +2   113     sfr PSW                 = 0xD0;
+                +2   114     
+  00E0          +2   115     sfr ACC                 = 0xE0;
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     3
+
+                +2   116     
+  00F0          +2   117     sfr B                   = 0xF0;
+                +2   118     
+  00F7          +2   119     sfr MFCON               = 0xF7;
+                +2   120     
+                +2   121     
+                +2   122     
+                +2   123     
+                +2   124     
+                +2   125     
+                +2   126     
+                +2   127     
+                +2   128     
+                +2   129     
+  00D7          +2   130     sbit CY                 = PSW^7;
+  00D6          +2   131     sbit AC                 = PSW^6;
+  00D5          +2   132     sbit F0                 = PSW^5;
+  00D4          +2   133     sbit RS1                = PSW^4;
+  00D3          +2   134     sbit RS0                = PSW^3;
+  00D2          +2   135     sbit OV                 = PSW^2;
+  00D1          +2   136     sbit M                  = PSW^1;
+  00D0          +2   137     sbit P                  = PSW^0; 
+                +2   138     
+                +2   139     
+                +2   140     
+                +2   141     
+  0099          +2   142     sbit TI                 = SCON^1;
+  0098          +2   143     sbit RI                 = SCON^0;
+                +2   144     
+                +2   145     
+                +2   146     
+                +2   147     
+  008F          +2   148     sbit TF1                = TCON^7;
+  008E          +2   149     sbit TR1                = TCON^6;
+  008D          +2   150     sbit TF0                = TCON^5;
+  008C          +2   151     sbit TR0                = TCON^4;
+                +2   152     
+                +2   153     
+                +2   154     
+                +2   155     
+                +2   156     
+                +2   157     
+                +2   158     
+                +2   159     
+                +2   160     
+                +2   161     
+                +2   162     
+                +1   163     
+                +1   164     
+  0003          +1   165     APDU_JUMPTABLE_SIZE             equ     0x03
+  0000          +1   166     XDATA_START_ADDRESS             equ     0x000000
+  5D00          +1   167     SD_BOOTLOADER_START_ADDRESS     equ     0x5D00
+                +1   168     
+                +1   169     extrn code (Firmware_WriteByteEE)
+                +1   170     extrn code (Firmware_WriteByteUCM)
+                +1   171     extrn code (Firmware_WriteUCM)
+                +1   172     extrn code (Firmware_MassEraseUCM)
+                +1   173     extrn code (Firmware_EraseEE8Bytes)
+                +1   174     extrn code (Firmware_EraseEE64Bytes)
+                +1   175     extrn code (Firmware_WriteEE)
+                +1   176     extrn code (Firmware_MassEraseEE)
+                +1   177     extrn code (Firmware_GetChipID)
+                +1   178     extrn code (Firmware_GetClockSourceSelectSFR)
+                +1   179     extrn code (Firmware_SetClock)
+                +1   180     extrn code (Firmware_GetInterruptEnable)
+                +1   181     extrn code (Firmware_SetInterruptEnable)
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     4
+
+                +1   182     extrn code (Firmware_GetFirmwareVersion)
+                +1   183     extrn code (Firmware_SetSecurityAction)
+                +1   184     extrn code (Firmware_SetSecurityMask)
+                +1   185     extrn code (Firmware_GetClockControlSFR)
+                +1   186     extrn code (Firmware_SetProtectStatus)
+                +1   187     extrn code (Firmware_ErasePageUCM)
+                +1   188     
+                +1   189     extrn code (Firmware_Erase24K_OTP)
+                +1   190     extrn code (Firmware_EraseOTPBlock)
+                +1   191     extrn code (Firmware_SetExecuteOnlyStatus)
+                +1   192     extrn code (Firmware_EraseConfigBlock)
+                     193     
+                     194     Public Erase_Back_To_Factory_State, _Erase_Back_To_Factory_State
+                     195     Public EraseNVM, _EraseNVM
+                     196     
+                     197     Extrn Code (TheseusPlatinum_EE_MassErase_Bootloader_Safe)
+                     198     
+                     199     EraseBackToFactoryState_Segment Segment Code
+----                 200             Rseg EraseBackToFactoryState_Segment
+                     201     
+                     202     using 0
+                     203     
+                     204     ;******************************************************************************************
+                             **************
+                     205     ;**+ Erase Back To Factory State
+                     206     ;
+                     207     ; Clears out the EEPROM and the UCM back to factory delivered state.
+                     208     ;
+                     209     ; Calls TheseusPlatinum_EE_MassErase_Bootloader_Safe to erase the EEPROM, copies the MassEr
+                             aseUCM code 
+                     210     ; segment into RAM, and runs it from here. This is so that when the device returns from the
+                              MassEraseUCM
+                     211     ; API, it can go into a forever loop.   
+                     212     ;******************************************************************************************
+                             **************
+                     213     ;
+                     214     ; Command Syntax
+                     215     ;
+                     216     ;       E5 30 00 00 00
+                     217     ;
+                     218     ; Inputs
+                     219     ;       None
+                     220     ;
+                     221     ; Outputs
+                     222     ;       None
+                     223     ;
+                     224     ; Example usage : Clears out the EEPROM and the UCM back to factory delivered state.
+                     225     ;
+                     226     ;       To Card                 ->      E5 30 00 00 00
+                     227     ;       Acknowledge from Card   <-      30
+                     228     ;       Response from Card      <-      90 00
+                     229     ;
+                     230     ;******************************************************************************************
+                             **************
+0000                 231     _EraseNVM:
+0000                 232     EraseNVM:
+0000                 233     _Erase_Back_To_Factory_State:
+0000                 234     Erase_Back_To_Factory_State:
+0000 120000   F      235             lcall   TheseusPlatinum_EE_MassErase_Bootloader_Safe    ; Erase all of the EEPROM e
+                             xcept the bootloader
+                     236     
+0003 7916            237             MOV     R1,#16h                 
+0005 758600          238             MOV     DPS, #00H
+0008 900000   F      239             MOV     DPTR,#Code_To_Go_Into_RAM
+                     240     
+000B                 241     Copy_Code_And_Jump_Forever_Loop_To_XRAM_And_Jump_To_It:
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     5
+
+000B 758601          242             MOV     DPS, #01H
+000E 90FC00          243             MOV     DPTR,#0FC00h                                    ; XRAM destination location
+                     244     
+0011                 245     Copy_Xram_Code_Loop:          
+0011 758600          246             mov     DPS, #00H
+0014 E0              247             movx    A,@DPTR                                         ; Transport_Key_Two_Code_To
+                             _Go_Into_XRAM
+0015 A3              248             inc     DPTR                                            ; Inc DPTR0
+0016 758601          249             mov     DPS, #01H                                       ; Copy it to XRAM
+0019 F0              250             movx    @DPTR,A
+001A A3              251             inc     DPTR                                            ; Inc DPTR1
+001B D9F4            252             djnz    R1,Copy_Xram_Code_Loop
+                     253     
+                     254     
+                     255             ;Now copy over the loop forever code. 
+001D 90FD00          256             mov     dptr,#0FD00h                                    ; This allows the XRAM code
+                              to be upto 256 bytes.
+0020 7402            257             mov     a,#02h
+0022 F0              258             movx    @dptr,a                                         ; LJMP
+0023 A3              259             inc     dptr
+0024 74FD            260             mov     a,#0FDh
+0026 F0              261             movx    @dptr,a                                         ; FDh
+0027 A3              262             inc     dptr
+0028 E4              263             clr     a
+0029 F0              264             movx    @dptr,a                                         ; 00h
+                     265     
+                     266             ; Now the erase code is in XRAM....so jump to it
+002A 02FC00          267             ljmp    0FC00h                                          ; This will Mass Erase the 
+                             UCM and go into a Forever loop. 
+                     268                                                                     ; Needs a reset to exit
+                     269             ; We never return from this....we are in a forever loop.
+                     270     
+002D                 271     Code_To_Go_Into_RAM:
+002D 120000   F      272             lcall   Firmware_MassEraseUCM                           ; 3 bytes
+0030 759990          273             mov     SBUF, #90h                                      ; 3
+0033 3099FD          274             jnb     SCON.1, $                                       ; 3
+0036 C299            275             clr     SCON.1                                          ; 2
+                     276     
+0038 759900          277             mov     SBUF, #00h                                      ; 3
+003B 3099FD          278             jnb     SCON.1, $                                       ; 3
+003E C299            279             clr     SCON.1                                          ; 2
+                     280     
+0040 02FD00          281             ljmp    0xFD00                                          ; 3. total 22 bytes
+                     282     
+                     283     end
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     6
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                                    T Y P E  V A L U E   ATTRIBUTES
+
+AC. . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.6 A   
+ACC . . . . . . . . . . . . . . . . . .    D ADDR   00E0H   A   
+APDU_JUMPTABLE_SIZE . . . . . . . . . .    N NUMB   0003H   A   
+B . . . . . . . . . . . . . . . . . . .    D ADDR   00F0H   A   
+CBSL. . . . . . . . . . . . . . . . . .    D ADDR   00A1H   A   
+CODE_TO_GO_INTO_RAM . . . . . . . . . .    C ADDR   002DH   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+COPY_CODE_AND_JUMP_FOREVER_LOOP_TO_XRAM_ANDC ADDRTO_000BH   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+COPY_XRAM_CODE_LOOP . . . . . . . . . .    C ADDR   0011H   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+CY. . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.7 A   
+DPH . . . . . . . . . . . . . . . . . .    D ADDR   0083H   A   
+DPH0. . . . . . . . . . . . . . . . . .    D ADDR   0083H   A   
+DPH1. . . . . . . . . . . . . . . . . .    D ADDR   0085H   A   
+DPL . . . . . . . . . . . . . . . . . .    D ADDR   0082H   A   
+DPL0. . . . . . . . . . . . . . . . . .    D ADDR   0082H   A   
+DPL1. . . . . . . . . . . . . . . . . .    D ADDR   0084H   A   
+DPS . . . . . . . . . . . . . . . . . .    D ADDR   0086H   A   
+ERASEBACKTOFACTORYSTATE_SEGMENT . . . .    C SEG    0043H       REL=UNIT
+ERASENVM. . . . . . . . . . . . . . . .    C ADDR   0000H   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+ERASE_BACK_TO_FACTORY_STATE . . . . . .    C ADDR   0000H   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+F0. . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.5 A   
+FIRMWARE_ERASE24K_OTP . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_ERASECONFIGBLOCK . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_ERASEEE64BYTES . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_ERASEEE8BYTES. . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_ERASEOTPBLOCK. . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_ERASEPAGEUCM . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_GETCHIPID. . . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_GETCLOCKCONTROLSFR . . . . . .    C ADDR   -----       EXT
+FIRMWARE_GETCLOCKSOURCESELECTSFR. . . .    C ADDR   -----       EXT
+FIRMWARE_GETFIRMWAREVERSION . . . . . .    C ADDR   -----       EXT
+FIRMWARE_GETINTERRUPTENABLE . . . . . .    C ADDR   -----       EXT
+FIRMWARE_MASSERASEEE. . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_MASSERASEUCM . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_SETCLOCK . . . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_SETEXECUTEONLYSTATUS . . . . .    C ADDR   -----       EXT
+FIRMWARE_SETINTERRUPTENABLE . . . . . .    C ADDR   -----       EXT
+FIRMWARE_SETPROTECTSTATUS . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_SETSECURITYACTION. . . . . . .    C ADDR   -----       EXT
+FIRMWARE_SETSECURITYMASK. . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_WRITEBYTEEE. . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_WRITEBYTEUCM . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_WRITEEE. . . . . . . . . . . .    C ADDR   -----       EXT
+FIRMWARE_WRITEUCM . . . . . . . . . . .    C ADDR   -----       EXT
+ISOCON. . . . . . . . . . . . . . . . .    D ADDR   00B2H   A   
+ISOTMR. . . . . . . . . . . . . . . . .    D ADDR   00B4H   A   
+M . . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.1 A   
+MFCON . . . . . . . . . . . . . . . . .    D ADDR   00F7H   A   
+MPTR. . . . . . . . . . . . . . . . . .    D ADDR   00A2H   A   
+NVFSMCON. . . . . . . . . . . . . . . .    D ADDR   0080H   A   
+OV. . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.2 A   
+P . . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.0 A   
+PCON. . . . . . . . . . . . . . . . . .    D ADDR   0087H   A   
+PROGIO. . . . . . . . . . . . . . . . .    D ADDR   00C0H   A   
+PSW . . . . . . . . . . . . . . . . . .    D ADDR   00D0H   A   
+RI. . . . . . . . . . . . . . . . . . .    B ADDR   0098H.0 A   
+RS0 . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.3 A   
+RS1 . . . . . . . . . . . . . . . . . .    B ADDR   00D0H.4 A   
+SBUF. . . . . . . . . . . . . . . . . .    D ADDR   0099H   A   
+SCON. . . . . . . . . . . . . . . . . .    D ADDR   0098H   A   
+SD_BOOTLOADER_START_ADDRESS . . . . . .    N NUMB   5D00H   A   
+A51 MACRO ASSEMBLER  TP40_TP62_ERASE_BACK_TO_FACTORY_STATE                                12/29/2006 16:28:11 PAGE     7
+
+SECURITYSTATUS. . . . . . . . . . . . .    D ADDR   00B0H   A   
+SP. . . . . . . . . . . . . . . . . . .    D ADDR   0081H   A   
+TCON. . . . . . . . . . . . . . . . . .    D ADDR   0088H   A   
+TF0 . . . . . . . . . . . . . . . . . .    B ADDR   0088H.5 A   
+TF1 . . . . . . . . . . . . . . . . . .    B ADDR   0088H.7 A   
+TH0 . . . . . . . . . . . . . . . . . .    D ADDR   008CH   A   
+TH1 . . . . . . . . . . . . . . . . . .    D ADDR   008DH   A   
+THESEUSPLATINUM_EE_MASSERASE_BOOTLOADER_SAFC ADDR   -----       EXT
+TI. . . . . . . . . . . . . . . . . . .    B ADDR   0098H.1 A   
+TL0 . . . . . . . . . . . . . . . . . .    D ADDR   008AH   A   
+TL1 . . . . . . . . . . . . . . . . . .    D ADDR   008BH   A   
+TMOD. . . . . . . . . . . . . . . . . .    D ADDR   0089H   A   
+TR0 . . . . . . . . . . . . . . . . . .    B ADDR   0088H.4 A   
+TR1 . . . . . . . . . . . . . . . . . .    B ADDR   0088H.6 A   
+XDATA_START_ADDRESS . . . . . . . . . .    N NUMB   0000H   A   
+_ERASENVM . . . . . . . . . . . . . . .    C ADDR   0000H   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+_ERASE_BACK_TO_FACTORY_STATE. . . . . .    C ADDR   0000H   R   SEG=ERASEBACKTOFACTORYSTATE_SEGMENT
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

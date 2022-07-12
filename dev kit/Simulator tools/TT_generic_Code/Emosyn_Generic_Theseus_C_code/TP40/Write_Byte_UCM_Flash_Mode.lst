@@ -1,0 +1,115 @@
+C51 COMPILER V7.50   WRITE_BYTE_UCM_FLASH_MODE                                             12/29/2006 16:28:16 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE WRITE_BYTE_UCM_FLASH_MODE
+OBJECT MODULE PLACED IN .\Write_Byte_UCM_Flash_Mode.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common\Write_Byte_UCM_Flash_Mode.c BROWSE INTVECTOR(0X8000) DEBUG OBJECT
+                    -EXTEND PRINT(.\Write_Byte_UCM_Flash_Mode.lst) OBJECT(.\Write_Byte_UCM_Flash_Mode.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         Write_Byte_UCM_Flash_Mode.c
+   4          * Description:  Contains function to write a byte to UCM memory
+   5          * Copyright:    Emosyn Inc. 2005
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.4 $
+  17          * $Author: amorris $ 
+  18          * $Date: 2005/10/26 09:41:11 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include "Firmware_API_JumpTable.h"
+  26          #include "Emosyn_Helper_Functions.h"
+  27          
+  28          
+  29          /******************************************************************************
+  30          * External and local function declarations 
+  31          ******************************************************************************/
+  32          
+  33          
+  34          /******************************************************************************
+  35          * External variable declarations
+  36          ******************************************************************************/
+  37          
+  38          
+  39          /******************************************************************************
+  40          *
+  41          * Function Name:      Write_Byte_UCM_Flash_Mode
+  42          * Function Inputs:    void 
+  43          * Function Outputs:   uint SW1SW2  9000h for success or
+  44          *                                  6581h for memory failure or
+  45          *                                  6700h for wrong LC
+  46          * Description:        Writes a byte to UCM memory
+  47          *
+  48          * APDU Syntax:        E5 26 PARA1 PARA2 01
+  49          * APDU Inputs:        PARA1      High byte of the UCM address space
+  50          *                     PARA2      Low byte of the UCM address space
+  51          *                     DataByte1  Data byte to write
+  52          * APDU Outputs:       None
+  53          *
+  54          * Example usage:      Write 55h to UCM address 1234h
+C51 COMPILER V7.50   WRITE_BYTE_UCM_FLASH_MODE                                             12/29/2006 16:28:16 PAGE 2   
+
+  55          * To Card             ->  E5 26 12 34 01
+  56          * ACK from Card       <-  26
+  57          * Data to Card        ->  55
+  58          * Response from Card  <-  90 00
+  59          *
+  60          ******************************************************************************/
+  61          uint Write_Byte_UCM_Flash_Mode (void)
+  62          {
+  63   1          if (PARA3 == 0x01)
+  64   1          {
+  65   2              /* Get the additional data byte (value to write into memory) */
+  66   2              TEMPVARIABLE1 = GetChar();
+  67   2      
+  68   2              /* Actual firmware API call */
+  69   2              cRet_Val_Char = Firmware_WriteByteUCM (Conv_Two_Bytes_To_Int (PARA1, PARA2), TEMPVARIABLE1);
+  70   2      
+  71   2              /* Check the firmware call result */
+  72   2              if (MSB_SET & cRet_Val_Char)
+  73   2              {
+  74   3                  SW1SW2 = SW1SW2_MEMORY_ERROR;   /* If MSB of return value set it */
+  75   3              }                                   /* indicates a memory operation error */
+  76   2              else
+  77   2              {
+  78   3                  SW1SW2 = SW1SW2_OK;         /* Firmware return value was 0 or the number */
+  79   3              }                               /* of pulses required for memory operation */
+  80   2          }
+  81   1      
+  82   1          else
+  83   1          {
+  84   2              SW1SW2 = SW1SW2_WRONG_LC_LENGTH;    /* Wrong amount of input bytes */
+  85   2          }
+  86   1      
+  87   1          return SW1SW2;
+  88   1      
+  89   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     66    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

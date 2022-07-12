@@ -1,0 +1,39 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;*******************************************************************************
+; TT30_Write_IDATA_Bytes_To_UCM.escrpt
+; ====================================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/02 14:32:26 $
+;
+; TT30 Write IDATA Bytes To UCM test
+; 1. Loads in TT30 memory defaults
+; 2. Offers user selection of terminal to run the scripter at
+; 3. Gets the ATR and compares it to the expected preset ATR value
+; 4. Loads in APDU commands values
+; 5. Calls the generic Write_IDATA_Bytes_To_UCM script
+;
+;*******************************************************************************
+
+$Include: ..\Support\TT30_Definitions.escrpt					; Load in the chip specific addresses
+
+$Include: ..\Support\Select_Terminal.escrpt					; Select the terminal to run the scripter at
+
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+$Include: ..\Support\Generic_Code_INS_Values.escrpt				; Load in the APDU command INS values
+
+>SETVW: UCM_END_ADDRESS = (BOOTLOADER_START_ADDRESS)				; End address of UCM is where the bootloader starts
+
+>SETVW: UCM_PAGE_SIZE = 0100							; Size of a UCM page
+
+$Include: ..\Support\Write_IDATA_Bytes_To_UCM.escrpt				; Call the generic Write_IDATA_Bytes_To_UCM script
+
+
+>DISPLAY2: Test completed for Write IDATA Bytes to UCM
+
+>ENDL

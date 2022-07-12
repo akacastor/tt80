@@ -1,0 +1,1 @@
+"..\Common\Set_Execute_Only_Status.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Set_Execute_Only_Status.lst) OBJECT(.\Set_Execute_Only_Status.obj)

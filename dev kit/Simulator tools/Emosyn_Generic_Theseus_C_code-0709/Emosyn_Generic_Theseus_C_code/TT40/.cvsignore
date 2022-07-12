@@ -1,0 +1,11 @@
+*.LST
+*.lst
+*.OBJ
+*.obj
+*.Opt
+*.M51
+*.hex
+*.lnp
+*.plg
+*.Bak
+Generic_TT40_Example_C_Code

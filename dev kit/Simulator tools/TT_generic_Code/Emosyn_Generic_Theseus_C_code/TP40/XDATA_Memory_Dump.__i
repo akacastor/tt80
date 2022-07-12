@@ -1,0 +1,1 @@
+"..\Common\XDATA_Memory_Dump.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\XDATA_Memory_Dump.lst) OBJECT(.\XDATA_Memory_Dump.obj)

@@ -1,0 +1,423 @@
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE TP40_TP62_MEMORY_WRITE
+OBJECT MODULE PLACED IN .\TP40_TP62_Memory_Write.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common_TP40_TP62\TP40_TP62_Memory_Write.c BROWSE INTVECTOR(0X8000) DEBUG
+                    - OBJECTEXTEND PRINT(.\TP40_TP62_Memory_Write.lst) OBJECT(.\TP40_TP62_Memory_Write.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         TP40_TP62_Memory_Write.c
+   4          * Description:  EEPROM writing functions
+   5          * Copyright:    Emosyn Inc. 2005 
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          ; $Revision: 1.5 $
+  17          ; $Author: chin $
+  18          ; $Date: 2005/10/25 11:22:33 $
+  19          ******************************************************************************/
+  20          
+  21          /* Header file inclusions */
+  22          #include "Firmware_API_JumpTable.h"
+  23          #include "Emosyn_Helper_Functions.h"
+  24          
+  25          /* External and local function declarations */
+  26          char Theseus_EEPROM_Write (uint EEPROM_Address, uchar *Source_Address, uint Length, uchar Mode);
+  27          
+  28          /* External and local variables  */
+  29          
+  30          #define Memory_Buffer_Mode 0 /* Buffer contains bytes to write */
+  31          #define Fixed_Data_Mode 1    /* The same byte is to be written repetively */
+  32          
+  33          
+  34          /******************************************************************************
+  35          *
+  36          * Function Name:      Write_X_Bytes_To_EEPROM
+  37          * Function Inputs:    void
+  38          * Function Outputs:   uint SW1SW2  9000h for success or
+  39          *                                  6581h for memory failure or
+  40          *                                  6700h for wrong LC
+  41          * Description:        Writes an input stream to EEPROM, writes in Flash mode if
+  42          *                     possible, if not it handles the EEPROM page erases.
+  43          *                     Example call demonstrates the usage of the
+  44          *                     Theseus_EEPROM_Write function in memory buffer mode
+  45          *
+  46          * APDU Syntax:        E5 70 PARA1 PARA2 PARA3
+  47          * APDU Inputs:        PARA1  High byte of the EEPROM address space of data
+  48          *                     PARA2  Low byte of the EEPROM address space of data
+  49          *                     PARA3  Number of bytes to write
+  50          *                     DATAX  Bytes to write to EEPROM
+  51          * APDU Outputs:       None
+  52          *
+  53          * Example usage:      Write sequential sequence bytes to 6000h in EEPROM
+  54          * To Card             ->  E5 70 60 00 08
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 2   
+
+  55          * ACK from Card       <-  70
+  56          * Data from Card      ->  01 02 03 04 05 06 07 08
+  57          * Response from Card  <-  90 00
+  58          *
+  59          ******************************************************************************/
+  60          uint Write_X_Bytes_To_EEPROM (void)
+  61          {
+  62   1          char cFunctionReturn = 0;
+  63   1          uint  uiNumber_To_Write;
+  64   1          uint  uiAddress;
+  65   1          uchar ucTemp_Buffer[16];
+  66   1          uchar ucCounter;
+  67   1      
+  68   1          if (PARA3 > 16) /* If the length of data expected is bigger than buffer exit with error */
+  69   1          {
+  70   2              SW1SW2 = SW1SW2_WRONG_LC_LENGTH;
+  71   2          }
+  72   1      
+  73   1          else
+  74   1          {
+  75   2              uiAddress = PARA1 << 8;
+  76   2              uiAddress = uiAddress | PARA2;
+  77   2      
+  78   2              /* Check the address to write to is in the EEPROM memory range */
+  79   2              if ((uiAddress < EEPROM_START_ADDRESS) || (uiAddress >= BOOTLOADER_START_ADDRESS))
+  80   2              {
+  81   3                  SW1SW2 = SW1SW2_INCORRECT_PARA;
+  82   3              }
+  83   2              else
+  84   2              {
+  85   3                  uiNumber_To_Write = PARA3;
+  86   3      
+  87   3                  for (ucCounter = 0; ucCounter < PARA3; ucCounter++)
+  88   3                  {
+  89   4                     ucTemp_Buffer[ucCounter] = GetChar();
+  90   4                  }
+  91   3      
+  92   3                  cFunctionReturn = Theseus_EEPROM_Write (uiAddress, ucTemp_Buffer, uiNumber_To_Write, Memory_Bu
+             -ffer_Mode); 
+  93   3      
+  94   3                  if (cFunctionReturn < 0x00)
+  95   3                  {
+  96   4                      SW1SW2 = SW1SW2_MEMORY_ERROR;
+  97   4                  }
+  98   3                  else
+  99   3                  {
+ 100   4                      SW1SW2 = SW1SW2_OK;
+ 101   4                  }
+ 102   3              }
+ 103   2          }
+ 104   1      
+ 105   1          return SW1SW2;
+ 106   1      
+ 107   1      } /* End of function */
+ 108          
+ 109          
+ 110          /******************************************************************************
+ 111          *
+ 112          * Function Name:      Fill_EEPROM_With_Byte
+ 113          * Function Inputs:    void
+ 114          * Function Outputs:   uint SW1SW2  9000h for success or
+ 115          *                                  6581h for memory failure or
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 3   
+
+ 116          *                                  6700h for wrong LC
+ 117          * Description:        Writes specified EEPROM area with byte
+ 118          *
+ 119          * APDU Syntax:        E5 76 PARA1 PARA2 PARA3
+ 120          * APDU Inputs:        PARA1  High byte of the EEPROM address space of data
+ 121          *                     PARA2  Low byte of the EEPROM address space of data
+ 122          *                     PARA3  3 data bytes following
+ 123          *                     DATA1  Byte to write to EEPROM
+ 124          *                     DATA2  High byte of the EEPROM address to write to
+ 125          *                     DATA3  Low byte of the length to write
+ 126          * APDU Outputs:       None
+ 127          *
+ 128          * Example usage:      Write 55h pattern across EEPROM staring at 6000h to 6040h
+ 129          *                     (0040h length)
+ 130          * To Card             ->  E5 76 60 00 03
+ 131          * ACK from Card       <-  76
+ 132          * Data to Card        ->  55 00 40
+ 133          * Response from Card  <-  90 00
+ 134          *
+ 135          ******************************************************************************/
+ 136          uint Fill_EEPROM_With_Byte (void)
+ 137          {
+ 138   1          char cFunctionReturn = 0;
+ 139   1          uint  uiLength;
+ 140   1          uint  uiAddress;
+ 141   1          uchar ucByte_To_Fill_With;
+ 142   1              
+ 143   1          /* Check that only 3 data bytes are to be received otherwise exit with error */
+ 144   1          if (PARA3 > 3)
+ 145   1          {
+ 146   2              SW1SW2 = SW1SW2_WRONG_LC_LENGTH;
+ 147   2          }
+ 148   1      
+ 149   1          else
+ 150   1          {
+ 151   2              uiAddress = PARA1 << 8;
+ 152   2              uiAddress = uiAddress | PARA2;
+ 153   2      
+ 154   2              /* Check the address to write to is in the EEPROM memory range */
+ 155   2              if ((uiAddress < EEPROM_START_ADDRESS) || (uiAddress >= BOOTLOADER_START_ADDRESS))
+ 156   2              {
+ 157   3                  SW1SW2 = SW1SW2_INCORRECT_PARA;
+ 158   3              }
+ 159   2              else
+ 160   2              {
+ 161   3                  ucByte_To_Fill_With = GetChar();    /* 1st data byte */
+ 162   3      
+ 163   3                  uiLength = GetChar();               /* 2nd data byte */
+ 164   3                  uiLength = uiLength << 8;
+ 165   3                  uiLength = uiLength + GetChar();    /* 3rd data byte */
+ 166   3      
+ 167   3                  cFunctionReturn = Theseus_EEPROM_Write (uiAddress, &ucByte_To_Fill_With, uiLength, Fixed_Data_
+             -Mode);
+ 168   3      
+ 169   3                  if (cFunctionReturn < 0x00)
+ 170   3                  {
+ 171   4                      SW1SW2 =  SW1SW2_MEMORY_ERROR;
+ 172   4                  }
+ 173   3                  else
+ 174   3                  {
+ 175   4                      SW1SW2 =  SW1SW2_OK;
+ 176   4                  }
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 4   
+
+ 177   3              }
+ 178   2          }
+ 179   1      
+ 180   1          return SW1SW2;
+ 181   1      
+ 182   1      } /* End of function */
+ 183          
+ 184          
+ 185          /******************************************************************************
+ 186          *
+ 187          * Function Name:      Theseus_EEPROM_Write
+ 188          * Function Inputs:    uint EEPROM_Address
+ 189          *                     uchar *Source_Address
+ 190          *                     uint Length
+ 191          *                     uchar Mode
+ 192          * Function Outputs:   char ReturnValue - Either success (0) or fail (<0)
+ 193          * Description:        Write to EEPROM function
+ 194          *                     Fills EEPROM with a byte or writes a memory buffer to EEPROM
+ 195          *                     Write in Flash mode, if not it will handle the page erases
+ 196          *
+ 197          *******************************************************************************/
+ 198          char Theseus_EEPROM_Write (uint EEPROM_Address, uchar *Source_Address, uint Length, uchar Mode)
+ 199          {
+ 200   1          uint Temp_Counter = 0;
+ 201   1          uchar Temp_buffer[14];                              /* Maximum of 14 bytes to back up as if we are writing 2 new */
+ 202   1                                              /* bytes that fall on a 2 page boundaries (16-2)  bytes remain */
+ 203   1          char ReturnValue;
+ 204   1      
+ 205   1          uint Temp_Address, Counter;
+ 206   1          uchar xdata *Temp_EEPROM_Address;
+ 207   1          uchar *Temp_Source_Address;
+ 208   1          uchar Input_Data = *Source_Address;
+ 209   1      
+ 210   1          uchar ExistingByte;
+ 211   1          uchar ByteToWrite;
+ 212   1          
+ 213   1              uchar Number_To_Backup_Before_New_Data;
+ 214   1          uchar Number_To_Backup_After_New_Data;
+ 215   1              
+ 216   1          uchar WeNeedToErasePageFirst = 0;
+ 217   1      
+ 218   1          uchar xdata *ucpTempPointer;
+ 219   1      
+ 220   1          /* We are using WriteByteEE instead of the WriteEE as WriteEE requires that */
+ 221   1          /* data to be written to be stored in IDATA. WriteByteEE has the byte to be */
+ 222   1          /* written passed in R5. This way C can pass any type of pointer into this function */
+ 223   1      
+ 224   1          Temp_EEPROM_Address = EEPROM_Address;
+ 225   1          Temp_Source_Address = Source_Address;
+ 226   1      
+ 227   1      
+ 228   1          /******************************************************************************/
+ 229   1          /* First check if there is any data to be written that will change the EEPROM */
+ 230   1          /* memory from a bit from 0 to 1                                              */    
+ 231   1          /* If any transistions are detected from 0 to 1 a page erase will be required */
+ 232   1          /* Otherwise the data can be written diretly with no page erases              */
+ 233   1          /******************************************************************************/
+ 234   1          for (Counter = 0; Counter < Length; Counter++)
+ 235   1          {
+ 236   2              ExistingByte = *Temp_EEPROM_Address++;
+ 237   2              ByteToWrite = *Temp_Source_Address++;
+ 238   2      
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 5   
+
+ 239   2              if ((~ExistingByte) & ByteToWrite) /* 0 -> 1 transistions require page erase first */
+ 240   2              {
+ 241   3                  WeNeedToErasePageFirst = 1;    /* Flag that a page erase is required to write the data */
+ 242   3                  break;
+ 243   3              }
+ 244   2          }
+ 245   1      
+ 246   1          /* Here we know if we need to erase the memory prior to writing */
+ 247   1          /* If we need to erase (WeNeedToErasePageFirst==1) else WeNeedToErasePageFirst==0 */
+ 248   1          Temp_EEPROM_Address = EEPROM_Address;
+ 249   1          Temp_Source_Address = Source_Address;       
+ 250   1      
+ 251   1          /***************************************************************************************/
+ 252   1          /* The following for loop will write the data to EEPROM if no page erasing is required */
+ 253   1          /***************************************************************************************/
+ 254   1          if (!WeNeedToErasePageFirst)
+ 255   1          {
+ 256   2              for (Counter = 0; Counter < Length; Counter++)
+ 257   2              {
+ 258   3                  if (Mode == Fixed_Data_Mode)   /* Write a block of the same data byte */
+ 259   3                  {
+ 260   4                      ReturnValue = Firmware_WriteByteEE (EEPROM_Address++, Input_Data);
+ 261   4                  }
+ 262   3                  else   /* Write from the buffer to memory */
+ 263   3                  {
+ 264   4                      ReturnValue = Firmware_WriteByteEE ((uint)Temp_EEPROM_Address + Counter, * Temp_Source_Add
+             -ress ++);
+ 265   4                  }
+ 266   3      
+ 267   3                  if (ReturnValue < 0x00) /* If the firmware write byte returned an error, exit now */
+ 268   3                      break;
+ 269   3              }
+ 270   2      
+ 271   2              return (ReturnValue);
+ 272   2          }
+ 273   1          else
+ 274   1          {
+ 275   2              /**************************************************************************************
+ 276   2              * The code below is executed if any data to be written causes a bit 0 to 1 transistion
+ 277   2                      * Data that is not changing needs to be backed up first, the page(s) can then be erased
+ 278   2              * The non-changing data and new data can then be written
+ 279   2              ***************************************************************************************/
+ 280   2      
+ 281   2              /*******************************************************************************************
+ 282   2              * Example Code usage.
+ 283   2              *
+ 284   2              * 4020h                           4028h
+ 285   2              *   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+ 286   2              *   |                               |                               |
+ 287   2              *   |   Existing 8 Byte Page A      |   Existing 8 Byte Page B      |
+ 288   2              *   |   at address 4020h            |   at address 4028h            |
+ 289   2              *   |                               |                               |
+ 290   2              *   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+ 291   2              *
+ 292   2              *         4022h
+ 293   2              *           |---|---|---|---|---|---|---|---|
+ 294   2              *           |                               |   Bytes at 4020h, 4021h (before new data) &
+ 295   2              *           |       New data to write       |   402Bh, 402Ch, 402D, 402Eh & 402Fh
+ 296   2              *           |       at address 4022->402A   |   (after new data)need to be backed up first
+ 297   2              *           |                               |
+ 298   2              *           |---|---|---|---|---|---|---|---|
+ 299   2              *
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 6   
+
+ 300   2              * To backup the 2 existing pages correctly we need to know how many bytes of each to backup
+ 301   2              *******************************************************************************************/
+ 302   2      
+ 303   2              /* Calculate how much data we need to backup */
+ 304   2              Temp_Address = EEPROM_Address;
+ 305   2      
+ 306   2              /* Page align the EEPROM address. This gives us the start of data that needs to be backed up */
+ 307   2                      Temp_EEPROM_Address = (Temp_Address & 0xFFF8);
+ 308   2      
+ 309   2              /* Find the number of bytes to backup BEFORE the start of the new data */
+ 310   2              /* In the example above this is 2. 4020h and 4021h will not change */
+ 311   2              Number_To_Backup_Before_New_Data = Temp_Address & 0x07;
+ 312   2      
+ 313   2              /* Find the number of bytes to backup AFTER the start of the new data */
+ 314   2              /* In the example above this is 6. 402Bh -> 402Fh will not change */
+ 315   2                      Number_To_Backup_After_New_Data =(0x08 - ((Temp_Address + Length) & 0x07)) & 0x07;
+ 316   2      
+ 317   2              /* Backup all the necessary data */
+ 318   2              for (Counter = 0; Counter < (Number_To_Backup_Before_New_Data + Number_To_Backup_After_New_Data); 
+             -Counter++)
+ 319   2              {
+ 320   3                  if (Counter < Number_To_Backup_Before_New_Data) /* backup data in page before new data */
+ 321   3                  {
+ 322   4                      Temp_buffer[Counter] = *(Temp_EEPROM_Address + Counter);
+ 323   4                  }
+ 324   3                  else
+ 325   3                  {   /* backup data in page after new data */ 
+ 326   4                      ucpTempPointer = EEPROM_Address + Length + Temp_Counter++; 
+ 327   4                      Temp_buffer[Counter] = *ucpTempPointer;
+ 328   4                  }
+ 329   3              }
+ 330   2      
+ 331   2              Temp_Counter = 0;
+ 332   2              Temp_Source_Address = Source_Address;
+ 333   2      
+ 334   2      
+ 335   2              /*************************************************************
+ 336   2              * The code below loops round performing one of the following:
+ 337   2              *  : erase an EEPROM page
+ 338   2              *  : write data before new data
+ 339   2              *  : write data after new data
+ 340   2              *  : write new data
+ 341   2              *************************************************************/
+ 342   2              for (Counter = 0; Counter < (Length + Number_To_Backup_Before_New_Data + Number_To_Backup_After_Ne
+             -w_Data); Counter++)
+ 343   2              {
+ 344   3                  /* Do we need to erase a page of memory on this loop */
+ 345   3                  if ((Counter % 8) == 0)
+ 346   3                  {
+ 347   4                      /* Erase the EEPROM page (8 bytes) */
+ 348   4                      Firmware_EraseEE8Bytes ((uint)Temp_EEPROM_Address + Counter);
+ 349   4                  }
+ 350   3                  if (Counter < Number_To_Backup_Before_New_Data)
+ 351   3                  {
+ 352   4                      /* Write back the existing data thats before the new data */
+ 353   4                      ReturnValue = Firmware_WriteByteEE((uint)Temp_EEPROM_Address + Counter, Temp_buffer[Counte
+             -r]);
+ 354   4                  }
+ 355   3                  else if (Counter < Number_To_Backup_Before_New_Data + Length)
+ 356   3                  {   /* Write the new data to EEPROM */
+ 357   4                      if (Mode == Fixed_Data_Mode)
+ 358   4                      {    /* Write a block of the same data byte */
+C51 COMPILER V7.50   TP40_TP62_MEMORY_WRITE                                                12/29/2006 16:28:11 PAGE 7   
+
+ 359   5                          ReturnValue = Firmware_WriteByteEE (EEPROM_Address++, Input_Data);
+ 360   5                      }
+ 361   4                      else
+ 362   4                      {    /* Write from the buffer to memory */
+ 363   5                          ReturnValue = Firmware_WriteByteEE ((uint)Temp_EEPROM_Address + Counter, *Temp_Source_
+             -Address ++);
+ 364   5                      }
+ 365   4                  }
+ 366   3                  else        
+ 367   3                  {   /* Write back the existing data after the new data */
+ 368   4                      ReturnValue = Firmware_WriteByteEE ((uint)Temp_EEPROM_Address + Counter, Temp_buffer[Numbe
+             -r_To_Backup_Before_New_Data + Temp_Counter++]);
+ 369   4                  }
+ 370   3      
+ 371   3                  if (ReturnValue < 0x00)
+ 372   3                      break;
+ 373   3      
+ 374   3              } /* End For loop */
+ 375   2      
+ 376   2              return ReturnValue;
+ 377   2          } /* End ELSE statement using erase */
+ 378   1      
+ 379   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    833    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      62
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

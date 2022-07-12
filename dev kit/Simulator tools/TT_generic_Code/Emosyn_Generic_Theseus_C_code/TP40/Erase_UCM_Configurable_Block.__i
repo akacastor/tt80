@@ -1,0 +1,1 @@
+"..\Common\Erase_UCM_Configurable_Block.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Erase_UCM_Configurable_Block.lst) OBJECT(.\Erase_UCM_Configurable_Block.obj)

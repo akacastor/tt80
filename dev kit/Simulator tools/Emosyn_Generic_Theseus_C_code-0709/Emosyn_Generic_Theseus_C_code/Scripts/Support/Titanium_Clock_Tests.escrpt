@@ -1,0 +1,148 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Titanium_Clock_Tests.escrpt
+; ===========================
+;
+; $Revision: 1.2 $
+; $Author: chin $ 
+; $Date: 2005/11/02 11:48:04 $
+;
+; Generic script for Titanium chips (no PLL) to test the clock settings
+; Generic code defaults to using the internal oscillator at 60MHz
+; 
+; 1. Check the chip is using the internal oscillator running at 60MHz
+; 2. Cycle through the 16 different internal oscillator speeds available for
+;    the chip checking after each switch the registers holds the correct setting
+; 3. Stress test the internal oscillator by cycling through the highest and
+;     lowest possible speeds
+; 4. Cycle through the possible speeds for the ISO Clock checking after each
+;     switch the registers holds the correct setting
+; 5. Stress test the ISO Clock by cycling through the highest and lowest
+;     possible speeds
+;******************************************************************************
+
+;******************************************************************************
+; 1. Check the chip is using the internal oscillator running at 60MHz
+;******************************************************************************
+>APDU: E5 (Get_Clock_Source_Select_SFR) 00 00 -- 01				; Get Clock Source value. Should be Internal Osc as we are in Generic code
+>COMP :RAPDU = 1A
+>COMP :SW1SW2 = 90 00
+
+>APDU: E5 (Get_Clock_Control_SFR) 00 00 -- 01					; Get Clock Control. Should be 60 MHz as we are in Generic code
+>COMP :RAPDU = 0F
+>COMP :SW1SW2 = 90 00
+
+;******************************************************************************
+; 2. Cycle through the 16 different internal oscillator speeds available for
+;    the chip checking after each switch the registers holds the correct setting
+;******************************************************************************
+>SETVB: bDivide_Ratio = 0
+>SETVB: bMax_Divide_Ratio = 10
+
+>DISPLAY0: Testing Internal Oscillator with all Divider Ratio codes
+
+>WHILE :(bDivide_Ratio) < (bMax_Divide_Ratio)
+
+	>APDU: E5 (Set_Clock) 00 00 03 -- 00 00 (bDivide_Ratio)			; Set Clock to Internal Osc. (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Source_Select_SFR) 00 00 -- 01			; Get Clock Source value. Should be Internal Osc
+	>COMP :RAPDU = 1A
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Control_SFR) 00 00 -- 01				; Get Clock Control value
+	>COMP :RAPDU = (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+	>CALC :bDivide_Ratio = (bDivide_Ratio) + 1
+>LOOP
+
+;******************************************************************************
+; 3. Stress test the internal oscillator by cycling through the highest and
+;     lowest possible speeds
+;******************************************************************************
+>SETVB: bDivide_Ratio = 0F
+>SETVB: bLoop_Count = 00
+
+>DISPLAY0: Cycling Internal Oscillator with highest and lowest Divider Ratio code
+
+>WHILE :(bLoop_Count) < 20							; Attempt switching of ratio 32 times
+
+	>APDU: E5 (Set_Clock) 00 00 03 -- 00 00 (bDivide_Ratio)			; Set Clock to Internal Osc. (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Source_Select_SFR) 00 00 -- 01			; Get Clock Source value. Should be Internal Osc
+	>COMP :RAPDU = 1A
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Control_SFR) 00 00 -- 01				; Get Clock Control value
+	>COMP :RAPDU = (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+        >IF: (bDivide_Ratio) = 0F
+            >SETVB: bDivide_Ratio = 0E						; Switch to the highest divide ratio to give lowest frequency
+        >ELSE
+            >SETVB: bDivide_Ratio = 0F						; Switch to the lowest divide ratio to give highest frequency
+        >ENDIF
+
+        >CALC: bLoop_Count = (bLoop_Count) + 1
+>LOOP
+
+;******************************************************************************
+; 4. Cycle through the possible speeds for the ISO Clock checking after each
+;     switch the registers holds the correct setting
+;******************************************************************************
+>SETVB: bDivide_Ratio = 0
+>SETVB: bMax_Divide_Ratio = 10	
+
+>DISPLAY0: Testing ISO Clock with all Divider Ratio codes
+
+>WHILE :(bDivide_Ratio) < (bMax_Divide_Ratio)
+
+	>APDU: E5 (Set_Clock) 00 00 03 -- 02 00 (bDivide_Ratio)			; Set Clock to ISO Clock. (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Source_Select_SFR) 00 00 -- 01			; Get Clock Source value. Should be ISO Clock
+	>COMP :RAPDU = 00
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Control_SFR) 00 00 -- 01				; Get Clock Control. 
+	>COMP :RAPDU = (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+	>CALC :bDivide_Ratio = (bDivide_Ratio) + 1
+>LOOP
+
+;******************************************************************************
+; 5. Stress test the ISO Clock by cycling through the highest and lowest
+;     possible speeds
+;******************************************************************************
+>SETVB: bDivide_Ratio = 0F
+>SETVB: bLoop_Count = 00
+
+>DISPLAY0: Cycling ISO Clock with highest and lowest Divider Ratio code
+
+>WHILE :(bLoop_Count) < 20							; Attempt switching of ratio 32 times
+
+	>APDU: E5 (Set_Clock) 00 00 03 -- 02 00 (bDivide_Ratio)			; Set Clock to ISO Clock. (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Source_Select_SFR) 00 00 -- 01			; Get Clock Source value. Should be ISO Clock
+	>COMP :RAPDU = 00
+	>COMP :SW1SW2 = 90 00
+
+	>APDU: E5 (Get_Clock_Control_SFR) 00 00 -- 01				; Get Clock Control value
+	>COMP :RAPDU = (bDivide_Ratio)
+	>COMP :SW1SW2 = 90 00
+
+        >IF: (bDivide_Ratio) = 0F
+            >SETVB: bDivide_Ratio = 0E						; Switch to the highest divide ratio to give lowest frequency
+        >ELSE
+            >SETVB: bDivide_Ratio = 0F						; Switch to the lowest divide ratio to give highest frequency
+        >ENDIF
+
+        >CALC: bLoop_Count = (bLoop_Count) + 1
+>LOOP

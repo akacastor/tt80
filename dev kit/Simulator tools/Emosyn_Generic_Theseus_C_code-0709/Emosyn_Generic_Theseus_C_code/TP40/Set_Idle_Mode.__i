@@ -1,0 +1,1 @@
+"..\Common\Set_Idle_Mode.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Set_Idle_Mode.lst) OBJECT(.\Set_Idle_Mode.obj)

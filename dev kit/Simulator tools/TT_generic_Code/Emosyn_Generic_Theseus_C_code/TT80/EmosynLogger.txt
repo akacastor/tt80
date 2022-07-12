@@ -1,0 +1,18 @@
+                                                                                                                                                                                                                                                                
+ Total(uS)   Step(uS) Thrd File name                                         : line :lv: Information
+       259        258 0C30 S:\Arbor\db32\logger\logger.cpp                   :  307 : 0: 17:29:50 on 28 December 2006 : Info File C:\Documents and Settings\Administrator\×ÀÃæ\Emosyn_Generic_Theseus_C_code\TT80\loggerInfo.txt not found, using defaults
+       296        295 0C30 S:\Arbor\db32\logger\logger.cpp                   :  318 : 0: 17:29:50 on 28 December 2006 : Level 1 : File <C:\Documents and Settings\Administrator\×ÀÃæ\Emosyn_Generic_Theseus_C_code\TT80\EmosynLogger.txt>
+     45071      45070 0C30 S:\Arbor\db32\logger\logger.cpp                   :  332 : 0: Logger = C:\Keil\Emosyn\logger.dll : 
+     45481      45480 0C30 S:\Arbor\db32\logger\logger.cpp                   :  347 : 0: logger.dll version information 
+     45526      45525 0C30 S:\Arbor\db32\logger\logger.cpp                   :  358 : 0: 	ProductName 	logger Dynamic Link Library
+     45559      45558 0C30 S:\Arbor\db32\logger\logger.cpp                   :  366 : 0: 	ProductVersion 	3.2
+     45623      45621 0C30 S:\Arbor\db32\logger\logger.cpp                   :  374 : 0: 	CompanyName 	Emosyn
+     45653      45652 0C30 S:\Arbor\db32\logger\logger.cpp                   :  382 : 0: 	LegalCopyright 	Copyright (C) 2004
+     45683      45681 0C30 S:\Arbor\db32\logger\logger.cpp                   :  389 : 0: 	Comments 	
+     45713      45711 0C30 S:\Arbor\db32\logger\logger.cpp                   :  396 : 0: 	FileDescription 	logger DLL
+     45743      45741 0C30 S:\Arbor\db32\logger\logger.cpp                   :  404 : 0: 	FileVersion 	3.2
+     45772      45771 0C30 S:\Arbor\db32\logger\logger.cpp                   :  411 : 0: 	InternalName 	logger
+     45803      45802 0C30 S:\Arbor\db32\logger\logger.cpp                   :  418 : 0: 	LegalTrademarks 	Copyright ? 2000-2004 Emosyn, Inc
+     45833      45832 0C30 S:\Arbor\db32\logger\logger.cpp                   :  425 : 0: 	PrivateBuild 	
+     45862      45860 0C30 S:\Arbor\db32\logger\logger.cpp                   :  432 : 0: 	SpecialBuild 	
+     45891      45890 0C30 S:\Arbor\db32\RaniaKeil\RaniaInterface.cpp        :  616 : 0: Load Library <C:\Keil\Emosyn\simAtmi51.dll>

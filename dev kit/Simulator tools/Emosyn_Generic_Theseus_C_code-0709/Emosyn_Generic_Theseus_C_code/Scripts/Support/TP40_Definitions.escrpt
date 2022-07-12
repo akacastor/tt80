@@ -1,0 +1,45 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; TP40_Definitions.escrpt
+; =======================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Theseus Platinum 40 Memory Map Definitions
+;
+; This holds all the variables containing the addresses and sizes of the TP40 chip
+;
+;***********************************************************************************************************
+
+>SETVW: wChipType = 0040
+
+>SETVW: EEPROM_START_ADDRESS = 4000						; Base address of EEPROM memory
+>SETVW: EEPROM_END_ADDRESS = 6000						; End address of EEPROM memory
+
+>SETVW: BOOTLOADER_START_ADDRESS = 5F00						; Bootloader start address with P-Algorithm
+;>SETVW: BOOTLOADER_START_ADDRESS = 5D80					; Bootloader start address with SD Bootloader
+
+>SETVW: EEPROM_USABLE_SPACE = 0000
+>CALC: EEPROM_USABLE_SPACE = (BOOTLOADER_START_ADDRESS) - (EEPROM_START_ADDRESS)	; Usable EEPORM space (excluding Bootloader)
+>SETVW: BOOTLOADER_SIZE = 0000
+>CALC: BOOTLOADER_SIZE = (EEPROM_END_ADDRESS) - (BOOTLOADER_START_ADDRESS)	; Bootloader size
+
+>SETVW: UCM_START_ADDRESS = 8000						; Base address of UCM memory	
+>SETVW: UCM_END_ADDRESS = FC00							; End address of UCM memory
+>SETVW: UCM_TOTAL_SIZE = 0000
+>CALC: UCM_TOTAL_SIZE = (UCM_END_ADDRESS) - (UCM_START_ADDRESS)			; Size of entire UCM space
+
+>SETVW: UCM_PAGE_SIZE = 0200							; Size of a UCM page
+>SETVW: UCM_USABLE_START_ADDRESS = B200						; This is the address clear of the Generic software code
+
+>SETVW: XDATA_RAM_START_ADDRESS = 0000						; Base address of XDATA RAM in XDATA space
+>SETVW: XDATA_RAM_END_ADDRESS = 0180						; End address of XDATA RAM in XDATA space
+>SETVW: XDATA_RAM_TOTAL_SIZE = 0000
+>CALC: XDATA_RAM_TOTAL_SIZE = (XDATA_RAM_END_ADDRESS) - (XDATA_RAM_START_ADDRESS)	; Total size of usable XDATA RAM 
+ 
+>ENDL

@@ -1,0 +1,130 @@
+### uVision2 Project, (C) Keil Software
+### Do not modify !
+
+Target (TT80 Bootloader), 0x0000 // Tools: 'MCS-51'
+
+Group (Core Bootloader)
+Group (Normal_Bootloader)
+Group (Apdu_Bootloader)
+
+File 1,2,<.\io.a51><io.a51> 0x0 
+File 1,2,<.\TT80_Core_Bootloader.A51><TT80_Core_Bootloader.A51> 0x0 
+File 2,2,<.\TT80_Normal_Bootloader.A51><TT80_Normal_Bootloader.A51> 0x0 
+File 3,2,<.\TT80_APDU_Bootloader.A51><TT80_APDU_Bootloader.A51> 0x0 
+File 3,2,<.\SelectFiDi.a51><SelectFiDi.a51> 0x0 
+File 3,1,<.\Undo_Last_Write.c><Undo_Last_Write.c> 0x0 
+File 3,1,<.\ATR.c><ATR.c> 0x0 
+File 3,1,<.\LoadKey.c><LoadKey.c> 0x0 
+File 3,1,<.\UCM_variables.c><UCM_variables.c> 0x0 
+File 3,1,<.\Manage_Device_Status.c><Manage_Device_Status.c> 0x0 
+File 3,1,<.\Set_PPS.c><Set_PPS.c> 0x0 
+File 3,1,<.\BulkCheckum_TT80_32bits.c><BulkCheckum_TT80_32bits.c> 0x0 
+File 3,2,<.\write_erase_UCM.a51><write_erase_UCM.a51> 0x0 
+File 3,1,<.\crc16_32bitVar.c><crc16_32bitVar.c> 0x0 
+File 3,2,<.\PutCharParityBit.a51><PutCharParityBit.a51> 0x0 
+
+
+Options 1,0,0  // Target 'TT80 Bootloader'
+ Device (Theseus Titanium 80)
+ Vendor (Emosyn)
+ Cpu (IRAM(0-0xFF) CLOCK(60000000) MODDP2  XRAM(0x7C00-0x7D7F) IROM(0-01FF))
+ FlashUt ()
+ StupF ()
+ FlashDR ()
+ Rgf ()
+ Mem ()
+ C ()
+ A ()
+ RL ()
+ OH ()
+ UseEnv=0
+ EnvBin ()
+ EnvInc ()
+ EnvLib ()
+ EnvReg (ÿEmosyn\)
+ OrgReg (ÿEmosyn\)
+ TgStat=0
+ OutDir (.\)
+ OutName (TT80_Bootloader_Full_PRODUCTION25K)
+ GenApp=1
+ GenLib=0
+ GenHex=1
+ Debug=1
+ Browse=0
+ LstDir (.\)
+ HexSel=1
+ MG32K=0
+ TGMORE=0
+ RunUsr 0 0 <ChangeBootloaderRecords.exe "TT80_Bootloader_Full.hex" Full_Bootloader.hex>
+ RunUsr 1 0 <>
+ BrunUsr 0 0 <>
+ BrunUsr 1 0 <>
+ SVCSID <>
+ MODEL5=0
+ RTOS5=0
+ ROMSZ5=2
+ DHOLD5=0
+ XHOLD5=0
+ T51FL=368
+ CBANKS5=0
+ XBANKS5=0
+ RCB51 { 0,0,0,0,0,255,255,0,0 }
+ RXB51 { 0,0,0,0,0,0,0,0,0 }
+ OCM51 { 0,0,246,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ OCR51 { 0,0,4,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ IRO51 { 1,0,0,0,0,0,0,0,0 }
+ IRA51 { 0,0,0,0,0,0,1,0,0 }
+ XRA51 { 0,0,124,0,0,128,1,0,0 }
+ XRA512 { 0,0,0,0,0,0,0,0,0 }
+ C51FL=21646608
+ C51VA=0
+ C51MSC ()
+ C51DEF (PRODUCTION)
+ C51UDF ()
+ INCC5 ()
+ AX51FL=68
+ AX51MSC ()
+ AX51SET ()
+ AX51RST ()
+ INCA5 ()
+ PropFld { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ IncBld=1
+ AlwaysBuild=0
+ GenAsm=0
+ AsmAsm=0
+ PublicsOnly=0
+ StopCode=3
+ CustArgs ()
+ LibMods ()
+ BankNo=65535
+ LX51FL=300
+ LX51OVL ()
+ LX51MSC ()
+ LX51DWN ()
+ LX51LFI ()
+ LX51ASN ()
+ LX51RES ()
+ LX51CCL ()
+ LX51UCL ()
+ LX51CSC ()
+ LX51UCS (?PR?CORE_BOOTLOADER_SEGMENT?CORE_BOOTLOADER(0800h),?PR?IO?IO, ?PR?NORMAL_BOOTLOADER_SEGMENT?NORMAL_BOOTLOADER)
+ LX51COB (0XF600-0XFFFF)
+ LX51XDB (0X0400-0X07FF)
+ LX51PDB ()
+ LX51BIB ()
+ LX51DAB ()
+ LX51IDB ()
+ LX51PRC ()
+ LX51STK ()
+ LX51COS (?PR?CORE_BOOTLOADER_SEGMENT?CORE_BOOTLOADER(0F600h),?PR?IO?IO, ?PR?NORMAL_BOOTLOADER_SEGMENT?NORMAL_BOOTLOADER(0f700h),?PR?_UPDATE1BYTE?UNDO_LAST_WRITE, ?PR?WRITE_ERASE_UCM_SEGMENT?WRITE_ERASE_UCM, ?PR?ISO_ALGORITHM_SEGMENT?TT80_APDU_BOOTLOADER, ?PR?UNDO_LAST_WRITE, ?CO?ATR, ?PR?RECEIVE_X_BYTES?TP40_NORMAL_BOOTLOADER, ?PR?_UPDATEERRORCODE?MANAGE_DEVICE_STATUS, ?PR?MANAGE_DEVICE_STATUS?MANAGE_DEVICE_STATUS)
+ LX51XDS (?XD?UCM_VARIABLES(0B7FBh))
+ LX51BIS ()
+ LX51DAS ()
+ LX51IDS ()
+  OPTDL (S8051.DLL)()(TP51.DLL)(-p51)(S8051.DLL)()(TP51.DLL)(-p51)
+  OPTDBG 44030,-1,()()()()()()()()()() (C:\Keil\Emosyn\TheseusKeil.dll)()()()
+ FLASH1 { 1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ FLASH2 (C:\Keil\Emosyn\TheseusKeil.dll)
+ FLASH3 ("" ())
+EndOpt
+

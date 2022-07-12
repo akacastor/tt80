@@ -1,0 +1,109 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;*******************************************************************************
+; Write_IDATA_Bytes_To_UCM.escrpt
+; ===============================
+;
+; $Revision: 1.3 $
+; $Author: chin $ 
+; $Date: 2005/11/08 17:59:09 $
+;
+; Generic script that tests the Write IRAM to UCM function
+; 1. Read UCM area checking it is all FFh 
+; 2. Write 8 byte pattern to IDATA memory
+; 3. Write IDATA pattern to UCM page boundaries
+; 4. Read back the start and end bytes of the page to ensure pattern has been written
+; 5. Use Write IDATA Bytes To UCM command with addresses not within the UCM range
+;*******************************************************************************
+
+
+;******************************************************************************
+; 1. Read UCM area checking it is all FFh
+;******************************************************************************
+>DISPLAY0: Checking UCM bytes are all FFh 
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Set the start address to the UCM where GSW code ends
+
+>WHILE: (wAddress) <> (UCM_END_ADDRESS)
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 80
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0080						; Point to the next address
+>LOOP
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Reset address to start of usable UCM space
+
+;******************************************************************************
+; 2. Write 8 byte pattern to IDATA memory
+;******************************************************************************
+>APDU: E5 (Write_To_RAM) F0 50 08 -- 01 02 03 04 05 06 07 08			; Writes 8 byte pattern into IDATA space
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 3. Write IDATA pattern to UCM page boundaries
+;******************************************************************************
+>WHILE: (wAddress) < (UCM_END_ADDRESS)
+
+    >DISPLAY0: Writing pattern 01 02 03 04 05 06 07 08 at address (wAddress)h boundaries
+
+    >APDU: E5 (Write_UCM_Bytes_Flash_Mode_From_IDATA_Buffer) (wAddress) 02 -- 50 08
+    >COMP: SW1SW2 = 9000
+
+    >CALC: wAddress = (wAddress) + (UCM_PAGE_SIZE)				; Point to the end of the page -8 bytes so there
+    >CALC: wAddress = (wAddress) - 8						; is space for the pattern to be written
+
+    >APDU: E5 (Write_UCM_Bytes_Flash_Mode_From_IDATA_Buffer) (wAddress) 02 -- 50 08
+    >COMP: SW1SW2 = 9000
+
+    >CALC: wAddress = (wAddress) + 8						; Point to start of next page
+
+>LOOP
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Reset address to start of usable UCM space
+
+;******************************************************************************
+; 4. Read back the start and end bytes of the page to ensure pattern has been written
+;******************************************************************************
+>WHILE: (wAddress) < (UCM_END_ADDRESS)
+
+    >DISPLAY0: Checking pattern 01 02 03 04 05 06 07 08 is written at address (wAddress)h
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 10
+    >COMP: RAPDU = 01 02 03 04 05 06 07 08 FF FF FF FF FF FF FF FF		; Check that only the first 8 bytes of the page are
+    >COMP: SW1SW2 = 9000							; written with the pattern
+
+    >CALC: wAddress = (wAddress) + (UCM_PAGE_SIZE)				; Point to the end of the page -16 bytes
+    >CALC: wAddress = (wAddress) - 10
+
+    >DISPLAY0: Checking pattern 01 02 03 04 05 06 07 08 is written at address (wAddress)h
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 10			; Check that only the last 8 bytes of the page are
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF 01 02 03 04 05 06 07 08		; written with the pattern
+    >COMP: SW1SW2 = 9000
+
+    >CALC: wAddress = (wAddress) + 10						; Point to start of next page
+
+>LOOP
+
+;******************************************************************************
+; 5. Use Write IDATA Bytes To UCM command with addresses not within the UCM range
+;******************************************************************************
+>DISPLAY0: Attempting invalid parameters in the Write IDATA Bytes To UCM APDU command
+
+>SETVW: wAddress = 0000	
+>APDU: E5 (Write_UCM_Bytes_Flash_Mode_From_IDATA_Buffer) (wAddress) 02 -- 50 08	; Attempt to write IDATA bytes to firmware space
+>COMP: SW1SW2 = 6581
+
+>SETVW: wAddress = FF00	
+>APDU: E5 (Write_UCM_Bytes_Flash_Mode_From_IDATA_Buffer) (wAddress) 02 -- 50 08	; Attempt to write IDATA bytes to last 256 bytes in memory space
+>COMP: SW1SW2 = 6581
+
+>APDU: E5 (Write_To_RAM) F0 50 08 -- FF FF FF FF FF FF FF FF			; Writes 8 byte pattern into IDATA space
+>COMP: SW1SW2 = 9000
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Attempt to write IDATA bytes to first free available UCM
+>APDU: E5 (Write_UCM_Bytes_Flash_Mode_From_IDATA_Buffer) (wAddress) 02 -- 50 08	; space that already has the 01 02 03 ... pattern in it
+>COMP: SW1SW2 = 6581

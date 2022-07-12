@@ -1,0 +1,49 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; TT120_Definitions.escrpt
+; ========================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Theseus Titanium 120 Memory Map Definitions
+;
+; This holds all the variables containing the addresses and sizes of the TT120 chip
+;
+;***********************************************************************************************************
+
+>SETVW: wChipType = 0120
+
+>SETVB: BOOTLOADER_DPX_START_ADDRESS = 01					; Bootloader start address extended DPX value
+>SETVW: BOOTLOADER_START_ADDRESS = E400						; Bootloader start address with SD Bootloader
+
+>SETVB: UCM_DPX_START_ADDRESS = 00						; Base address DPX value of UCM memory	
+>SETVW: UCM_START_ADDRESS = 0800						; Base address of UCM memory	
+>SETVB: UCM_DPX_END_ADDRESS = 01						; End address DPX value of UCM memory
+>SETVW: UCM_END_ADDRESS = E800							; End address of UCM memory
+
+;>SETVW: UCM_TOTAL_SIZE = 0000
+;>CALC: UCM_TOTAL_SIZE = (BOOTLOADER_START_ADDRESS) - (UCM_START_ADDRESS)	; Size of entire UCM space (excluding Bootloader)
+
+; There is an extra 56K above the FFFFh word limit
+
+>SETVW: BOOTLOADER_SIZE = 0000
+>CALC: BOOTLOADER_SIZE = (UCM_END_ADDRESS) - (BOOTLOADER_START_ADDRESS)		; Bootloader size
+
+>SETVW: UCM_PAGE_SIZE = 0100							; Size of a UCM page
+>SETVB: UCM_USABLE_DPX_START_ADDRESS = 00					; This is the DPX address clear of the Generic software code
+>SETVW: UCM_USABLE_START_ADDRESS = 3600						; This is the address clear of the Generic software code
+
+>SETVB: XDATA_RAM_DPX_START_ADDRESS = 01					; Base address DPX value of XDATA RAM in XDATA space
+>SETVW: XDATA_RAM_START_ADDRESS = E800						; Base address of XDATA RAM in XDATA space
+>SETVB: XDATA_RAM_DPX_END_ADDRESS = 01						; End address DPX value of XDATA RAM in XDATA space
+>SETVW: XDATA_RAM_END_ADDRESS = F000						; End address of XDATA RAM in XDATA space
+
+>SETVW: XDATA_RAM_TOTAL_SIZE  = 0000
+>CALC: XDATA_RAM_TOTAL_SIZE = (XDATA_RAM_END_ADDRESS) - (XDATA_RAM_START_ADDRESS)	; Total size of usable XDATA RAM 
+ 
+>ENDL

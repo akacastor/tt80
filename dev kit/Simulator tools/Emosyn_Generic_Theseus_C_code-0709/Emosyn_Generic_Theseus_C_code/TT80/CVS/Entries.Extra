@@ -1,0 +1,12 @@
+/APDU_Command_Definition.h////*///
+/CleanUp.bat////*///
+/Emosyn_Helper_Functions.h////*///
+/Firmware_API_JumpTable.h////*///
+/Firmware_API_JumpTable.inc////*///
+/Generic_TT80_Example_C_Code.Uv2////*///
+/TT80_API_JumpTable.a51////*///
+/TT80_Get_OS_Version.c////*///
+/TT80_ISR.c////*///
+/TT80_Mass_Erase_UCM_Leaving_Bootloader.a51////*///
+/TT80_STARTUP.A51////*///
+/TT80_Send_ATR.c////*///

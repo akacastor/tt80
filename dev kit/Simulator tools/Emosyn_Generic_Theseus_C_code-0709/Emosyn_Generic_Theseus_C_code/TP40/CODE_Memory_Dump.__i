@@ -1,0 +1,1 @@
+"..\Common\CODE_Memory_Dump.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\CODE_Memory_Dump.lst) OBJECT(.\CODE_Memory_Dump.obj)

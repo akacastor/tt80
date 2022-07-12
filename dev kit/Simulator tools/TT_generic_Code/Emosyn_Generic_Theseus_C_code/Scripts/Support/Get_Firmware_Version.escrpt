@@ -1,0 +1,39 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Get_Firmware_Version.escrpt
+; ===========================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Generic script that checks the Get Firmware Version call functions correctly
+; 1. Get Firmware Version checking that it is not 00
+; 2. Try the same command with invalid parameters 
+;******************************************************************************
+
+>APDU: E5 (Get_Firmware_Version) 00 00 -- 01					; Get Chip ID APDU command
+>SETVB: Rx_FW_Version = RAPDU							; Save the firmware version into a byte
+
+>IF: (Terminal) = (Rania)							; If this test is using the simulator the Firmware
+    >COMP: RAPDU = A5								; version is known
+>ELSE
+    >IF: (Rx_FW_Version) = 00							; Make sure that the firmware version is not 0
+        >MESSAGE: Firmware version is 00					; If it is 00 it suggests the firmware is incorrect
+    >ENDIF
+>ENDIF
+
+>APDU: E5 (Get_Firmware_Version) FF 00 -- 01					; Get Firmware Version APDU command with set PARA1 value
+>COMP: RAPDU = (Rx_FW_Version)
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_Firmware_Version) 00 FF -- 01					; Get Firmware Version APDU command with set PARA2 value
+>COMP: RAPDU = (Rx_FW_Version)
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_Firmware_Version) FF FF -- 01					; Get Firmware Version APDU command with set PARA1 & PARA2 value
+>COMP: RAPDU = (Rx_FW_Version)
+>COMP: SW1SW2 = 9000

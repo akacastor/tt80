@@ -1,0 +1,87 @@
+### uVision2 Project, (C) Keil Software
+### Do not modify !
+
+ cExt (*.c)
+ aExt (*.s*; *.src; *.a*)
+ oExt (*.obj)
+ lExt (*.lib)
+ tExt (*.txt; *.h; *.inc)
+ pExt (*.plm)
+ CppX (*.cpp)
+ DaveTm { 0,0,0,0,0,0,0,0 }
+
+Target (Theseus Platinum 40 Example C Code), 0x0000 // Tools: 'MCS-51'
+GRPOPT 1,(Theseus Platinum 40 Specific),1,0,0
+GRPOPT 2,(Common TP40 TP62),1,0,0
+GRPOPT 3,(Common Theseus Platinum Family),0,0,0
+GRPOPT 4,(Common Theseus Family),0,0,0
+GRPOPT 5,(Firmware Calls),0,0,0
+
+OPTFFF 1,1,4,0,0,0,0,0,<.\TP40_API_JumpTable.LIB><TP40_API_JumpTable.LIB> 
+OPTFFF 1,2,1,0,0,0,0,0,<.\TP40_Get_OS_Version.c><TP40_Get_OS_Version.c> 
+OPTFFF 1,3,1,0,0,49,49,0,<.\TP40_MassEraseEE_Bootloader_Safe.c><TP40_MassEraseEE_Bootloader_Safe.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,0,0,0,0,0,0,0,0,102,2,0,0,35,1,0,0 }
+OPTFFF 1,4,1,0,0,0,0,0,<.\TP40_Send_ATR.c><TP40_Send_ATR.c> 
+OPTFFF 1,5,2,0,0,0,0,0,<.\TP40_STARTUP.A51><TP40_STARTUP.A51> 
+OPTFFF 1,6,1,0,0,0,0,0,<.\TP40_ISR.c><TP40_ISR.c> 
+OPTFFF 2,7,2,117440512,0,59,59,0,<..\Common_TP40_TP62\TP40_TP62_Erase_Back_To_Factory_State.A51><TP40_TP62_Erase_Back_To_Factory_State.A51> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,22,0,0,0,29,0,0,0,128,2,0,0,65,1,0,0 }
+OPTFFF 2,8,1,0,0,0,0,0,<..\Common_TP40_TP62\TP40_TP62_Memory_Write.c><TP40_TP62_Memory_Write.c> 
+OPTFFF 3,9,1,0,0,0,0,0,<..\Common_Platinum\Chip_Init.c><Chip_Init.c> 
+OPTFFF 4,10,1,0,0,0,0,0,<..\Common\Global_Vars.c><Global_Vars.c> 
+OPTFFF 4,11,1,0,0,0,0,0,<..\Common\IO.c><IO.c> 
+OPTFFF 4,12,1,0,0,0,0,0,<..\Common\CRC16_Normal.c><CRC16_Normal.c> 
+OPTFFF 4,13,1,0,0,0,0,0,<..\Common\Set_Idle_Mode.c><Set_Idle_Mode.c> 
+OPTFFF 4,14,1,0,0,0,0,0,<..\Common\ISO_Select_Speed.c><ISO_Select_Speed.c> 
+OPTFFF 4,15,1,2,0,277,285,0,<..\Common\Main.c><Main.c> { 44,0,0,0,2,0,0,0,3,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,0,0,0,0,0,0,0,0,46,2,0,0,51,1,0,0 }
+OPTFFF 4,16,1,0,0,0,0,0,<..\Common\SHA-1.c><SHA-1.c> 
+OPTFFF 4,17,1,0,0,0,0,0,<..\Common\Change_ISO_Speed.c><Change_ISO_Speed.c> 
+OPTFFF 4,18,1,0,0,0,0,0,<..\Common\Get_Security_Status.c><Get_Security_Status.c> 
+OPTFFF 4,19,1,0,0,0,0,0,<..\Common\Set_Security_Status.c><Set_Security_Status.c> 
+OPTFFF 4,20,1,0,0,0,0,0,<..\Common\Write_UCM_Bytes_Flash_Mode_From_IRAM_Buffer.c><Write_UCM_Bytes_Flash_Mode_From_IRAM_Buffer.c> 
+OPTFFF 4,21,1,0,0,0,0,0,<..\Common\Write_EE_Bytes_Flash_Mode_From_IRAM_Buffer.c><Write_EE_Bytes_Flash_Mode_From_IRAM_Buffer.c> 
+OPTFFF 4,22,1,0,0,0,0,0,<..\Common\CODE_Memory_Dump.c><CODE_Memory_Dump.c> 
+OPTFFF 4,23,1,0,0,0,0,0,<..\Common\XDATA_Memory_Dump.c><XDATA_Memory_Dump.c> 
+OPTFFF 4,24,1,0,0,0,0,0,<..\Common\IDATA_Memory_Dump.c><IDATA_Memory_Dump.c> 
+OPTFFF 4,25,1,0,0,0,0,0,<..\Common\Write_To_RAM.c><Write_To_RAM.c> 
+OPTFFF 4,26,1,0,0,0,0,0,<..\Common\Get_Response.c><Get_Response.c> 
+OPTFFF 4,27,1,0,0,0,0,0,<..\Common\Conv_Two_Bytes_To_Int.c><Conv_Two_Bytes_To_Int.c> 
+OPTFFF 5,28,1,0,0,0,0,0,<..\Common\Erase_EE_64_Bytes.c><Erase_EE_64_Bytes.c> 
+OPTFFF 5,29,1,0,0,0,0,0,<..\Common\Mass_Erase_EE.c><Mass_Erase_EE.c> 
+OPTFFF 5,30,1,0,0,0,0,0,<..\Common\Get_Clock_Source.c><Get_Clock_Source.c> 
+OPTFFF 5,31,1,0,0,0,0,0,<..\Common\Get_Clock_Control.c><Get_Clock_Control.c> 
+OPTFFF 5,32,1,0,0,0,0,0,<..\Common\Set_Execute_Only_Status.c><Set_Execute_Only_Status.c> 
+OPTFFF 5,33,1,0,0,0,0,0,<..\Common\Set_Protection_Status.c><Set_Protection_Status.c> 
+OPTFFF 5,34,1,0,0,0,0,0,<..\Common\Set_Security_Action.c><Set_Security_Action.c> 
+OPTFFF 5,35,1,0,0,0,0,0,<..\Common\Set_Security_Mask.c><Set_Security_Mask.c> 
+OPTFFF 5,36,1,0,0,0,0,0,<..\Common\Write_Byte_EE_Flash_Mode.c><Write_Byte_EE_Flash_Mode.c> 
+OPTFFF 5,37,1,0,0,0,0,0,<..\Common\Write_Byte_UCM_Flash_Mode.c><Write_Byte_UCM_Flash_Mode.c> 
+OPTFFF 5,38,1,0,0,0,0,0,<..\Common\Erase_24K_Block.c><Erase_24K_Block.c> 
+OPTFFF 5,39,1,0,0,0,0,0,<..\Common\Erase_EE_8_Bytes.c><Erase_EE_8_Bytes.c> 
+OPTFFF 5,40,1,0,0,0,0,0,<..\Common\Get_Firmware_Version.c><Get_Firmware_Version.c> 
+OPTFFF 5,41,1,0,0,0,0,0,<..\Common\Erase_UCM_Page.c><Erase_UCM_Page.c> 
+OPTFFF 5,42,1,0,0,0,0,0,<..\Common\Get_Chip_ID.c><Get_Chip_ID.c> 
+OPTFFF 5,43,1,0,0,0,0,0,<..\Common\Set_Interrupt_Enable.c><Set_Interrupt_Enable.c> 
+OPTFFF 5,44,1,0,0,0,0,0,<..\Common\Get_Interrupt_Enable.c><Get_Interrupt_Enable.c> 
+OPTFFF 5,45,1,0,0,0,0,0,<..\Common\Set_Clock.c><Set_Clock.c> 
+OPTFFF 5,46,1,0,0,0,0,0,<..\Common\Erase_UCM_Configurable_Block.c><Erase_UCM_Configurable_Block.c> 
+OPTFFF 5,47,1,0,0,0,0,0,<..\Common\Mass_Erase_UCM.c><Mass_Erase_UCM.c> 
+
+
+TARGOPT 1, (Theseus Platinum 40 Example C Code)
+ CLK51=60000000
+  OPTTT 1,1,1,0
+  OPTHX 0,65535,0,0,0
+  OPTLX 120,65,8,<.\>
+  OPTOX 16
+  OPTLT 1,1,1,0,1,1,0,1,0,0,0,0
+  OPTXL 1,1,1,1,1,1,1,0,0
+  OPTFL 1,0,1
+  OPTDL (S8051.DLL)()(TP51.DLL)(-p51)(S8051.DLL)()(TP51.DLL)(-p51)
+  OPTDBG 48126,-1,()()()()()()()()()() (C:\Keil\Emosyn\TheseusKeil.dll)()()()
+  OPTKEY 0,(PheseusKeil)(-S1 -B9600 -O1792 -E -D-D)
+  OPTKEY 0,(DLGTP51)((98=-1,-1,-1,-1,0)(82=-1,-1,-1,-1,0)(83=-1,-1,-1,-1,0)(84=-1,-1,-1,-1,0)(85=-1,-1,-1,-1,0)(80=-1,-1,-1,-1,0)(91=-1,-1,-1,-1,0)(92=-1,-1,-1,-1,0))
+  OPTKEY 0,(TheseusKeil)(-S1 -B115200 -O1792 -E -D)
+  OPTDF 0x94
+  OPTLE <>
+  OPTLC <>
+EndOpt
+

@@ -1,0 +1,355 @@
+C51 COMPILER V8.05a   WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC                            04/16/2007 10:40:55 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC
+OBJECT MODULE PLACED IN .\Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common_Titanium\Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled.c O
+                    -MF2 OPTIMIZE(SIZE) BROWSE INTVECTOR(0X0800) MODDP2 DEBUG PRINT(.\Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled.ls
+                    -t) OBJECT(.\Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *               
+   3          * Name:         Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled.c
+   4          * Description:  Contains function that writes an input stream of data to CODE
+   5          *               Space UCM
+   6          *               Backing up data and page erasing is handled within this function
+   7          *               This function only works with UCM pages 256 bytes in size
+   8          *               This function uses backup pages defined in the
+   9          *               Firmware_API_JumpTable.h file in each individual chip directory
+  10          * Copyright:    Emosyn Inc. 2006
+  11          *
+  12          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+  13          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+  14          * not limited to the implied warranties of merchantability and fitness for a
+  15          * particular purpose. EMOSYN does not warrant that the functions contained in
+  16          * this code will meet your requirements, or that the operation of the code will
+  17          * be accurate, error-free, or non-infringing. No oral or written information or
+  18          * advice given by EMOSYN or an authorized representative shall create or affect
+  19          * any Warranty.
+  20          *******************************************************************************
+  21          ; $Revision: 1.1 $
+  22          ; $Author: chin $
+  23          ; $Date: 2006/02/22 15:51:57 $
+  24          ******************************************************************************/
+  25          
+  26          /* Header file inclusions */
+  27          #include "Firmware_API_JumpTable.h"
+  28          #include "Emosyn_Helper_Functions.h"
+  29          
+  30          /* External and local function declarations */
+  31          
+  32          
+  33          /* External and local variables  */
+  34          extern char bdata ucTemp_Page_Status;              /*  Variable to hold status bits */
+  35          
+  36          /* These bit variables state whether data needs to be backed up */
+  37          extern bit bData_Present_Before_New_Data_Temp_Page1;
+  38          extern bit bData_Present_After_New_Data_Temp_Page1;
+  39          extern bit bData_Present_After_New_Data_Temp_Page2;
+  40          extern bit bTwo_Page_Erase_Needed;
+  41          
+  42          
+  43          /******************************************************************************
+  44          *
+  45          * Function Name:      Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled
+  46          * Function Inputs:    void
+  47          * Function Outputs:   uint SW1SW2  9000h for success or
+  48          *                                  6581h for memory failure or
+  49          * Description:        Writes an input stream to UCM space
+  50          *                     Function handles any data backup and page erases required
+  51          *
+  52          * APDU Syntax:        E5 E6 PARA1 PARA2 PARA3
+  53          * APDU Inputs:        PARA1  High byte of the UCM address to write to
+C51 COMPILER V8.05a   WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC                            04/16/2007 10:40:55 PAGE 2   
+
+  54          *                     PARA2  Low byte of the UCM address to write to
+  55          *                     PARA3  Number of bytes to write
+  56          *                     DATAX  Bytes to write to UCM
+  57          * APDU Outputs:       None
+  58          *
+  59          * Example usage:      Write 16 bytes of data to 50F8h in UCM CODE Space
+  60          * To Card             ->  E5 E6 5F F8 10
+  61          * ACK from Card       <-  E6
+  62          * Data from Card      ->  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+  63          * Response from Card  <-  90 00
+  64          *
+  65          * Example Code usage.
+  66          *
+  67          * 5000h                           5100h                           5200h
+  68          *   |---------------------------------------------------------------|
+  69          *   |                               |                               |
+  70          *   |   Existing 256 Byte Page A    |   Existing 256 Byte Page B    |
+  71          *   |   at address 5000h            |   at address 5100h            |
+  72          *   |                               |                               |
+  73          *   |---------------------------------------------------------------|
+  74          *                    50F8h                      5107h  
+  75          *                      |--------------------------|
+  76          *                      |                          |
+  77          *    5000h -> 50F7h    |   New data to write      |  51080h -> 51FFh
+  78          *   must be backed up  | at address 50F8 -> 5107h | must be backed up
+  79          *                      |                          |
+  80          *                      |--------------------------|
+  81          *
+  82          * If the new data to be written to 50F8h -> 5108h differs from the current
+  83          * data held in that address range (e.g. there is a 0 -> 1 transision) it means
+  84          * data from 5000h -> 50F7h and 5108 ->51FF must be backed up.
+  85          * The chip can then erase the 2 256 byte pages (5000h and 5100h) and then copy
+  86          * back the backed up data and then the new data
+  87          *
+  88          * This function uses backup pages defined in the Firmware_API_JumpTable.h file
+  89          * in each individual chip directory
+  90          ******************************************************************************/
+  91          uint Write_X_Bytes_To_CODE_Space__256_Page_Backup_Handled (void)
+  92          {
+  93   1          uint idata uiStart_Address;                     /* Variable to hold start address of new data */
+  94   1          uint idata uiTemp_Page_Address;                 /* Variable to hold address in the backup page */ 
+  95   1          uint idata uiEnd_Address;                       /* Variable to hold end address of the new data */
+  96   1          uchar idata ucTemp_Page1_Before_Data_Count;     /* Variable to hold number of bytes to copy before new
+             - data in Page1 */
+  97   1          uchar idata ucTemp_Page1_After_Data_Count;      /* Variable to hold number of bytes to copy after new 
+             -data in Page1 */
+  98   1          uchar idata ucTemp_Page2_After_Data_Count;      /* Variable to hold number of bytes to copy after new 
+             -data in Page2 */
+  99   1          uchar xdata *ucByte_To_Write_Data_Ptr;          /* Variable to hold data to write */
+ 100   1          uint idata uiCount;                             /* Variable to hold integer counter */
+ 101   1      
+ 102   1          ucTemp_Page_Status = 0x00;                      /* Initialisation of variables */
+ 103   1          cRet_Val_Char = 0x00;                           /* Declaed in global_vars.h */
+ 104   1          ucCount = 0x00;
+ 105   1          uiCount = 0x00;
+ 106   1      
+ 107   1          uiStart_Address = PARA1 << 8;                   /* Convert input address into an integer */
+ 108   1          uiStart_Address |= PARA2;
+ 109   1      
+ 110   1          uiTemp_Page_Address = uiStart_Address & 0x00FF; /* Find the address with offset in the backup page */
+ 111   1          uiTemp_Page_Address += PAGE1_BACKUP_START_ADDRESS;
+ 112   1      
+C51 COMPILER V8.05a   WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC                            04/16/2007 10:40:55 PAGE 3   
+
+ 113   1          uiEnd_Address = uiStart_Address + PARA3;        /* Calculate the end address of the new data */
+ 114   1      
+ 115   1      
+ 116   1          /******************************/
+ 117   1          /* Clear out the backup pages */
+ 118   1          /******************************/
+ 119   1          cRet_Val_Char = Firmware_EraseUCM512Bytes_In_CODE_Space (PAGE1_BACKUP_START_ADDRESS);
+ 120   1      
+ 121   1      
+ 122   1          /*****************************************************************************/
+ 123   1          /* Write the new data to the backup page(s)                                  */
+ 124   1          /*****************************************************************************/
+ 125   1          if (!(cRet_Val_Char & MSB_SET))
+ 126   1          {
+ 127   2              for (ucCount = 0; ucCount < PARA3; ucCount++)
+ 128   2              {
+ 129   3                  /* Write the byte to the corresponding address in the backup page */
+ 130   3                  cRet_Val_Char = Firmware_WriteByteUCM_In_CODE_Space (uiTemp_Page_Address++, GetChar());
+ 131   3      
+ 132   3                  if (cRet_Val_Char & MSB_SET)
+ 133   3                  {
+ 134   4                      break;
+ 135   4                  }
+ 136   3                  }
+ 137   2          }
+ 138   1      
+ 139   1      
+ 140   1          /********************************************************************************/
+ 141   1          /* Calculate: whether the new data falls across the boundaries of 2 pages       */
+ 142   1          /*          : how much old data needs to be copied before the new data in Page1 */ 
+ 143   1          /*          : how much old data needs to be copied after the new data in Page1  */
+ 144   1          /*          : how much old data needs to be copied after the new data in Page2  */
+ 145   1          /********************************************************************************/
+ 146   1      
+ 147   1          if (!(cRet_Val_Char & MSB_SET))
+ 148   1          {
+ 149   2              /* Check if the new data covers memory in both page1 and page2 */
+ 150   2              if ((uiStart_Address + PARA3) > ((uiStart_Address + 0x100) & 0xFF00))
+ 151   2              {
+ 152   3                  /* Check if the new data goes up to page2 end boundary */
+ 153   3                  if ((uiStart_Address + PARA3) < ((uiStart_Address + 0x200) & 0xFF00))
+ 154   3                  {    
+ 155   4                      ucTemp_Page2_After_Data_Count = ((uiStart_Address + 0x200) & 0xFF00) - (uiStart_Address + 
+             -PARA3);
+ 156   4                      bData_Present_After_New_Data_Temp_Page2 = 1;
+ 157   4                      bTwo_Page_Erase_Needed = 1;
+ 158   4                  }
+ 159   3              }
+ 160   2      
+ 161   2              /* Check if the new data starts after the page1 start boundary */
+ 162   2              if (uiStart_Address > (uiStart_Address & 0xFF00))
+ 163   2              {
+ 164   3                  ucTemp_Page1_Before_Data_Count = uiStart_Address - (uiStart_Address & 0xFF00);
+ 165   3                  bData_Present_Before_New_Data_Temp_Page1 = 1;
+ 166   3              }
+ 167   2      
+ 168   2              /* Check if there is any old data to copy over in page1 at the end of the new data */
+ 169   2              if ((uiStart_Address + PARA3) < ((uiStart_Address + 0x100) & 0xFF00))
+ 170   2              {
+ 171   3                  ucTemp_Page1_After_Data_Count = ((uiStart_Address + 0x100) & 0xFF00) - (uiStart_Address + PARA
+             -3);
+ 172   3                  bData_Present_After_New_Data_Temp_Page1 = 1;
+C51 COMPILER V8.05a   WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC                            04/16/2007 10:40:55 PAGE 4   
+
+ 173   3              }
+ 174   2          }
+ 175   1      
+ 176   1          /******************************************************************************/
+ 177   1          /* Copy across old data before and after the new data into the temp page(s)   */
+ 178   1          /******************************************************************************/
+ 179   1      
+ 180   1          if (!(cRet_Val_Char & MSB_SET))
+ 181   1          {
+ 182   2              /* Copy in old data from page1 before new data */
+ 183   2              if (bData_Present_Before_New_Data_Temp_Page1)
+ 184   2              {
+ 185   3                  /* Reset start address to page1 start */
+ 186   3                  ucByte_To_Write_Data_Ptr = uiStart_Address & 0xFF00;
+ 187   3                  uiTemp_Page_Address = PAGE1_BACKUP_START_ADDRESS;
+ 188   3      
+ 189   3                  /* Copy across unchanged old data that is before the new data into page1 */
+ 190   3                  for (ucCount = 0; ucCount < ucTemp_Page1_Before_Data_Count; ucCount++)
+ 191   3                  {
+ 192   4                      cRet_Val_Char = Firmware_WriteByteUCM_In_CODE_Space (uiTemp_Page_Address++, *ucByte_To_Wri
+             -te_Data_Ptr++);
+ 193   4      
+ 194   4                      if (cRet_Val_Char & MSB_SET)
+ 195   4                      {
+ 196   5                          break;
+ 197   5                      }
+ 198   4                  }
+ 199   3              }
+ 200   2          }
+ 201   1      
+ 202   1          if (!(cRet_Val_Char & MSB_SET))
+ 203   1          {
+ 204   2              /* Copy in old data from page1 after the new data */
+ 205   2              if (bData_Present_After_New_Data_Temp_Page1)
+ 206   2              {
+ 207   3                  /* Point the start address to the end of the new data */
+ 208   3                  uiTemp_Page_Address = (uiEnd_Address & 0x00FF) + PAGE1_BACKUP_START_ADDRESS;
+ 209   3                  ucByte_To_Write_Data_Ptr = uiEnd_Address;
+*** WARNING C289 IN LINE 209 OF ..\COMMON_TITANIUM\WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BACKUP_HANDLED.C: '=': converti
+             -ng non-pointer to pointer
+ 210   3      
+ 211   3                  /* Copy across unchanged old data that is after the new data into page1 */
+ 212   3                  for (ucCount = 0; ucCount < ucTemp_Page1_After_Data_Count; ucCount++)
+ 213   3                  {
+ 214   4                      cRet_Val_Char = Firmware_WriteByteUCM_In_CODE_Space (uiTemp_Page_Address++, *ucByte_To_Wri
+             -te_Data_Ptr++);
+ 215   4      
+ 216   4                      if (cRet_Val_Char & MSB_SET)
+ 217   4                      {
+ 218   5                          break;
+ 219   5                      }
+ 220   4                  }
+ 221   3              }
+ 222   2          }
+ 223   1      
+ 224   1          if (!(cRet_Val_Char & MSB_SET))
+ 225   1          {
+ 226   2              /* Copy in old data from page2 after new data */
+ 227   2              if (bData_Present_After_New_Data_Temp_Page2)
+ 228   2              {
+ 229   3                  /* Reset start address to page2 start address */
+ 230   3                  uiTemp_Page_Address = (uiEnd_Address & 0x00FF) + PAGE2_BACKUP_START_ADDRESS;
+C51 COMPILER V8.05a   WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC                            04/16/2007 10:40:55 PAGE 5   
+
+ 231   3                  ucByte_To_Write_Data_Ptr = uiEnd_Address;
+*** WARNING C289 IN LINE 231 OF ..\COMMON_TITANIUM\WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BACKUP_HANDLED.C: '=': converti
+             -ng non-pointer to pointer
+ 232   3      
+ 233   3                  /* Copy across unchanged old data that is after the new data into page2 */
+ 234   3                  for (ucCount = 0; ucCount < ucTemp_Page2_After_Data_Count; ucCount++)
+ 235   3                  {
+ 236   4                      cRet_Val_Char = Firmware_WriteByteUCM_In_CODE_Space (uiTemp_Page_Address++, *ucByte_To_Wri
+             -te_Data_Ptr++);
+ 237   4      
+ 238   4                      if (cRet_Val_Char & MSB_SET)
+ 239   4                      {
+ 240   5                          break;
+ 241   5                      }
+ 242   4                  }
+ 243   3              }
+ 244   2          }
+ 245   1      
+ 246   1      
+ 247   1          /******************************************************************************/
+ 248   1          /* Erase original UCM page(s)                                                 */
+ 249   1          /******************************************************************************/
+ 250   1          if (!(cRet_Val_Char & MSB_SET))
+ 251   1          {
+ 252   2              if (bTwo_Page_Erase_Needed)
+ 253   2              {
+ 254   3                  cRet_Val_Char = Firmware_EraseUCM512Bytes_In_CODE_Space (uiStart_Address & 0xFF00);
+ 255   3              }
+ 256   2              else    /* Just erase 1 page if the new data was all contained within a page */
+ 257   2              {
+ 258   3                   cRet_Val_Char = Firmware_EraseUCM256Bytes_In_CODE_Space (uiStart_Address & 0xFF00);
+ 259   3              }
+ 260   2          }
+ 261   1      
+ 262   1          /**********************************************************************************/
+ 263   1          /* Reset the address start to the start of the UCM page and point to the new data */
+ 264   1          /**********************************************************************************/
+ 265   1              uiStart_Address &= 0xFF00;
+ 266   1          ucByte_To_Write_Data_Ptr = PAGE1_BACKUP_START_ADDRESS;
+ 267   1      
+ 268   1          if (!(cRet_Val_Char & MSB_SET))
+ 269   1          {
+ 270   2              /* Copy over page1 data (this includes old data and new data) */       
+ 271   2              for (uiCount = 0; uiCount < 0x100; uiCount++)
+ 272   2              {
+ 273   3                  cRet_Val_Char = Firmware_WriteByteUCM_In_CODE_Space (uiStart_Address++, *ucByte_To_Write_Data_
+             -Ptr++);
+ 274   3              }
+ 275   2          }
+ 276   1      
+ 277   1          if (!(cRet_Val_Char & MSB_SET))
+ 278   1          {
+ 279   2              /* Copy over page2 data (old data and new data) if requried */
+ 280   2              if (bTwo_Page_Erase_Needed)
+ 281   2              {
+ 282   3                  /* Copy over page1 data (this includes old data and new data) */    
+ 283   3                  for (uiCount = 0; uiCount < 0x100; uiCount++)
+ 284   3                  {
+ 285   4                      cRet_Val_Char = Firmware_WriteByteUCM_In_CODE_Space (uiStart_Address++, *ucByte_To_Write_D
+             -ata_Ptr++);
+ 286   4                  }
+ 287   3              }
+C51 COMPILER V8.05a   WRITE_X_BYTES_TO_CODE_SPACE__256_PAGE_BAC                            04/16/2007 10:40:55 PAGE 6   
+
+ 288   2          }
+ 289   1      
+ 290   1          if (cRet_Val_Char & MSB_SET)
+ 291   1          {
+ 292   2              /* Report a memory error if any firmware functions failed */
+ 293   2              SW1SW2 = SW1SW2_MEMORY_ERROR;
+ 294   2          }
+ 295   1          else
+ 296   1          {
+ 297   2              SW1SW2 = SW1SW2_OK;
+ 298   2          }
+ 299   1      
+ 300   1          return SW1SW2;
+ 301   1      
+ 302   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    759    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----      11
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,18 @@
+                                                                                                                                                                                                                                                                
+ Total(uS)   Step(uS) Thrd File name                                         : line :lv: Information
+       606        605 0364 S:\Arbor\db32\logger\logger.cpp                   :  307 : 0: 10:41:22 on 16 April 2007 : Info File C:\Documents and Settings\Administrator\×ÀÃæ\Emosyn_Generic_Theseus_C_code\TT80\loggerInfo.txt not found, using defaults
+       645        643 0364 S:\Arbor\db32\logger\logger.cpp                   :  318 : 0: 10:41:22 on 16 April 2007 : Level 1 : File <C:\Documents and Settings\Administrator\×ÀÃæ\Emosyn_Generic_Theseus_C_code\TT80\EmosynLogger.txt>
+     41525      41524 0364 S:\Arbor\db32\logger\logger.cpp                   :  332 : 0: Logger = C:\Keil\Emosyn\logger.dll : 
+     41919      41917 0364 S:\Arbor\db32\logger\logger.cpp                   :  347 : 0: logger.dll version information 
+     41962      41961 0364 S:\Arbor\db32\logger\logger.cpp                   :  358 : 0: 	ProductName 	logger Dynamic Link Library
+     42035      42034 0364 S:\Arbor\db32\logger\logger.cpp                   :  366 : 0: 	ProductVersion 	3.2
+     42066      42064 0364 S:\Arbor\db32\logger\logger.cpp                   :  374 : 0: 	CompanyName 	PanSun
+     42097      42095 0364 S:\Arbor\db32\logger\logger.cpp                   :  382 : 0: 	LegalCopyright 	Copyright (C) 2004
+     42127      42125 0364 S:\Arbor\db32\logger\logger.cpp                   :  389 : 0: 	Comments 	
+     42157      42155 0364 S:\Arbor\db32\logger\logger.cpp                   :  396 : 0: 	FileDescription 	logger DLL
+     42187      42186 0364 S:\Arbor\db32\logger\logger.cpp                   :  404 : 0: 	FileVersion 	3.2
+     42217      42216 0364 S:\Arbor\db32\logger\logger.cpp                   :  411 : 0: 	InternalName 	logger
+     42249      42247 0364 S:\Arbor\db32\logger\logger.cpp                   :  418 : 0: 	LegalTrademarks 	Copyright ? 2000-2004 PanSun, Inc
+     42279      42278 0364 S:\Arbor\db32\logger\logger.cpp                   :  425 : 0: 	PrivateBuild 	
+     42309      42308 0364 S:\Arbor\db32\logger\logger.cpp                   :  432 : 0: 	SpecialBuild 	
+     42339      42338 0364 S:\Arbor\db32\RaniaKeil\RaniaInterface.cpp        :  616 : 0: Load Library <C:\Keil\Emosyn\simAtmi51.dll>

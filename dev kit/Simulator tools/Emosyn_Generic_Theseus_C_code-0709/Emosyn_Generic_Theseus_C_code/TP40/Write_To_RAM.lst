@@ -1,0 +1,129 @@
+C51 COMPILER V8.05a   WRITE_TO_RAM                                                         05/08/2007 13:43:16 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE WRITE_TO_RAM
+OBJECT MODULE PLACED IN .\Write_To_RAM.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common\Write_To_RAM.c BROWSE INTVECTOR(0X8000) DEBUG OBJECTEXTEND PRINT(
+                    -.\Write_To_RAM.lst) OBJECT(.\Write_To_RAM.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         Write_To_RAM.c
+   4          * Description:  Contains function to write input data to IDATA or XDATA RAM
+   5          * Copyright:    Emosyn Inc. 2005
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.1 $
+  17          * $Author: chin $ 
+  18          * $Date: 2005/08/09 11:53:42 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include "Firmware_API_JumpTable.h"
+  26          #include "Emosyn_Helper_Functions.h"
+  27          
+  28          
+  29          /******************************************************************************
+  30          * External and local function declarations 
+  31          ******************************************************************************/
+  32          
+  33          
+  34          /******************************************************************************
+  35          * External variable declarations
+  36          ******************************************************************************/
+  37          
+  38          
+  39          /******************************************************************************
+  40          *
+  41          * Function Name:      Write_To_RAM
+  42          * Function Inputs:    void
+  43          * Function Outputs:   uint SW1SW2_OK  9000h
+  44          * Description:        Writes input data to IDATA or XDATA RAM
+  45          *
+  46          * APDU Syntax:        E5 8C PARA1 PARA2 PARA3
+  47          * APDU Inputs:        PARA1  High byte of the RAM address to write to
+  48          *                     PARA2  Low byte of the RAM address to write to
+  49          *                     PARA3  Number of bytes to output
+  50          * APDU Outputs:       (PARA3) number of RAM data bytes
+  51          *
+  52          * Example1 usage:     Write 11h 22h to IDATA address 40h
+  53          * To Card             ->  E5 8C F0 40 02
+  54          * ACK from Card       <-  8C
+C51 COMPILER V8.05a   WRITE_TO_RAM                                                         05/08/2007 13:43:16 PAGE 2   
+
+  55          * Data from Card      ->  11 22
+  56          * Response from Card  <-  90 00
+  57          *
+  58          *                     The F0 (PARA1) above tells the code that we are writing
+  59          *                     to IDATA as the MSB is set
+  60          *
+  61          * Example1 usage:     Write 11h 22h to XDATA address 40h
+  62          * To Card             ->  E5 8C 00 40 02
+  63          * ACK from Card       <-  8C
+  64          * Data from Card      ->  11 22
+  65          * Response from Card  <-  90 00
+  66          *
+  67          *                     The 00 (PARA1) above tells the code that we are writing
+  68          *                     to XDATA as the MSB is NOT set
+  69          *
+  70          ******************************************************************************/
+  71          unsigned int Write_To_RAM (void)
+  72          {
+  73   1          if (PARA1 & 0x80) /* If MSB of Para1 is set it is an IDATA RAM write */
+  74   1          {
+  75   2              IDATA_PTR = PARA2; /* Point to IDATA location to write to */
+*** WARNING C289 IN LINE 75 OF ..\COMMON\WRITE_TO_RAM.C: '=': converting non-pointer to pointer
+  76   2      
+  77   2              /* A DO-WHILE loop enables 256 bytes to be sent */
+  78   2              /* User needs to set PARA3 = 00 for 256 byte output */
+  79   2              do
+  80   2              {
+  81   3                  *(IDATA_PTR++) =  GetChar();    /* Get the value to write to RAM */
+  82   3              } while ((--PARA3) != 0);       /* Output byte until counter is zero */
+  83   2      
+  84   2          } /* End of IDATA RAM write */
+  85   1      
+  86   1          else /* If MSB of Para1 is NOT set it is an XDATA RAM write */
+  87   1          {
+  88   2              /* Point to XDATA location to write to */
+  89   2              XDATA_PTR = (PARA1 << 8) + (PARA2);
+  90   2      
+  91   2              /* A DO-WHILE loop enables 256 bytes to be sent */
+  92   2              /* User needs to set PARA3 = 00 for 256 byte output */
+  93   2              do
+  94   2              {
+  95   3                  *(XDATA_PTR++) =  GetChar();    /* Get the value to write to RAM */
+  96   3              } while ((--PARA3) != 0);       /* Output byte until counter is zero */
+  97   2      
+  98   2          } /* End of XDATA RAM write */
+  99   1      
+ 100   1          return SW1SW2_OK;
+ 101   1      
+ 102   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     77    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

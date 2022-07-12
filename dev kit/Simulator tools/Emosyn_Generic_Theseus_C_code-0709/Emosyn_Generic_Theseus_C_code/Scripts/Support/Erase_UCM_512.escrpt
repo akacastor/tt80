@@ -1,0 +1,146 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Erase_UCM_512.escrpt
+; ====================
+;
+; $Revision: 1.2 $
+; $Author: chin $ 
+; $Date: 2005/11/08 17:59:09 $
+;
+; Generic script that checks the erase UCM page call functions correctly
+; 
+; 1. Read UCM area checking it is all FFh
+; 2. Write the pattern 55 AA 55 AA 55 AA 55 AA to the start and end of the page
+;    for all the UCM pages available
+; 3. Read the start and end of page to ensure pattern has been written
+; 4. Erase page and then read back start and end of page, should all be FF's
+; 5. Move to next page and repeat step 3 and 4
+; 6. Try entering addresses not within the UCM range
+;******************************************************************************
+
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Set the start address to the UCM where GSW code ends
+>SETVW: wPageStart = 0000							; Variable to remember page start
+>SETVW: wPageEnd = 0000								; Variable to remember page end
+>SETVB: bNumberBytesWritten = 0							; Variable to remember number of bytes written
+>SETVW: wUCMSpaceLeftToCheck = 0000						; Variable to remeber UCM space left to check
+
+>CALC: wUCMSpaceLeftToCheck = (UCM_END_ADDRESS) - (UCM_USABLE_START_ADDRESS)	; A check can be done on this variable to see is less than 512 bytes left
+
+;******************************************************************************
+; 1. Read UCM area checking it is all FFh
+;******************************************************************************
+>DISPLAY0: Checking UCM bytes are all FFh 
+
+>WHILE: (wAddress) <> (UCM_END_ADDRESS)
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 80
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0080						; Point to the next address
+
+>LOOP
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Reset the variable address back to usable UCM space
+>SETVW: wPageStart = (wAddress)							; Set the page start variable
+>CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+
+;******************************************************************************
+; 2. Write the pattern 55 AA 55 AA 55 AA 55 AA to the start and end of the page
+;    for all the UCM pages available
+;******************************************************************************
+>WHILE: (wUCMSpaceLeftToCheck) > 200						; Keep looping until there is less than 512 bytes left to check
+
+    >DISPLAY0: Writing pattern 55 AA 55 AA 55 AA 55 AA at address (wAddress)h boundaries
+
+    >WHILE: (bNumberBytesWritten) < 10						; This loop writes 16 bytes per page
+
+        >APDU: E5 (Write_Byte_UCM_Flash_Mode) (wAddress) 01 -- 55		; Write 55h to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+        >APDU: E5 (Write_Byte_UCM_Flash_Mode) (wAddress) 01 -- AA		; Write AAh to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+
+        >CALC: bNumberBytesWritten = (bNumberBytesWritten) + 2			; Increment number of bytes written in page
+
+        >IF: (bNumberBytesWritten) = 8						; After writing the pattern at the start
+            >SETVW: wAddress = (wPageEnd)					; point to the end of the page and then
+            >CALC: wAddress = (wAddress) - 8					; adjust so 8 bytes can be written at the end
+        >ENDIF
+    >LOOP
+
+    >SETVW: wPageStart = (wAddress)						; Set the page start variable to next page
+    >CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+    >CALC: wUCMSpaceLeftToCheck = (wUCMSpaceLeftToCheck) - 200			; Update variable that holds how much UCM there is left to check
+    >SETVB: bNumberBytesWritten = 0						; Reset the number of bytes written
+>LOOP
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Reset the variable address back to usable UCM space
+>CALC: wUCMSpaceLeftToCheck = (UCM_END_ADDRESS) - (UCM_USABLE_START_ADDRESS)	; A check can be done on this variable to see is less than 512 bytes left
+
+;******************************************************************************
+; 3. Read the start and end of page to ensure pattern has been written
+;******************************************************************************
+>WHILE: (wUCMSpaceLeftToCheck) > 200						; Keep looping until there is less than 512 bytes left to check
+
+    >DISPLAY0: Checking page starting at (wAddress) has pattern 55 AA 55 AA 55 AA 55 AA its boundaries
+
+    >SETVW: wPageStart = (wAddress)						; Set the page start variable
+    >CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the first 8 bytes of the page
+    >COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA					; Should match the pattern
+
+    >SETVW: wAddress = (wPageEnd)						; Point to the end of the page and then
+    >CALC: wAddress = (wAddress) - 8						; adjust so 8 bytes can be written at the end
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the last 8 bytes of the page
+    >COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA					; Should match the pattern
+
+;******************************************************************************
+; 4 Erase page and then read back start and end of page, should all be FF's
+;******************************************************************************
+    >SETVW: wAddress = 	(wPageStart)						; Set the page start variable again
+    >CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+
+    >DISPLAY1: Erasing page starting at (wAddress)h and checking it is contents
+
+    >APDU: E5 (Erase_UCM_512) (wAddress) -- --					; Erase the UCM page contents
+    >COMP: SW1SW2 = 9000							; Check the APDU return value
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the first 8 bytes of the page
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF					; Should all be FFh's
+
+    >SETVW: wAddress = (wPageEnd)						; Point to the end of the page and then
+    >CALC: wAddress = (wAddress) - 8						; adjust so 8 bytes can be written at the end
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the last 8 bytes of the page
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF					; Should all be FFh's
+
+    >CALC: wAddress = (wAddress) + 0008						; Point to the next page
+    >CALC: wUCMSpaceLeftToCheck = (wUCMSpaceLeftToCheck) - 200			; Update variable that holds how much UCM there is left to check
+
+;******************************************************************************
+; 5. Move to next page and repeat step 3 and 4
+;******************************************************************************
+>LOOP
+
+;******************************************************************************
+; 6. Try entering addresses not within the UCM range
+;******************************************************************************
+>SETVW: wAddress = 0000								; Try erasing firmware code space
+>DISPLAY1: Attemping to erase page starting at (wAddress)h
+>APDU: E5 (Erase_UCM_512) (wAddress) -- --					; Erase the UCM page contents
+>COMP: SW1SW2 = 6581								; Check the return value, should be a memory error
+
+>SETVW: wAddress = FE00								; Try erasing last 512 of CODE space memory
+>DISPLAY1: Attemping to erase page starting at (wAddress)h
+>APDU: E5 (Erase_UCM_512) (wAddress) -- --					; Erase the UCM page contents
+>COMP: SW1SW2 = 6581								; Check the return value, should be a memory error
+
+
+>ENDL

@@ -1,0 +1,13 @@
+/APDU_Command_Definition.h/1.8/Wed Mar  8 18:55:34 2006//
+/CleanUp.bat/1.1/Fri Aug 12 09:10:40 2005//
+/Emosyn_Helper_Functions.h/1.2/Mon Aug 15 10:21:49 2005//
+/Firmware_API_JumpTable.h/1.5/Fri Jul 28 22:32:35 2006//
+/Firmware_API_JumpTable.inc/1.1/Fri Aug 12 09:10:40 2005//
+/Generic_TT80_Example_C_Code.Uv2/1.11/Wed Mar  8 18:58:02 2006//
+/TT80_API_JumpTable.a51/1.5/Fri Jul 28 22:32:35 2006//
+/TT80_Get_OS_Version.c/1.1/Fri Aug 12 09:10:40 2005//
+/TT80_ISR.c/1.4/Sat Nov 26 18:24:19 2005//
+/TT80_Mass_Erase_UCM_Leaving_Bootloader.a51/1.2/Wed Feb 22 16:04:51 2006//
+/TT80_STARTUP.A51/1.2/Wed Feb 22 16:18:29 2006//
+/TT80_Send_ATR.c/1.2/Tue Oct 25 11:44:31 2005//
+D

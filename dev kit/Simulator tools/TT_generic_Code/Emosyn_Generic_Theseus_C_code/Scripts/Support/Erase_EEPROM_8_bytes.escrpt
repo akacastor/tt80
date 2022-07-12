@@ -1,0 +1,95 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Erase_EEPROM_8_bytes.escrpt
+; ===========================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Generic script that checks the 8 byte page EEPROM erase functions correctly
+; 
+; 1. Erase the entire EEPROM space excluding the bootloader area
+; 2. Read back erased area checking it is now all FFh
+; 3. Write 00h to the entire EEPROM space excluding the bootloader area
+; 4. Read back entire area checking all bytes are now 00h
+; 5. Erase a 64 byte page of EEPROM and check firmware return call is successful
+; 6. Read back 64 bytes of EEPROM checking all bytes are now FFh
+; 7. Repeat 5 and 6 until entire EEPROM area is tested
+;
+;******************************************************************************
+
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Set the start address to the base of EEPROM
+
+;******************************************************************************
+; 1. Erase the entire EEPROM space excluding the bootloader area
+;******************************************************************************
+>APDU: E5 (TheseusPlatinum_EE_MassErase_Bootloader_Safe) 00 00 -- --
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 2. Read back erased area checking it is now all FFh
+;******************************************************************************
+>DISPLAY0: Checking EEPROM bytes are all FFh
+
+>WHILE: (wAddress) <> (BOOTLOADER_START_ADDRESS)
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 00
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0100						; Point to the next address
+>LOOP
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Reset the variable address back to beginning of EEPROM
+
+;******************************************************************************
+; 3. Write 00h to the entire EEPROM space excluding the bootloader area
+;******************************************************************************
+>APDU: E5 (Fill_EEPROM_With_Byte) (EEPROM_START_ADDRESS) 03 -- 00 (EEPROM_USABLE_SPACE)
+>COMP: SW1SW2 = 9000
+
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Reset the variable address back to beginning of EEPROM
+
+;******************************************************************************
+; 4. Read back entire area checking all bytes are now 00h
+;******************************************************************************
+>DISPLAY0: Checking EEPROM bytes are all 00h
+
+>WHILE: (wAddress) <> (BOOTLOADER_START_ADDRESS)				; Check the whole of EEPROM is now 00h except Bootloader space
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 00
+    >COMP: RAPDU = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+    >CALC: wAddress = (wAddress) + 0100						; Point to the next address
+>LOOP
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Set the start address to the base of EEPROM
+
+;******************************************************************************
+; 5. Erase an 8 byte page of EEPROM and check firmware return call is successful
+;******************************************************************************
+>WHILE: (wAddress) <> (BOOTLOADER_START_ADDRESS)				; Keep looping until the Bootloader has been reached
+
+    >DISPLAY0: Erasing EEPROM page at address (wAddress)h
+
+    >APDU: E5 (Erase_EE_8) (wAddress) -- --					; APDU command to erase an 8 byte page
+    >COMP: SW1SW2 = 9000							: Check if the SW1 SW2 status is 9000
+
+;******************************************************************************
+; 6. Read back 8 bytes of EEPROM checking all bytes are now FFh
+;******************************************************************************
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0008						; Increment the address to the next EEPROM page
+
+>LOOP
+
+>DISPLAY2: Test completed for 8 byte Page Erase for EEPROM area
+
+>ENDL

@@ -1,0 +1,123 @@
+C51 COMPILER V7.50   XDATA_MEMORY_DUMP_EXTENDED_ADDRESSING                                 12/12/2006 14:05:41 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE XDATA_MEMORY_DUMP_EXTENDED_ADDRESSING
+OBJECT MODULE PLACED IN .\XDATA_Memory_Dump_Extended_Addressing.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common\XDATA_Memory_Dump_Extended_Addressing.c OMF2 ROM(D512K) OPTIMIZE(
+                    -SIZE) BROWSE INTVECTOR(0X0800) DEFINE(EXTENDED_ADDRESSING) VARBANKING DEBUG PRINT(.\XDATA_Memory_Dump_Extended_Addressin
+                    -g.lst) OBJECT(.\XDATA_Memory_Dump_Extended_Addressing.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         XDATA_Memory_Dump_Extended_Addressing.c
+   4          * Description:  Contains function to output data from XDATA space
+   5          * Copyright:    Emosyn Inc. 2006
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.2 $
+  17          * $Author: chin $ 
+  18          * $Date: 2006/03/08 18:46:13 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include "Firmware_API_JumpTable.h"
+  26          #include "Emosyn_Helper_Functions.h"
+  27          
+  28          #include <absacc.h>    /* Contains macro for FVAR and FCVAR */
+  29          
+  30          
+  31          /******************************************************************************
+  32          * External and local function declarations 
+  33          ******************************************************************************/
+  34          
+  35          
+  36          /******************************************************************************
+  37          * External variable declarations
+  38          ******************************************************************************/
+  39          
+  40          
+  41          /******************************************************************************
+  42          *
+  43          * Function Name:      XDATA_Memory_Dump_Extended_Addressing
+  44          * Function Inputs:    void
+  45          * Function Outputs:   uint SW1SW2_OK  9000h
+  46          * Description:        
+  47          *
+  48          * APDU Syntax:        E5 7E PARA1 PARA2 PARA3
+  49          * APDU Inputs:        PARA1  High byte of the CODE address space of data
+  50          *                     PARA2  Low byte of the CODE address space of data
+  51                                PARA3  Number of bytes to output
+  52          * APDU Outputs:       (PARA3) number of XDATA data bytes
+  53          *
+C51 COMPILER V7.50   XDATA_MEMORY_DUMP_EXTENDED_ADDRESSING                                 12/12/2006 14:05:41 PAGE 2   
+
+  54          * Example usage:      Output 67h bytes starting from address 12345h in XDATA space
+  55          *                        (E5 B2 01 00 00) - Load DPX byte (This has to be performed first)
+  56          * To Card             ->  E5 7E 23 45 67
+  57          * ACK from Card       <-  7E
+  58          * Data from Card      ->  Byte1 Byte2 Byte3...ByteX
+  59          * Response from Card  <-  90 00
+  60          *
+  61          ******************************************************************************/
+  62          uint XDATA_Memory_Dump_Extended_Addressing (void)
+  63          {
+  64   1          /* Keil uses 0x01-0x7F to represent DPX values in XDATA space for */
+  65   1          /* X:0x00:0000-X:0x7E:FFFF (See http://www.keil.com/support/docs/2226.htm) */
+  66   1          
+  67   1          /* Have to use a long variable to hold the address as you */
+  68   1          /* cannot perform arithmetic operations on far pointers */
+  69   1          /* See "http://www.keil.com/support/man/docs/c51/c51_le_far.htm" */
+  70   1          /* Also see "http://www.keil.com/support/docs/2276.htm" */
+  71   1      
+  72   1          /* Convert the seperate address parameters into a long */
+  73   1              IDATA_PTR = (uchar*)&ulTemp_Var;
+  74   1          *(IDATA_PTR++) = 0x00;
+  75   1          *(IDATA_PTR++) = DPX_Addr;
+  76   1          *(IDATA_PTR++) = PARA1;
+  77   1          *(IDATA_PTR++) = PARA2;
+  78   1      
+  79   1          /* A DO-WHILE loop enables 256 bytes to be sent */
+  80   1          /* User needs to set PARA3 = 00 for 256 byte output */
+  81   1          do
+  82   1          {
+  83   2                /* To access memory above 64K in C for CODE space use the FCVAR macro */
+  84   2                /* See "http://www.keil.com/support/docs/1947.htm" */
+  85   2                /* Also see "http://www.keil.com/support/docs/2276.htm" */
+  86   2                PutChar (FVAR (char, ulTemp_Var++));
+  87   2      
+  88   2          } while ((--PARA3) != 0);   /* Output byte until counter is zero */
+  89   1      
+  90   1          return SW1SW2_OK;
+  91   1      
+  92   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     81    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

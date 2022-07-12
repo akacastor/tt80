@@ -1,0 +1,1 @@
+"..\Common\Global_Vars.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Global_Vars.lst) OBJECT(.\Global_Vars.obj)

@@ -1,0 +1,341 @@
+C51 COMPILER V8.05a   MAIN                                                                 04/16/2007 10:40:57 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common\Main.c OMF2 OPTIMIZE(SIZE) BROWSE INTVECTOR(0X0800) MODDP2 DEBUG 
+                    -PRINT(.\Main.lst) OBJECT(.\Main.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         Main .c
+   4          * Description:  Contains main C entry function + additional supporting functions
+   5          * Copyright:    Emosyn Inc. 2005
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.12 $
+  17          * $Author: chin $ 
+  18          * $Date: 2006/03/08 16:39:29 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include <intrins.h> /* Includes the _nop_() function for C code */
+  26          #include "Firmware_API_JumpTable.h"
+  27          #include "Emosyn_Helper_Functions.h"
+  28          #include "APDU_Command_Definition.h"
+  29          #include "APDU_Test.h"
+*** WARNING C318 IN LINE 29 OF ..\Common\Main.c: can't open file 'APDU_Test.h'
+  30          #include "Emosyn_Clock_Speeds.h"
+  31          
+  32          
+  33          /******************************************************************************
+  34          * External and local function declarations 
+  35          ******************************************************************************/
+  36          extern void Chip_Init (void);
+  37          extern void Send_ATR (void);
+  38          extern void ISO_Select_Speed (uchar FiDi, uchar ucCommand_Type);
+  39          
+  40          void Process_PPS_Command (void);
+  41          void Process_APDU_Command (void);
+  42          void Enter_Idle_Mode (uchar ucIdleMode);
+  43          
+  44          
+  45          /******************************************************************************
+  46          * External variable declarations
+  47          ******************************************************************************/
+  48          
+  49          
+  50          /******************************************************************************
+  51          *
+  52          * Function Name:      main
+  53          * Function Inputs:    void
+C51 COMPILER V8.05a   MAIN                                                                 04/16/2007 10:40:57 PAGE 2   
+
+  54          * Function Outputs:   void
+  55          * Description:        Main function calls chip initialistion & Send ATR function
+  56          *                     It then goes into idle mode. Chip wakes up on receving a
+  57          *                     char from the serial port, it then starts the process of
+  58          *                     decoding and executing the APDU command
+  59          *
+  60          *******************************************************************************/
+  61          void main (void)
+  62          {
+  63   1          Chip_Init();                /* Initialises clock, serial port */
+  64   1      
+  65   1          Send_ATR();                 /* Transmit the chip specified ATR */
+  66   1      
+  67   1          Enter_Idle_Mode (IDLE_MODE);/* Go into idle mode until a char is received */
+  68   1      
+  69   1          /*******************************************************************/
+  70   1          /* After the ATR has been sent always check the first APDU command */
+  71   1          /* to see if it a PPS command (4 byte command), otherwise always   */
+  72   1          /* get a standard 5 byte APDU command                              */
+  73   1          /*******************************************************************/
+  74   1      
+  75   1          CLA = GetChar();            /* Get the first byte */
+  76   1      
+  77   1          if (CLA == PPS_CLA)         /* If 1st APDU byte is 0xFF it's a PPS command */
+  78   1          {
+  79   2              Process_PPS_Command();
+  80   2          }
+  81   1          else                        /* Else receive the rest of APDU command (4 bytes) */
+  82   1          {
+  83   2              Serial_Receive_X_Bytes (APDU_HEADER_LENGTH - 1, &INS);
+  84   2              Process_APDU_Command();
+  85   2          }
+  86   1      
+  87   1          /************************************************************/
+  88   1          /* This is the main loop that waits in specific idle mode   */
+  89   1          /* It wakes up and comes active when a character is received */
+  90   1          /* It will then process the APDU command                    */
+  91   1          /************************************************************/
+  92   1          while (1)
+  93   1          {
+  94   2              /* Switch chip to normal idle or deep idle (use ISO clock) */
+  95   2              Enter_Idle_Mode(IDLE_MODE);
+  96   2      
+  97   2              /* Get 5 byte APDU, should always do this after the 1st ever APDU command */
+  98   2              Serial_Receive_X_Bytes (APDU_HEADER_LENGTH, &CLA);
+  99   2      
+ 100   2              Process_APDU_Command();
+ 101   2              } /* Forever loop */
+ 102   1      
+ 103   1      } /* End of main function */
+ 104          
+ 105          
+ 106          /******************************************************************************
+ 107          *
+ 108          * Function Name:      Process_PPS_Command
+ 109          * Function Inputs:    void
+ 110          * Function Outputs:   void
+ 111          * Description:        Processes PPS command, changing the timer when necessary
+ 112          *
+ 113          ******************************************************************************/
+ 114           void Process_PPS_Command (void)
+ 115          {
+C51 COMPILER V8.05a   MAIN                                                                 04/16/2007 10:40:57 PAGE 3   
+
+ 116   1          /* Read in rest of PPS command (3 bytes), already got the CLA */
+ 117   1          Serial_Receive_X_Bytes (APDU_HEADER_LENGTH - 2, &INS);
+ 118   1      
+ 119   1          /* Call function to change ISO serial timer */
+ 120   1          ISO_Select_Speed (PARA1, PPS_BAUD_CMD);
+ 121   1      
+ 122   1      } /* End of function */
+ 123          
+ 124          
+ 125          /******************************************************************************
+ 126          *
+ 127          * Function Name:      Enter_Idle_Mode
+ 128          * Function Inputs:    Idle mode type deep idle = 1; normal idle = 0
+ 129          * Function Outputs:   void
+ 130          * Description:        Puts chip into normal or deep idle (internal clock stopped)
+ 131          *
+ 132          ******************************************************************************/
+ 133          void Enter_Idle_Mode (uchar ucIdleMode)
+ 134          {
+ 135   1          if (ucIdleMode == NORMAL_IDLE_MODE) 
+ 136   1          {
+ 137   2              PCON |= 0x01;   /* Set the SFR bit that puts the processor into idle mode */
+ 138   2      
+ 139   2              _nop_ ();
+ 140   2              _nop_ ();
+ 141   2              _nop_ ();
+ 142   2              _nop_ ();
+ 143   2              _nop_ ();
+ 144   2          }
+ 145   1          else if (ucIdleMode == DEEP_IDLE_MODE) 
+ 146   1          {
+ 147   2              /* Save the Clock multiplier and divider ratios currently used by the chip */
+ 148   2              /* This is so the Clock values can be restored after waking up from idle */
+ 149   2              TEMPVARIABLE2 = Firmware_GetClockControlSFR();
+ 150   2      
+ 151   2              TEMPVARIABLE1 = TEMPVARIABLE2 & 0x0F; /* Clock Divider (lower nibble)*/
+ 152   2      
+ 153   2              TEMPVARIABLE2 = (TEMPVARIABLE2 & 0xF0) >> 4; /* Clock Multiplier (upper nibble) */
+ 154   2      
+ 155   2              TEMPVARIABLE3 = Firmware_GetClockSourceSelectSFR(); /* Get the clock source */
+ 156   2      
+ 157   2              /***********************************************************
+ 158   2               * Note
+ 159   2               * The values for clock settings differ from 
+ 160   2               * Firmware_GetClockSourceSelectSFR to Firmware_SetClock
+ 161   2               *
+ 162   2               * Firmware_GetClockSourceSelectSFR    Firmware_SetClock
+ 163   2               * 00 - ISO Clock Source               00 - Int Clock Source
+ 164   2               * 01 - PLL Clock Source               01 - PLL Clock Source
+ 165   2               * 02 - Int Clock Source               02 - ISO Clock Source
+ 166   2               * So the conversion code below is necessary         
+ 167   2              ***********************************************************/
+ 168   2      
+ 169   2              if (TEMPVARIABLE3 & 0x02)       /* 0x00 = Int Osc for Firmware_SetClock */
+ 170   2              {
+ 171   3                  TEMPVARIABLE3 = INT_OSC;
+ 172   3              }
+ 173   2              else if (TEMPVARIABLE3 & 0x01)  /* 0x01 = PLL for Firmware_SetClock */
+ 174   2              {
+ 175   3                  TEMPVARIABLE3 = PLL_CLOCK;
+ 176   3              }
+ 177   2              else                            /* 0x02 = ISOCLK for Firmware_SetClock */
+C51 COMPILER V8.05a   MAIN                                                                 04/16/2007 10:40:57 PAGE 4   
+
+ 178   2              {
+ 179   3                  TEMPVARIABLE3 = ISO_CLOCK;
+ 180   3              }
+ 181   2      
+ 182   2              /* Run the processor from the ISO clock, no multiplier & no divisor value */
+ 183   2              Firmware_SetClock (ISO_CLOCK, MULTIPLY_BY_01_RATIO, DIVIDE_BY_01_RATIO);
+ 184   2      
+ 185   2              PCON |= 0x01;       /* Set the SFR that puts the processor into idle mode */
+ 186   2      
+ 187   2              _nop_ ();
+ 188   2              _nop_ ();
+ 189   2              _nop_ ();
+ 190   2              _nop_ ();
+ 191   2              _nop_ ();
+ 192   2      
+ 193   2              /* Restore all the previous clock values */
+ 194   2              Firmware_SetClock (TEMPVARIABLE3, TEMPVARIABLE2, TEMPVARIABLE1);
+ 195   2      
+ 196   2          } /* End of deep idle process */
+ 197   1      
+ 198   1      }  /* End of function */
+ 199          
+ 200          
+ 201          /******************************************************************************
+ 202          *
+ 203          * Function Name:      Process_APDU_Command
+ 204          * Function Inputs:    void
+ 205          * Function Outputs:   void
+ 206          * Description:        APDU command functions are listed sequentially as
+ 207          *                     addresses in an array. The index for the array is the
+ 208          *                     INS value (divided by 2 as INS can only be even). If
+ 209          *                     there is no address for the INS value index it means NO
+ 210          *                     function is available for this INS value (it will have
+ 211          *                     an 0xFFFF (NO_ENTRY) entry for its address)
+ 212          *                     If a function address does exist for the APDU entry a
+ 213          *                     function pointer refernces it
+ 214          *
+ 215          *                     See APDU_Command_Definition.h in the chip specfic
+ 216          *                     directory for more detail
+ 217          *
+ 218          ******************************************************************************/
+ 219          void Process_APDU_Command (void)
+ 220          {
+ 221   1          /* If not a valid CLA value return 0x6E00 */
+ 222   1          if (CLA != EMOSYN_CLA)
+ 223   1          {
+ 224   2              SW1SW2 = SW1SW2_CLA_NOT_SUPPORTED;
+ 225   2          }
+ 226   1      
+ 227   1          /* If INS value is an odd number return error */
+ 228   1          else if (INS & 0x01)
+ 229   1          {
+ 230   2              SW1SW2 = SW1SW2_INS_NOT_SUPPORTED;
+ 231   2          }
+ 232   1      
+ 233   1          /******************************************
+ 234   1           * INS values are even always even!
+ 235   1           * Array for APDU function addresses are 
+ 236   1           * organised sequentially
+ 237   1           * A division of the INS value by 2 is 
+ 238   1           * required to access the array entry for a
+ 239   1           * particular INS command
+C51 COMPILER V8.05a   MAIN                                                                 04/16/2007 10:40:57 PAGE 5   
+
+ 240   1          ******************************************/
+ 241   1      
+ 242   1          /* Check if the function address value for this particular APDU INS */
+ 243   1          /* value in the INS_FPTR table is valid (not equal to 0xFFFF) */
+ 244   1      
+ 245   1      #ifndef EXTENDED_ADDRESSING
+ 246   1      
+ 247   1          else if (INS_FPTR[INS / 2] != (uint)NO_ENTRY)
+ 248   1      
+ 249   1      #else
+              
+                  else if (INS_FPTR[INS / 2] != NO_ENTRY)
+              
+              #endif
+ 254   1          {   
+ 255   2              /*************************************************************/
+ 256   2              /* The #ifdef below is designed to give the user the ability */
+ 257   2              /* to remove the ACK byte (INS) for APDU communications      */
+ 258   2              /* The example below does not return an ACK for the          */
+ 259   2              /* Erase_256_UCM command. To execute, insert the define in   */
+ 260   2              /* Project Options\C51\Preprocessor Symbols\Define           */
+ 261   2              /*************************************************************/
+ 262   2      #ifdef NO_ACK_BYTE_RETURN
+              
+                      if (INS != 0x2C)
+                      {
+                          PutChar (INS); /* Output the INS as an ack */
+                      }
+              
+              #else
+ 270   2      
+ 271   2              PutChar (INS); /* Output the INS as an ack */
+ 272   2      
+ 273   2      #endif        
+ 274   2      
+ 275   2      
+ 276   2              /* Call the function listed in the INS_FPTR table */
+ 277   2      #ifndef EXTENDED_ADDRESSING
+ 278   2      
+ 279   2              /* Function pointer (2 bytes) referencing */
+ 280   2              SW1SW2 = ((uint (code*) (void)) INS_FPTR[INS / 2])();
+ 281   2      
+ 282   2      #else
+              
+                      /* Function pointer (3 bytes) referencing */
+                      SW1SW2 = ((uint (*) (void)) INS_FPTR[INS / 2])();
+              
+              #endif
+ 288   2          }
+ 289   1      
+ 290   1          /* INS value has no function associated with it */    
+ 291   1          else
+ 292   1          {
+ 293   2              SW1SW2 = SW1SW2_INS_NOT_SUPPORTED;
+ 294   2          }
+ 295   1      
+ 296   1          /* Only output SW1SW2 if required, not required for Change_ISO_Speed() */
+ 297   1          if (SW1SW2 != NO_SW1SW2)
+ 298   1          {
+ 299   2              Serial_Transmit_X_Bytes (2, (uchar *)&SW1SW2);
+ 300   2          }
+ 301   1      
+C51 COMPILER V8.05a   MAIN                                                                 04/16/2007 10:40:57 PAGE 6   
+
+ 302   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    286    ----
+   CONSTANT SIZE    =    256    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

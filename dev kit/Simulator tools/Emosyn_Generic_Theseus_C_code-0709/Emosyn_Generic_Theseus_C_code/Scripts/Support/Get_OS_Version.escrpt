@@ -1,0 +1,33 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Get_OS_Version.escrpt
+; =====================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 18:50:50 $
+;
+; Generic script that checks the Get OS Version call functions correctly
+; 
+; 1. Get OS Version making sure it is 00 01
+; 2. Try the same command with invalid parameters
+;******************************************************************************
+
+>APDU: E5 (Get_OS_Version) 00 00 -- 02						; Get OS Version APDU command
+>COMP: RAPDU = 00 01								; Check if the OS Version is 0001
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_OS_Version) FF 00 -- 02						; Get OS Version APDU command with set PARA1 value
+>COMP: RAPDU =  00 01
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_OS_Version) 00 FF -- 02						; Get OS Version APDU command with set PARA2 value
+>COMP: RAPDU = 00 01
+>COMP: SW1SW2 = 9000
+
+>APDU: E5 (Get_OS_Version) FF FF -- 02						; Get OS Version APDU command with set PARA1 & PARA2 value
+>COMP: RAPDU =  00 01
+>COMP: SW1SW2 = 9000

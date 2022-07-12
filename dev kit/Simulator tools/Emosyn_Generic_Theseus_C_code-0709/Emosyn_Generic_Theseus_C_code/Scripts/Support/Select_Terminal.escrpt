@@ -1,0 +1,70 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; Select_Terminal.escrpt
+; ======================
+;
+; $Revision: 1.2 $
+; $Author: chin $ 
+; $Date: 2006/02/21 12:19:47 $
+;
+; Offers the choice and sets the terminal as selected by the user
+;
+;***********************************************************************************************************
+
+
+>SETVB: Rania = 01				; This is the list of selectable terminals the scripter can use
+>SETVB: Star265Int = 02
+>SETVB: Star265Ext = 03
+>SETVB: Towitoko = 04
+>SETVB: PCSC = 05
+>SETVB: SwiftSIM1 = 06
+>SETVB: SwiftSIM2 = 07
+
+>DISPLAY0: Select the terminal the scripter will be communicating with
+>DISPLAY1: Rania = 01, Star265Int = 02, Star265Ext = 03, Towitoko = 04, PCSC = 05, SwiftSIM1 = 06, SwiftSIM2 = 07
+
+
+>SETVA: Terminal = Keyboard			; Get the user keyed terminal selection
+;***********************************************************************************************************
+; Comment out the line above ">SETVA: Terminal = Keyboard" and remove the semi colon from the line below
+; ";>SETVA: Terminal = 0X"  to force the scripter to use SwiftSIM1 using Com1 or PCSC reader
+;***********************************************************************************************************
+;>SETVA: Terminal = 06				; Automatically select SwifSIM1 Com1
+;>SETVA: Terminal = 05				; Automatically select PCSC reader
+
+
+>IF: (Terminal) = (Rania)			; If user selection is 01 select Rania
+    >SELECT: Rania
+>ENDIF
+
+>IF: (Terminal) = (Star265Int)			; If user selection is 02 select Micropross Star 265 using internal reader
+    >SELECT: Star265Int
+>ENDIF
+
+>IF: (Terminal) = (Star265Ext)			; If user selection is 03 select Micropross Star 265 using external reader
+    >SELECT: Star265Ext
+>ENDIF
+
+>IF: (Terminal) = (Towitoko)			; If user selection is 04 select Towitoko card reader
+    >SELECT: Towitoko
+>ENDIF
+
+>IF: (Terminal) = (PCSC)			; If user selection is 05 select PCSC card reader
+    >SELECT: PCSC
+>ENDIF
+
+>IF: (Terminal) = (SwiftSim1)			; If user selection is 06 select SwifSIM1 card reader
+    >SELEctTerm selected is :SwiftSIM1(Comm1)
+>ENDIF
+
+>IF: (Terminal) = (SwiftSim2)			; If user selection is 07 select SwifSIM2 card reader
+    >SELEctTerm selected is :SwiftSIM2(Comm1)
+>ENDIF
+
+>DISPLAY0: 					; Clear the display
+>DISPLAY1: 
+
+>ENDL

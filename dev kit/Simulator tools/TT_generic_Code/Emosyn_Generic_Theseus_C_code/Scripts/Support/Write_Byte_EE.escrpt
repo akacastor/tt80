@@ -1,0 +1,67 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Write_Byte_EE.escrpt
+; ====================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Generic script that writes a byte value to EEPROM space
+; 
+; 1. Read EEPROM area checking it is all FFh
+; 2. Write 00h to the entire EEPROM space excluding the bootloader area
+; 3. Read back entire area checking all bytes are now 00h
+;
+;******************************************************************************
+
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Set the start address to the base of EEPROM
+
+;******************************************************************************
+; 1. Read EEPROM area checking it is all FFh
+;******************************************************************************
+>DISPLAY0: Checking EEPROM bytes are all FFh 
+
+>WHILE: (wAddress) <> (BOOTLOADER_START_ADDRESS)
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 00
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0100						; Point to the next address
+>LOOP
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Reset the variable address back to beginning of EEPROM
+
+;******************************************************************************
+; 2. Write 00h to the entire EEPROM space excluding the bootloader area
+;******************************************************************************
+>WHILE: (wAddress) <> (BOOTLOADER_START_ADDRESS)
+
+    >DISPLAY0: Writing byte 00h at address (wAddress)h
+
+    >APDU: E5 (Write_Byte_EE_Flash_Mode) (wAddress) 01 -- 00
+    >COMP: SW1SW2 = 9000
+
+    >CALC: wAddress = (wAddress) + 0001						; Point to the next address
+>LOOP
+
+>SETVW: wAddress = (EEPROM_START_ADDRESS)					; Reset the variable address back to beginning of EEPROM
+
+;******************************************************************************
+; 3. Read back entire area checking all bytes are now 00h
+;******************************************************************************
+>DISPLAY0: Checking EEPROM bytes are all 00h 
+
+>WHILE: (wAddress) <> (BOOTLOADER_START_ADDRESS)				; Check the whole of EEPROM is now 00h except Bootloader space
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 00
+    >COMP: RAPDU = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+    >CALC: wAddress = (wAddress) + 0100						; Point to the next address
+>LOOP
+
+>ENDL

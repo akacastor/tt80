@@ -1,0 +1,258 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;*******************************************************************************
+; TT30_Set_Security_Action_&_Set_Security_Mask.Escrpt
+; ===================================================
+;
+; $Revision: 1.2 $
+; $Author: chin $ 
+; $Date: 2006/02/20 12:46:16 $
+;
+; TT30 Security Action & Set Security Mask test
+;
+; This tests the reset and interrupt mode of security on the chip
+; There are only two faults to test for on the TT30, under volatage and brown out
+;
+; 1. Loads in TT30 memory defaults
+; 2. Offers user selection of terminal to run the scripter at
+; 3. Gets the ATR and compares it to the expected preset ATR value
+; 4. Loads in APDU commands values
+; 5. Test under voltage fault by setting security mask temporarily using reset option
+; 6. Test brown out fault by setting security mask temporarily using reset option
+; 7. Set interrupt enable for security faults
+; 8. Set security faults to generate interrupts
+; 9. Test under voltage fault setting security mask temporarily using interrupt option
+; 10. Test brown out fault setting the security mask temporarily using interrupt option
+; 11. Reset the chip
+; 12. Test under voltage fault setting the security mask permanently using reset option
+; 13. Test brown out fault setting the security mask permanently using reset option
+; 14. Test under voltage fault again. Mask is already set permanently - reset should occur without setting mask
+; 15. Test brown out fault again. Mask is already set permanently - reset should occur without setting mask
+; 16. Reset the chip
+; 17. Set interrupt enable for security faults
+; 18. Set security faults to generate interrupts
+; 19. Test under voltage fault using the interrupt option
+; 20. Reset the chip
+; 21. Set interrupt enable for security faults
+; 22. Test brown out fault using the interrupt option
+; 23. Reset the chip
+; 24. Set interrupt enable for security faults
+; 25. Test under voltage fault using the interrupt option
+; 26. Reset the chip
+; 27. Set interrupt enable for security faults
+; 28. Test brown out fault using the interrupt option
+;*******************************************************************************
+
+
+$Include: ..\Support\TT30_Definitions.escrpt					; Load in the chip specific addresses
+
+$Include: ..\Support\Select_Terminal.escrpt					; Select the terminal to run the scripter at
+
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+$Include: ..\Support\Generic_Code_INS_Values.escrpt				; Load in the APDU command INS values
+
+
+;*******************************************************************************
+; After power up faults cause a Reset by default
+; Test 5 - 10 will test the security using the reset and interrupt options with
+; the temporary parameter option
+;*******************************************************************************
+
+
+;******************************************************************************
+; 5. Test under voltage fault by setting the security mask temporarily,
+;    using the reset option
+;******************************************************************************
+>APDU :E5 (Set_Security_Mask) 02 00 -- --					; Enable Under voltage fault
+>COMP :SW1SW2 = 90 00
+
+>APDU :E5 (Set_Security_Status) 02 00 -- 05					; Force the Under voltage fault. Chip will reset
+>COMP :RAPDU = 3B 93 11 00 00							; First 5 bytes of ATR
+>COMP :SW1SW2 = 30 XX								; Last two bytes of ATR will be seen as SW1SW2
+
+;******************************************************************************
+; 6. Test brown out fault by setting the security mask temporarily,
+;    using the reset option
+;******************************************************************************
+>APDU :E5 (Set_Security_Mask) 20 00 -- --					; Enable Brown Out fault
+>COMP :SW1SW2 = 90 00
+
+>APDU :E5 (Set_Security_Status) 20 00 -- 05					; Force the Brown Out fault. Chip will reset
+>COMP :RAPDU = 3B 93 11 00 00							; First 5 bytes of ATR
+>COMP :SW1SW2 = 30 XX								; Last two bytes of ATR will be seen as SW1SW2
+
+;******************************************************************************
+; 7. Set interrupt enable for security faults
+;******************************************************************************
+>APDU :E5 (Set_Interrupt_Enable) A0 00 -- --					; Enable Physical Fault interrupts
+>COMP :SW1SW2 = 90 00
+
+;******************************************************************************
+; 8. Set security faults to generate interrutps
+;******************************************************************************
+>APDU :E5 (Set_Security_Action) 40 00 -- --					; Security Faults cause an Interrupt temporarily
+>COMP :SW1SW2 = 90 00
+
+;******************************************************************************
+; 9. Test under voltage fault by setting the security mask temporarily,
+;    using the interrupt option
+;******************************************************************************
+>APDU :E5 (Set_Security_Mask) 02 00 -- --					; Enable Under voltage fault
+>COMP :SW1SW2 = 90 00
+
+>APDU :E5 (Set_Security_Status) 02 00 -- 02					; Force the Under voltage fault. Chip will cause interrupt
+>COMP :RAPDU = 2B 82								; Physical Fault ISR
+>COMP :SW1SW2 = 90 00
+
+;******************************************************************************
+; 10. Test brown out fault by setting the security mask temporarily,
+;     using the interrupt option
+;******************************************************************************
+>APDU :E5 (Set_Security_Mask) 20 00 -- --					; Enable Brown Out fault
+>COMP :SW1SW2 = 90 00
+
+>APDU :E5 (Set_Security_Status) 20 00 -- 02					; Force the Brown Out fault. Chip will cause interrupt
+>COMP :RAPDU = 2B A0								; Physical Fault ISR
+>COMP :SW1SW2 = 90 00
+
+
+;*******************************************************************************
+; Test 11 -  will test the security using the reset and interrupt options with
+; the permanent parameter option
+;*******************************************************************************
+
+;*******************************************************************************
+; 11. Reset the chip
+;*******************************************************************************
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+;*******************************************************************************
+; 12. Test under voltage fault by setting the security mask permanently,
+;     using the reset option
+;*******************************************************************************
+>APDU :E5 (Set_Security_Mask) 02 01 -- --					; Enable Under voltage fault in Persistant mode
+>COMP :SW1SW2 = 90 00
+
+>APDU :E5 (Set_Security_Status) 02 00 -- 05					; Force the Under voltage fault. Chip will reset
+>COMP :RAPDU = 3B 93 11 00 00							; First 5 ytes of ATR
+>COMP :SW1SW2 = 30 XX								; Last two bytes of ATR will be seen as SW1SW2
+
+;*******************************************************************************
+; 13. Test brown out fault by setting the security mask permanently,
+;     using the reset option
+;*******************************************************************************
+>APDU :E5 (Set_Security_Mask) 20 01 -- --					; Enable Brown Out fault in Persistant mode
+>COMP :SW1SW2 = 90 00
+
+>APDU :E5 (Set_Security_Status) 20 00 -- 05					; Force the Brown Out fault. Chip will reset
+>COMP :RAPDU = 3B 93 11 00 00							; First 5 bytes of ATR
+>COMP :SW1SW2 = 30 XX								; Last two bytes of ATR will be seen as SW1SW2
+
+
+;*******************************************************************************
+; 14. Test under voltage fault again. Mask is alreay set permanently so reset
+;     should occur without setting mask
+;*******************************************************************************
+>APDU :E5 (Set_Security_Status) 02 00 -- 05					; Force the Under voltage fault. Chip will reset
+>COMP :RAPDU = 3B 93 11 00 00							; First 5 ytes of ATR
+>COMP :SW1SW2 = 30 XX								; Last two bytes of ATR will be seen as SW1SW2
+
+;*******************************************************************************
+; 15. Test brown out fault again. Mask is alreay set permanently so reset should
+;     occur without setting mask
+;*******************************************************************************
+>APDU :E5 (Set_Security_Status) 20 00 -- 05					; Force the Brown Out fault. Chip will reset
+>COMP :RAPDU = 3B 93 11 00 00							; First 5 bytes of ATR
+>COMP :SW1SW2 = 30 XX	
+
+
+;*******************************************************************************
+; The following will now test the interrupt mode of the security settings
+; The mask for the security settings have already been set previously in 12 & 13
+;*******************************************************************************
+
+;*******************************************************************************
+; 16. Reset the chip
+;*******************************************************************************
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+;******************************************************************************
+; 17. Set interrupt enable for security faults
+;******************************************************************************
+>APDU :E5 (Set_Interrupt_Enable) A0 00 -- --					; Enable Physical Fault interrupts
+>COMP :SW1SW2 = 90 00
+
+;******************************************************************************
+; 18. Set security faults to generate interrupts
+;******************************************************************************
+>APDU :E5 (Set_Security_Action) 40 01 -- --					; Security Faults cause an Interrupt permanently
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 19. Test under voltage fault using the interrupt option
+;*******************************************************************************
+>APDU :E5 (Set_Security_Status) 02 00 -- 02					; Force the Under voltage fault. Chip will interrupt
+>COMP :RAPDU = 2B 82								; Physical Fault ISR
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 20. Reset the chip
+;*******************************************************************************
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+;******************************************************************************
+; 21. Set interrupt enable for security faults
+;******************************************************************************
+>APDU :E5 (Set_Interrupt_Enable) A0 00 -- --					; Enable Physical Fault interrupts
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 22. Test brown out fault using the interrupt option
+;*******************************************************************************
+>APDU :E5 (Set_Security_Status) 20 00 -- 02					; Force the Brown Out fault. Chip will interrupt
+>COMP :RAPDU = 2B A0								; Physical Fault ISR
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 23. Reset the chip
+;*******************************************************************************
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+;******************************************************************************
+; 24. Set interrupt enable for security faults
+;******************************************************************************
+>APDU :E5 (Set_Interrupt_Enable) A0 00 -- --					; Enable Physical Fault interrupts
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 25. Test under voltage fault using the interrupt option
+;*******************************************************************************
+>APDU :E5 (Set_Security_Status) 02 00 -- 02					; Force the Under voltage fault. Chip will interrupt
+>COMP :RAPDU = 2B 82								; Physical Fault ISR
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 26. Reset the chip
+;*******************************************************************************
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+;******************************************************************************
+; 27. Set interrupt enable for security faults
+;******************************************************************************
+>APDU :E5 (Set_Interrupt_Enable) A0 00 -- --					; Enable Physical Fault interrupts
+>COMP :SW1SW2 = 90 00
+
+;*******************************************************************************
+; 28. Test brown out fault using the interrupt option
+;*******************************************************************************
+>APDU :E5 (Set_Security_Status) 20 00 -- 02					; Force the Brown Out fault. Chip will interrupt
+>COMP :RAPDU = 2B A0								; Physical Fault ISR
+>COMP :SW1SW2 = 90 00
+
+
+>DISPLAY2: Test completed for Set Security Action and Set Security Mask
+
+>ENDL

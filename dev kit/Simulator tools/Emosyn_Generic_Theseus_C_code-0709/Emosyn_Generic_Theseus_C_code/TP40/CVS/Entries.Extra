@@ -1,0 +1,12 @@
+/APDU_Command_Definition.h////*///
+/CleanUp.bat////*///
+/Emosyn_Helper_Functions.h////*///
+/Firmware_API_JumpTable.h////*///
+/Firmware_API_JumpTable.inc////*///
+/Generic_TP40_Example_C_Code.Uv2////*///
+/TP40_API_JumpTable.LIB////*///
+/TP40_Get_OS_Version.c////*///
+/TP40_ISR.c////*///
+/TP40_MassEraseEE_Bootloader_Safe.c////*///
+/TP40_STARTUP.A51////*///
+/TP40_Send_ATR.c////*///

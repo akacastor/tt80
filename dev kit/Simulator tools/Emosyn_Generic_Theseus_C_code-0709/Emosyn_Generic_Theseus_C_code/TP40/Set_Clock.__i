@@ -1,0 +1,1 @@
+"..\Common\Set_Clock.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Set_Clock.lst) OBJECT(.\Set_Clock.obj)

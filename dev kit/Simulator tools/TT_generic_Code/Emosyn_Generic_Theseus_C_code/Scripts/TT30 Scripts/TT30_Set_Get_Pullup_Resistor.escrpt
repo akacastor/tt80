@@ -1,0 +1,62 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;*******************************************************************************
+; TT30_Set_Get_Pullup_Resistor.escrpt
+; ===================================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2006/02/21 12:16:18 $
+;
+; TT30 write byte in UCM test
+; 1. Loads in TT30 memory defaults
+; 2. Offers user selection of terminal to run the scripter at
+; 3. Gets the ATR and compares it to the expected preset ATR value
+; 4. Loads in APDU commands values
+; 5. Stress test the IO Pullup resistor APDU commands
+;
+;*******************************************************************************
+
+$Include: ..\Support\TT30_Definitions.escrpt					; Load in the chip specific addresses
+
+$Include: ..\Support\Select_Terminal.escrpt					; Select the terminal to run the scripter at
+
+$Include: ..\Support\GetATR_and_Compare.escrpt					; Get ATR and compare it to known chip ATR response
+
+$Include: ..\Support\Generic_Code_INS_Values.escrpt				; Load in the APDU command INS values
+
+
+
+;******************************************************************************
+; 5. Stress test the IO Pullup resistor APDU commands
+;******************************************************************************
+
+>SETVB: bLoop_Count = 00
+
+>DISPLAY0: Stress testing the setting of the IO Pullup Resistor
+
+>WHILE :(bLoop_Count) < 20							; Try the IO Pullup APDU 32 times
+
+    >APDU: E5 (Get_Pullup_Resistor) 00 00 -- 01
+    >COMP: RAPDU = 00 
+    >COMP: SW1SW2 = 9000
+
+    >APDU: E5 (Set_Pullup_Resistor) 01 00 -- --
+    >COMP: SW1SW2 = 9000
+
+    >APDU: E5 (Get_Pullup_Resistor) 00 00 -- 01
+    >COMP: RAPDU = 01 
+    >COMP: SW1SW2 = 9000
+
+    >APDU: E5 (Set_Pullup_Resistor) 00 00 -- --
+    >COMP: SW1SW2 = 9000
+
+    >CALC: bLoop_Count = (bLoop_Count) + 1
+>LOOP
+
+
+>DISPLAY2: Test completed for Pullup Resistor tests
+
+>ENDL

@@ -1,0 +1,96 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; GetATR_and_Compare.escrpt
+; =========================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Gets the chip ATR and compares it to a set value
+;
+; The variable wChipType is defined in the TXXX_Definitions.escrpt
+;
+;***********************************************************************************************************
+
+>TERM :GetATR
+
+>SETVA :SavedATR = ATR
+
+>IF: (wChipType) = 0040
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 00 40 A5	; Simulation TP40 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 00 40 XX	; Actual TP40 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0050
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 00 50 A5	; Simulation TP50 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 00 50 XX	; Actual TP50 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0062
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 00 62 A5	; Simulation TP62 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 00 62 XX	; Actual TP62 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0102
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 01 02 A5	; Simulation T100-2 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 01 02 XX	; Actual TP100-2 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0130
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 01 30 A5	; Simulation TP130 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 01 30 XX	; Actual TP130 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0030
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 00 30 A5	; Simulation TT30 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 00 30 XX	; Actual TT30 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0080
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 00 80 A5	; Simulation TT80 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 00 80 XX	; Actual TT80 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0120
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 01 20 A5	; Simulation TT120 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 01 20 XX	; Actual TT120 ATR
+    >ENDIF
+>ENDIF
+
+>IF: (wChipType) = 0260
+    >IF: (Terminal) = (Rania)
+        >COMP :ATR = 3B 93 11 00 02 60 A5	; Simulation TT260 ATR
+    >ELSE
+        >COMP :ATR = 3B 93 11 00 02 60 XX	; Actual TT260 ATR
+    >ENDIF
+>ENDIF
+
+
+>ENDL

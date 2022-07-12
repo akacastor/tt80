@@ -1,0 +1,1 @@
+"..\Common\Get_Interrupt_Enable.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Get_Interrupt_Enable.lst) OBJECT(.\Get_Interrupt_Enable.obj)

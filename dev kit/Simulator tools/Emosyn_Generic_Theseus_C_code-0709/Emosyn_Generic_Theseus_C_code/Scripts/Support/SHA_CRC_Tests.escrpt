@@ -1,0 +1,84 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; SHA_CRC_Tests.escrpt
+; ====================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/09 12:50:35 $
+;
+; Generic script that checks the SHA and CRC calls functions correctly
+;
+; 1. Check that the first free 256 bytes of UCM are all FF's
+; 2. Write a 255 byte incremental pattern to the 256 bytes of UCM
+; 3. Perform a CRC over the data just written
+; 4. Write a 255 byte incremental pattern to 256 bytes of XDATA SRAM
+; 5. Perform a CRC over the data just written
+; 6. Perform a SHA over data written to XDATA SRAM
+;******************************************************************************
+
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)
+
+;******************************************************************************
+; 1. Check that the first free 256 bytes of UCM are all FF's
+;******************************************************************************
+>DISPLAY0: Checking first free 256 bytes of UCM FFh's 
+
+>APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 80
+>COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+>CALC: wAddress = (wAddress) + 0080
+
+>APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 80
+>COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+;******************************************************************************
+; 2. Write a 255 byte incremental pattern to the 256 bytes of UCM
+;******************************************************************************
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)
+
+>DISPLAY0: Writing 255 byte pattern to address (wAddress)h
+
+>APDU: E5 (Write_X_Bytes_To_UCM) (wAddress) FF -- 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F 80 81 82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E 8F 90 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 B8 B9 BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1 E2 E3 E4 E5 E6 E7 E8 E9 EA EB EC ED EE EF F0 F1 F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 3. Perform a CRC over the data just written
+;******************************************************************************
+>APDU: E5 (Create_CRC16_Hash_Of_XDATA) (wAddress) -- 02
+>COMP: RAPDU = BA D3
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 4. Write a 255 byte incremental pattern to 256 bytes of XDATA SRAM
+;******************************************************************************
+>DISPLAY0: Writing 256 byte pattern to XDATA SRAM at (wAddress)h
+
+>SETVW: wAddress = (XDATA_RAM_START_ADDRESS)
+
+>APDU: E5 (Write_To_RAM) (wAddress) 80 -- 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+>COMP: SW1SW2 = 9000
+
+>CALC: wAddress = (wAddress) + 0080
+
+>APDU: E5 (Write_To_RAM) (wAddress) 80 -- 80 81 82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E 8F 90 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 B8 B9 BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1 E2 E3 E4 E5 E6 E7 E8 E9 EA EB EC ED EE EF F0 F1 F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE FF
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 5. Perform a CRC over the data just written
+;******************************************************************************
+>SETVW: wAddress = (XDATA_RAM_START_ADDRESS)
+
+>APDU: E5 (Create_CRC16_Hash_Of_XDATA) (XDATA_RAM_START_ADDRESS) -- 02
+>COMP: RAPDU = BA D3
+>COMP: SW1SW2 = 9000
+
+;******************************************************************************
+; 6. Perform a SHA over FFh pattern written to XDATA SRAM
+;******************************************************************************
+>APDU: E5 (Call_SHA1) FF 80 -- 14
+>COMP: RAPDU = CD 5B D2 0E 9A 0F 22 D7 36 7C C1 69 E2 84 4A 02 75 1C 7C 91
+>COMP: SW1SW2 = 9000

@@ -1,0 +1,1 @@
+"..\Common\Erase_EE_64_Bytes.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Erase_EE_64_Bytes.lst) OBJECT(.\Erase_EE_64_Bytes.obj)

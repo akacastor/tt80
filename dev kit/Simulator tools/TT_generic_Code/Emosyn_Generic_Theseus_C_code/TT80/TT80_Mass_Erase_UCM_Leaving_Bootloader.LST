@@ -1,0 +1,506 @@
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     1
+
+
+MACRO ASSEMBLER AX51 V2.14
+OBJECT MODULE PLACED IN TT80_Mass_Erase_UCM_Leaving_Bootloader.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\AX51.EXE TT80_Mass_Erase_UCM_Leaving_Bootloader.a51 SET(SMALL) DEBUG EP
+
+LOC    OBJ             LINE     SOURCE
+
+                          1     ;***************************************************************************************
+                               *****************
+                          2     ;
+                          3     ; Name:         TT80_Mass_Erase_UCM_Leaving_Bootloader.a51
+                          4     ; Description:  Erase all of the UCM except the bootloader
+                          5     ; Copyright:    Emosyn Inc. 2005
+                          6     ; 
+                          7     ;***************************************************************************************
+                               *****************
+                          8     ; The Example Code hereinbelow is provided "AS IS" and at your sole risk.  
+                          9     ; As to this Code, EMOSYN expressly disclaims all Warranties, including, but not limited
+                                to the implied 
+                         10     ; warranties of merchantability and fitness for a particular purpose. EMOSYN does not wa
+                               rrant that the 
+                         11     ; functions contained in this code will meet your requirements, or that the operation of
+                                the code will 
+                         12     ; be accurate, error-free, or non-infringing.  No oral or written information or advice 
+                               given by EMOSYN 
+                         13     ; or an authorized representative shall create or affect any Warranty.
+                         14     ;***************************************************************************************
+                               *****************
+                         15     ; $Revision: 1.2 $
+                         16     ; $Author: chin $ 
+                         17     ; $Date: 2006/02/22 16:04:51 $
+                         18     ;***************************************************************************************
+                               *****************
+                         19     ;
+                         20     ; Command Syntax
+                         21     ;
+                         22     ;               E5 30 00 00 00
+                         23     ;
+                         24     ; Inputs
+                         25     ;               None
+                         26     ;
+                         27     ; Outputs
+                         28     ;               None
+                         29     ;
+                         30     ; Example usage : Erase all of the UCM except the bootloader
+                         31     ;
+                         32     ;               To Card                 ->      E5 30 00 00 00
+                         33     ;               Acknowledge from Card   <-      30
+                         34     ;               Response from Card      <-      90 00
+                         35     ;
+                         36     ;***************************************************************************************
+                               *****************
+                         37     
+                         38     ;**+ Extrn's and Public's
+                         39     ;$include (Firmware_API_JumpTable.inc) ; External declarations for API Jumptable library
+                    +1   40     
+                    +1   41     
+                    +1   42     
+                    +1   43     
+                    +1   44     
+                    +1   45     
+                    +1   46     
+                    +1   47     
+                    +1   48     
+                    +1   49     
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     2
+
+                    +1   50     
+                    +1   51     
+                    +1   52     
+                    +1   53     
+                    +1   54     
+                    +1   55     
+                    +1   56     
+                    +1   57     
+                    +1   58     
+                    +1   59     
+                    +1   60     
+                    +1   61     
+                    +1   62     ;$include (../Common_Titanium/Theseus_Titanium_Family.h)
+                    +2   63     
+                    +2   64     
+                    +2   65     
+                    +2   66     
+                    +2   67     
+                    +2   68     
+                    +2   69     
+                    +2   70     
+                    +2   71     
+                    +2   72     
+                    +2   73     
+                    +2   74     
+                    +2   75     
+                    +2   76     
+                    +2   77     
+                    +2   78     
+                    +2   79     
+                    +2   80     
+                    +2   81     
+                    +2   82     
+                    +2   83     
+                    +2   84     
+                    +2   85     
+                    +2   86     
+                    +2   87     
+                    +2   88     
+                    +2   89     
+                    +2   90     
+                    +2   91     
+                    +2   92     
+                    +2   93     
+                    +2   94     
+                    +2   95     
+  0080              +2   96     sfr NVFSMCON       = 0x80;
+  0081              +2   97     sfr SP             = 0x81;
+  0082              +2   98     sfr DPL            = 0x82;
+  0083              +2   99     sfr DPH            = 0x83;
+  0082              +2  100     sfr DPL0           = 0x82;
+  0083              +2  101     sfr DPH0           = 0x83;
+  0084              +2  102     sfr DPL1           = 0x84;
+  0085              +2  103     sfr DPH1           = 0x85;
+  0086              +2  104     sfr DPS            = 0x86;
+  0087              +2  105     sfr PCON           = 0x87;
+  0088              +2  106     sfr TCON           = 0x88;
+  0089              +2  107     sfr TMOD           = 0x89;
+  008A              +2  108     sfr TL0            = 0x8A;
+  008B              +2  109     sfr TL1            = 0x8B;
+  008C              +2  110     sfr TH0            = 0x8C;
+  008D              +2  111     sfr TH1            = 0x8D;
+                    +2  112     
+                    +2  113     
+                    +2  114     
+                    +2  115     
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     3
+
+  0093              +2  116     sfr DPX            = 0x93;
+  0093              +2  117     sfr DPX0           = 0x93;
+  0095              +2  118     sfr DPX1           = 0x95;
+                    +2  119     
+                    +2  120     
+                    +2  121     
+                    +2  122     
+  0098              +2  123     sfr SCON           = 0x98;
+  0099              +2  124     sfr SBUF           = 0x99;
+                    +2  125     
+  00A1              +2  126     sfr CBSL           = 0xA1;
+  00A2              +2  127     sfr MPTR           = 0xA2;
+  00A8              +2  128     sfr IE             = 0xA8;
+                    +2  129     
+  00B0              +2  130     sfr SECURITYSTATUS = 0xB0;
+  00B2              +2  131     sfr ISOCON         = 0xB2;
+  00B4              +2  132     sfr ISOTMR         = 0xB4;
+  00B8              +2  133     sfr IP             = 0xB8;
+                    +2  134     
+  00C0              +2  135     sfr PROGIO         = 0xC0;
+                    +2  136     
+  00C9              +2  137     sfr NvFsmMode      = 0xC9;
+                    +2  138     
+  00D0              +2  139     sfr PSW            = 0xD0;
+  00D8              +2  140     sfr SPSW           = 0xD8;
+                    +2  141     
+  00E0              +2  142     sfr ACC            = 0xE0;
+  00E8              +2  143     sfr EPSW           = 0xE8;
+                    +2  144     
+  00EA              +2  145     sfr MPTRX          = 0xEA;
+                    +2  146     
+  00F0              +2  147     sfr B              = 0xF0;
+                    +2  148     
+                    +2  149     
+                    +2  150     
+                    +2  151     
+  00F7              +2  152     sfr MFCON          = 0xF7;
+                    +2  153     
+                    +2  154     
+                    +2  155     
+                    +2  156     
+                    +2  157     
+                    +2  158     
+                    +2  159     
+                    +2  160     
+                    +2  161     
+                    +2  162     
+00D0.7              +2  163     sbit CY            = PSW^7;
+00D0.6              +2  164     sbit AC            = PSW^6;
+00D0.5              +2  165     sbit F0            = PSW^5;
+00D0.4              +2  166     sbit RS1           = PSW^4;
+00D0.3              +2  167     sbit RS0           = PSW^3;
+00D0.2              +2  168     sbit OV            = PSW^2;
+                    +2  169     
+00D0.0              +2  170     sbit P             = PSW^0; 
+                    +2  171     
+                    +2  172     
+                    +2  173     
+                    +2  174     
+0098.1              +2  175     sbit TI            = SCON^1;
+0098.0              +2  176     sbit RI            = SCON^0;
+                    +2  177     
+                    +2  178     
+                    +2  179     
+                    +2  180     
+0088.7              +2  181     sbit TF1           = TCON^7;
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     4
+
+0088.6              +2  182     sbit TR1           = TCON^6;
+0088.5              +2  183     sbit TF0           = TCON^5;
+0088.4              +2  184     sbit TR0           = TCON^4;
+0088.3              +2  185     sbit MFLT          = TCON^3;
+0088.1              +2  186     sbit SINT          = TCON^1;
+0088.1              +2  187     sbit USINT         = TCON^1;
+0088.0              +2  188     sbit SSINT         = TCON^0;
+                    +2  189     
+                    +2  190     
+                    +2  191     
+                    +2  192     
+00E8.0              +2  193     sbit AM            = EPSW^0;
+00E8.1              +2  194     sbit F1            = EPSW^1;
+                    +2  195     
+                    +2  196     
+                    +2  197     
+                    +2  198     
+                    +2  199     
+0080.0              +2  200     sbit FSM_FINISH    = NVFSMCON^0;
+0080.1              +2  201     sbit FSM_START     = NVFSMCON^1;
+0080.5              +2  202     sbit FSM_RESULT    = NVFSMCON^5;
+                    +2  203     
+                    +2  204     
+                    +2  205     
+                    +2  206     
+00C0.0              +2  207     sbit PULLUP_RES_STATE = PROGIO^0;
+                    +2  208     
+                    +2  209     
+                    +2  210     
+                    +2  211     
+                    +2  212     
+                    +2  213     
+                    +2  214     
+                    +2  215     
+                    +2  216     
+                    +1  217     
+                    +1  218     
+ 0003               +1  219     APDU_JUMPTABLE_SIZE     equ     0x03
+ 0400               +1  220     XRAM_START_ADDRESS      equ     0x0400
+                    +1  221     
+                    +1  222     ; Firmware API's / FSM Interface
+                    +1  223     extrn code (Firmware_WriteByteUCM)
+                    +1  224     extrn code (Firmware_MassEraseUCM)
+                    +1  225     extrn code (Firmware_GetChipID)
+                    +1  226     extrn code (Firmware_GetClockSourceSelectSFR)
+                    +1  227     extrn code (Firmware_SetClock)
+                    +1  228     extrn code (Firmware_GetFirmwareVersion)
+                    +1  229     extrn code (Firmware_SetSecurityAction)
+                    +1  230     extrn code (Firmware_SetSecurityMask)
+                    +1  231     extrn code (Firmware_GetClockControlSFR)
+                    +1  232     extrn code (Firmware_SetProtectStatus)
+                    +1  233     extrn code (Firmware_EraseUCM256Bytes)
+                    +1  234     extrn code (Firmware_EraseUCM512Bytes)
+                    +1  235     extrn code (Firmware_SetExecuteOnlyStatus)
+                    +1  236     extrn code (Firmware_EraseUCMBlock)
+                    +1  237     extrn code (Firmware_ErasePageUCM)
+                    +1  238     extrn code (Firmware_GetDiagnosticData)
+                    +1  239     
+                    +1  240     ; Software simulated API's
+                    +1  241     extrn code (Firmware_WriteUCM)
+                        242     
+                        243     
+                        244     Public Mass_Erase_UCM_Leaving_Bootloader, _Mass_Erase_UCM_Leaving_Bootloader
+                        245     
+                        246     
+------                  247     ?PR?Mass_Erase_UCM_Leaving_Bootloader?TT80_Mass_Erase_UCM_Leaving_Bootloader SEGMENT COD
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     5
+
+                               E
+------                  248             RSEG     ?PR?Mass_Erase_UCM_Leaving_Bootloader?TT80_Mass_Erase_UCM_Leaving_Bootl
+                               oader
+                        249     
+                        250     using 0
+                        251     
+000000                  252     _Mass_Erase_UCM_Leaving_Bootloader:
+000000                  253     Mass_Erase_UCM_Leaving_Bootloader:
+                        254     
+                        255     ; We need to copy the code to erase the UCM but not the bootloader into XRAM and run it 
+                               from here.
+                        256     ; This is because if we run from the UCM, at some point we will erase ourselves
+                        257     
+ 0400                   258     XRAM_CODE_LOCATION      equ     0400h
+ 0500                   259     XRAM_LOOP_FOREVER_ADDR  equ     0500h
+                        260     
+000000 7948             261             mov     r1,#48h                                         ; Number of bytes to cop
+                               y into XRAM
+000002 758600           262             mov     dps, #00H
+000005 900000     F     263             mov     DPTR,#MASS_ERASE_CODE_TO_GO_INTO_XRAM
+                        264     
+000008                  265     Copy_Code_And_Jump_Forever_Loop_To_XRAM_And_Jump_To_It:
+000008 758601           266             mov     dps, #01H
+00000B 900400           267             mov     DPTR,#XRAM_CODE_LOCATION                        ;XRAM destination locati
+                               on
+                        268     
+00000E                  269     Copy_Xram_Code_Loop:          
+00000E 758600           270             mov     dps, #00H
+000011 E4               271             clr     A
+000012 93               272             movc    A,@A+DPTR                                       ; Copy code to Acc
+000013 A3               273             inc     DPTR                                            ; Inc DPTR0
+                        274     
+000014 758601           275             mov     dps, #01H                                       ; Copy Acc to XRAM
+000017 F0               276             movx    @DPTR,A
+000018 A3               277             inc     DPTR                                            ; Inc DPTR1
+000019 D9F3             278             djnz    R1,Copy_Xram_Code_Loop
+                        279     
+                        280             ;Now copy over the loop forever code. 
+00001B 900500           281             mov     dptr,#XRAM_LOOP_FOREVER_ADDR
+00001E 7402             282             mov     a,#02h
+000020 F0               283             movx    @dptr,a                                         ; Code = LJMP   XRAM_LOO
+                               P_FOREVER_ADDR
+000021 A3               284             inc     dptr
+000022 7405             285             mov     a,#HIGH(XRAM_LOOP_FOREVER_ADDR)
+000024 F0               286             movx    @dptr,a
+000025 A3               287             inc     dptr
+000026 7400             288             mov     a,#LOW(XRAM_LOOP_FOREVER_ADDR)
+000028 F0               289             movx    @dptr,a
+                        290     
+                        291             ; Now the erase code is in XRAM....so jump to it
+000029 020400           292             ljmp    XRAM_CODE_LOCATION                      ;This will Mass Erase the UCM an
+                               d go into a Forever loop. Needs a reset to exit
+                        293             ; We never return from this....we are in a forever loop.
+                        294     
+                        295     
+                        296     
+                        297     
+                        298     
+00002C                  299     MASS_ERASE_CODE_TO_GO_INTO_XRAM:
+00002C 7E7B             300             mov     r6,#07Bh                        
+00002E 7FFF             301             mov     r7,#0FFh                        
+000030 120000     E     302             lcall   Firmware_EraseUCMBlock                          ; This will erase the al
+                               l of the UCM except
+                        303                                                                     ; between F000h->FFFFh i
+                               n CODE space = A800->C800h
+                        304                                                                     ; in XDATA space
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     6
+
+                        305     
+000033 90A800           306             mov     dptr,#0A800h                                    ; Setup DPTR with start 
+                               address of the block to erase
+000036 7803             307             mov     r0,#3                                           ; Erase 3 x 512 byte pag
+                               es: we must erase until C:F600h
+                        308     
+000038                  309     Mass_Erase_UCM_Erase_512_Loop:
+000038 75C920           310             mov     NvFsmMode,#20h                                  ; 512 Byte UCM Erase
+00003B F0               311             movx    @dptr,a                                         ; Select memory type.
+00003C 438002           312             orl     NvFsmCon,#02h                                   ; Set Start Bit
+00003F 3080FD           313             jnb     NvFsmCon.0,$                                    ; Wait for the NvInt fla
+                               g
+                        314                                                                     ; This tells us the FSM 
+                               has completed its task
+000042 C280             315             clr     NvFsmCon.0                                      ; Clear the NvInt flag
+                        316     
+000044 0585             317             inc     dph1
+000046 0585             318             inc     dph1
+                        319     
+000048 D8EE             320             djnz    r0,Mass_Erase_UCM_Erase_512_Loop
+                        321     
+00004A 90B800           322             mov     dptr,#0B800h                                    ; Setup DPTR with start 
+                               address of the block to erase
+00004D 7808             323             mov     r0,#8                                           ; Erase 8 x 512 byte pag
+                               es
+                        324     
+00004F                  325     Mass_Erase_UCM_Erase_512_Loop1:
+00004F 75C920           326             mov     NvFsmMode,#20h                                  ; 512 Byte UCM Erase
+000052 F0               327             movx    @dptr,a                                         ; Select memory type.
+000053 438002           328             orl     NvFsmCon,#02h                                   ; Set Start Bit
+000056 3080FD           329             jnb     NvFsmCon.0,$                                    ; Wait for the NvInt fla
+                               g
+                        330                                                                     ; This tells us the FSM 
+                               has completed its task
+000059 C280             331             clr     NvFsmCon.0                                      ; Clear the NvInt flag
+                        332     
+00005B 0585             333             inc     dph1
+00005D 0585             334             inc     dph1
+                        335     
+00005F D8EE             336             djnz    r0,Mass_Erase_UCM_Erase_512_Loop1
+                        337     
+000061 759990           338             mov     SBUF, #90h
+000064 3099FD           339             jnb     TI, $
+000067 C299             340             clr     TI
+                        341     
+000069 759900           342             mov     SBUF, #00h
+00006C 3099FD           343             jnb     TI, $
+00006F C299             344             clr     TI
+                        345     
+000071 020500           346             ljmp    XRAM_LOOP_FOREVER_ADDR 
+                        347     
+                        348     
+                        349     end
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                                    T Y P E  V A L U E     ATTRIBUTES
+
+?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_C  SEG AS000074HEAVING_REL=UNIT, ALN=BYTE
+_MASS_ERASE_UCM_LEAVING_BOOTLOADER. . .    C  ADDR  0000H     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+AC. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.6   A   
+ACC . . . . . . . . . . . . . . . . . .    D  ADDR  00E0H     A   
+AM. . . . . . . . . . . . . . . . . . .    B  ADDR  00E8H.0   A   
+APDU_JUMPTABLE_SIZE . . . . . . . . . .    N  NUMB  0003H     A   
+B . . . . . . . . . . . . . . . . . . .    D  ADDR  00F0H     A   
+CBSL. . . . . . . . . . . . . . . . . .    D  ADDR  00A1H     A   
+COPY_CODE_AND_JUMP_FOREVER_LOOP_TO_XRAM_ANDC  ADDRO_0008H     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+COPY_XRAM_CODE_LOOP . . . . . . . . . .    C  ADDR  000EH     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+CY. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.7   A   
+DPH . . . . . . . . . . . . . . . . . .    D  ADDR  0083H     A   
+DPH0. . . . . . . . . . . . . . . . . .    D  ADDR  0083H     A   
+DPH1. . . . . . . . . . . . . . . . . .    D  ADDR  0085H     A   
+DPL . . . . . . . . . . . . . . . . . .    D  ADDR  0082H     A   
+DPL0. . . . . . . . . . . . . . . . . .    D  ADDR  0082H     A   
+DPL1. . . . . . . . . . . . . . . . . .    D  ADDR  0084H     A   
+DPS . . . . . . . . . . . . . . . . . .    D  ADDR  0086H     A   
+DPX . . . . . . . . . . . . . . . . . .    D  ADDR  0093H     A   
+DPX0. . . . . . . . . . . . . . . . . .    D  ADDR  0093H     A   
+DPX1. . . . . . . . . . . . . . . . . .    D  ADDR  0095H     A   
+EPSW. . . . . . . . . . . . . . . . . .    D  ADDR  00E8H     A   
+F0. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.5   A   
+F1. . . . . . . . . . . . . . . . . . .    B  ADDR  00E8H.1   A   
+FIRMWARE_ERASEPAGEUCM . . . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_ERASEUCM256BYTES . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_ERASEUCM512BYTES . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_ERASEUCMBLOCK. . . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_GETCHIPID. . . . . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_GETCLOCKCONTROLSFR . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_GETCLOCKSOURCESELECTSFR. . . .    C  ADDR  -------       EXT
+FIRMWARE_GETDIAGNOSTICDATA. . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_GETFIRMWAREVERSION . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_MASSERASEUCM . . . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_SETCLOCK . . . . . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_SETEXECUTEONLYSTATUS . . . . .    C  ADDR  -------       EXT
+FIRMWARE_SETPROTECTSTATUS . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_SETSECURITYACTION. . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_SETSECURITYMASK. . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_WRITEBYTEUCM . . . . . . . . .    C  ADDR  -------       EXT
+FIRMWARE_WRITEUCM . . . . . . . . . . .    C  ADDR  -------       EXT
+FSM_FINISH. . . . . . . . . . . . . . .    B  ADDR  0080H.0   A   
+FSM_RESULT. . . . . . . . . . . . . . .    B  ADDR  0080H.5   A   
+FSM_START . . . . . . . . . . . . . . .    B  ADDR  0080H.1   A   
+IE. . . . . . . . . . . . . . . . . . .    D  ADDR  00A8H     A   
+IP. . . . . . . . . . . . . . . . . . .    D  ADDR  00B8H     A   
+ISOCON. . . . . . . . . . . . . . . . .    D  ADDR  00B2H     A   
+ISOTMR. . . . . . . . . . . . . . . . .    D  ADDR  00B4H     A   
+MASS_ERASE_CODE_TO_GO_INTO_XRAM . . . .    C  ADDR  002CH     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+MASS_ERASE_UCM_ERASE_512_LOOP . . . . .    C  ADDR  0038H     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+MASS_ERASE_UCM_ERASE_512_LOOP1. . . . .    C  ADDR  004FH     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+MASS_ERASE_UCM_LEAVING_BOOTLOADER . . .    C  ADDR  0000H     R   SEG=?PR?MASS_ERASE_UCM_LEAVING_BOOTLOADER?TT80_MASS_ER
+                                    AX51 MAASE_UCM_LEAVING_BOOTLOADER
+MFCON . . . . . . . . . . . . . . . . .    D  ADDR  00F7H     A   
+AX51 MACRO ASSEMBLER  TT80_MASS_ERASE_UCM_LEAVING_BOOTLOADER                                12/28/06 17:29:38 PAGE     8
+
+MFLT. . . . . . . . . . . . . . . . . .    B  ADDR  0088H.3   A   
+MPTR. . . . . . . . . . . . . . . . . .    D  ADDR  00A2H     A   
+MPTRX . . . . . . . . . . . . . . . . .    D  ADDR  00EAH     A   
+NVFSMCON. . . . . . . . . . . . . . . .    D  ADDR  0080H     A   
+NVFSMMODE . . . . . . . . . . . . . . .    D  ADDR  00C9H     A   
+OV. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.2   A   
+P . . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.0   A   
+PCON. . . . . . . . . . . . . . . . . .    D  ADDR  0087H     A   
+PROGIO. . . . . . . . . . . . . . . . .    D  ADDR  00C0H     A   
+PSW . . . . . . . . . . . . . . . . . .    D  ADDR  00D0H     A   
+PULLUP_RES_STATE. . . . . . . . . . . .    B  ADDR  00C0H.0   A   
+RI. . . . . . . . . . . . . . . . . . .    B  ADDR  0098H.0   A   
+RS0 . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.3   A   
+RS1 . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.4   A   
+SBUF. . . . . . . . . . . . . . . . . .    D  ADDR  0099H     A   
+SCON. . . . . . . . . . . . . . . . . .    D  ADDR  0098H     A   
+SECURITYSTATUS. . . . . . . . . . . . .    D  ADDR  00B0H     A   
+SINT. . . . . . . . . . . . . . . . . .    B  ADDR  0088H.1   A   
+SP. . . . . . . . . . . . . . . . . . .    D  ADDR  0081H     A   
+SPSW. . . . . . . . . . . . . . . . . .    D  ADDR  00D8H     A   
+SSINT . . . . . . . . . . . . . . . . .    B  ADDR  0088H.0   A   
+TCON. . . . . . . . . . . . . . . . . .    D  ADDR  0088H     A   
+TF0 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.5   A   
+TF1 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.7   A   
+TH0 . . . . . . . . . . . . . . . . . .    D  ADDR  008CH     A   
+TH1 . . . . . . . . . . . . . . . . . .    D  ADDR  008DH     A   
+TI. . . . . . . . . . . . . . . . . . .    B  ADDR  0098H.1   A   
+TL0 . . . . . . . . . . . . . . . . . .    D  ADDR  008AH     A   
+TL1 . . . . . . . . . . . . . . . . . .    D  ADDR  008BH     A   
+TMOD. . . . . . . . . . . . . . . . . .    D  ADDR  0089H     A   
+TR0 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.4   A   
+TR1 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.6   A   
+USINT . . . . . . . . . . . . . . . . .    B  ADDR  0088H.1   A   
+XRAM_CODE_LOCATION. . . . . . . . . . .    N  NUMB  0400H     A   
+XRAM_LOOP_FOREVER_ADDR. . . . . . . . .    N  NUMB  0500H     A   
+XRAM_START_ADDRESS. . . . . . . . . . .    N  NUMB  0400H     A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S).

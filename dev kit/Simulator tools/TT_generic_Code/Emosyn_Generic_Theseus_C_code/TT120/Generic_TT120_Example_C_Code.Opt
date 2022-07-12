@@ -1,0 +1,91 @@
+### uVision2 Project, (C) Keil Software
+### Do not modify !
+
+ cExt (*.c)
+ aExt (*.s*; *.src; *.a*)
+ oExt (*.obj)
+ lExt (*.lib)
+ tExt (*.txt; *.h; *.inc)
+ pExt (*.plm)
+ CppX (*.cpp)
+ DaveTm { 0,0,0,0,0,0,0,0 }
+
+Target (Theseus Titanium 120 Example C Code), 0x0000 // Tools: 'MCS-51'
+GRPOPT 1,(Theseus Titanium 120 Specific),1,0,0
+GRPOPT 2,(Common Theseus Titanium Family),1,0,0
+GRPOPT 3,(Common Theseus Family),1,0,0
+GRPOPT 4,(Firmware / FSM Calls),1,0,0
+
+OPTFFF 1,1,1,0,0,0,0,0,<.\TT120_Get_OS_Version.c><TT120_Get_OS_Version.c> 
+OPTFFF 1,2,1,0,0,0,0,0,<.\TT120_Send_ATR.c><TT120_Send_ATR.c> 
+OPTFFF 1,3,2,0,0,0,0,0,<.\TT120_STARTUP.A51><TT120_STARTUP.A51> 
+OPTFFF 1,4,1,0,0,0,0,0,<.\TT120_ISR.c><TT120_ISR.c> 
+OPTFFF 1,5,2,0,0,0,0,0,<.\TT120_Mass_Erase_UCM_Leaving_Bootloader.a51><TT120_Mass_Erase_UCM_Leaving_Bootloader.a51> 
+OPTFFF 1,6,2,0,0,0,0,0,<.\TT120_API_JumpTable.a51><TT120_API_JumpTable.a51> 
+OPTFFF 2,7,1,0,0,0,0,0,<..\Common_Titanium\Chip_Init.c><Chip_Init.c> 
+OPTFFF 2,8,1,0,0,0,0,0,<..\Common_Titanium\Get_Interrupt_Enable.c><Get_Interrupt_Enable.c> 
+OPTFFF 2,9,1,0,0,0,0,0,<..\Common_Titanium\Set_Interrupt_Enable.c><Set_Interrupt_Enable.c> 
+OPTFFF 2,10,1,0,0,1,1,0,<..\Common_Titanium\Get_Pullup_Resistor.c><Get_Pullup_Resistor.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,44,0,0,0,58,0,0,0,223,1,0,0,202,1,0,0 }
+OPTFFF 2,11,1,0,0,0,0,0,<..\Common_Titanium\Set_Pullup_Resistor.c><Set_Pullup_Resistor.c> 
+OPTFFF 3,12,1,150994944,0,35,35,0,<..\Common\Global_Vars.c><Global_Vars.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,66,0,0,0,87,0,0,0,226,2,0,0,231,1,0,0 }
+OPTFFF 3,13,1,0,0,0,0,0,<..\Common\IO.c><IO.c> 
+OPTFFF 3,14,1,0,0,0,0,0,<..\Common\Main.c><Main.c> 
+OPTFFF 3,15,1,0,0,0,0,0,<..\Common\SHA-1.c><SHA-1.c> 
+OPTFFF 3,16,1,150994944,0,3,3,0,<..\Common\Set_Idle_Mode.c><Set_Idle_Mode.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,22,0,0,0,29,0,0,0,201,1,0,0,173,1,0,0 }
+OPTFFF 3,17,1,0,0,0,0,0,<..\Common\ISO_Select_Speed.c><ISO_Select_Speed.c> 
+OPTFFF 3,18,1,0,0,0,0,0,<..\Common\Change_ISO_Speed.c><Change_ISO_Speed.c> 
+OPTFFF 3,19,1,0,0,0,0,0,<..\Common\Set_Security_Status.c><Set_Security_Status.c> 
+OPTFFF 3,20,1,0,0,0,0,0,<..\Common\Get_Security_Status.c><Get_Security_Status.c> 
+OPTFFF 3,21,1,0,0,0,0,0,<..\Common\Get_Response.c><Get_Response.c> 
+OPTFFF 3,22,1,0,0,1,1,0,<..\Common_Titanium\Timer0_Functions.c><Timer0_Functions.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,0,0,0,0,0,0,0,0,175,1,0,0,143,1,0,0 }
+OPTFFF 3,23,1,0,0,0,0,0,<..\Common\Write_UCM_Bytes_From_IRAM_Buffer_Extended_Addressing.c><Write_UCM_Bytes_From_IRAM_Buffer_Extended_Addressing.c> 
+OPTFFF 3,24,1,0,0,0,0,0,<..\Common\Get_TCON.c><Get_TCON.c> 
+OPTFFF 3,25,1,0,0,0,0,0,<..\Common\CRC16_Normal.c><CRC16_Normal.c> 
+OPTFFF 3,26,1,335544321,0,29,29,0,<..\Common\CODE_Memory_Dump_Extended_Addressing.c><CODE_Memory_Dump_Extended_Addressing.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,66,0,0,0,87,0,0,0,190,1,0,0,231,1,0,0 }
+OPTFFF 3,27,1,134217728,0,53,73,0,<..\Common\XDATA_Memory_Dump_Extended_Addressing.c><XDATA_Memory_Dump_Extended_Addressing.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,44,0,0,0,58,0,0,0,224,1,0,0,202,1,0,0 }
+OPTFFF 3,28,1,0,0,0,0,0,<..\Common\IDATA_Memory_Dump.c><IDATA_Memory_Dump.c> 
+OPTFFF 3,29,1,0,0,0,0,0,<..\Common\Conv_Two_Bytes_To_Int.c><Conv_Two_Bytes_To_Int.c> 
+OPTFFF 3,30,1,0,0,0,0,0,<..\Common\Write_To_IRAM.c><Write_To_IRAM.c> 
+OPTFFF 3,31,1,0,0,0,0,0,<..\Common\Write_To_XRAM_Extended_Addressing.c><Write_To_XRAM_Extended_Addressing.c> 
+OPTFFF 3,32,2,0,0,0,0,0,<..\Common\Software_APIs_Extended_Addressing.a51><Software_APIs_Extended_Addressing.a51> 
+OPTFFF 4,33,1,0,0,0,0,0,<..\Common\Get_Chip_ID.c><Get_Chip_ID.c> 
+OPTFFF 4,34,1,0,0,0,0,0,<..\Common\Get_Clock_Source.c><Get_Clock_Source.c> 
+OPTFFF 4,35,1,0,0,0,0,0,<..\Common\Get_Diagnostic_Data.c><Get_Diagnostic_Data.c> 
+OPTFFF 4,36,1,0,0,0,0,0,<..\Common\Set_Security_Mask.c><Set_Security_Mask.c> 
+OPTFFF 4,37,1,0,0,0,0,0,<..\Common\Get_Clock_Control.c><Get_Clock_Control.c> 
+OPTFFF 4,38,1,0,0,0,0,0,<..\Common\Set_Security_Action.c><Set_Security_Action.c> 
+OPTFFF 4,39,1,0,0,0,0,0,<..\Common\Get_Firmware_Version.c><Get_Firmware_Version.c> 
+OPTFFF 4,40,1,0,0,0,0,0,<..\Common\Load_DPX.c><Load_DPX.c> 
+OPTFFF 4,41,1,0,0,0,0,0,<..\Common\Set_Clock.c><Set_Clock.c> 
+OPTFFF 4,42,1,0,0,0,0,0,<..\Common\Erase_256_UCM_Extended_Addressing.c><Erase_256_UCM_Extended_Addressing.c> 
+OPTFFF 4,43,1,0,0,0,0,0,<..\Common\Erase_512_UCM_Extended_Addressing.c><Erase_512_UCM_Extended_Addressing.c> 
+OPTFFF 4,44,1,0,0,0,0,0,<..\Common\Write_Byte_UCM_Extended_Addressing.c><Write_Byte_UCM_Extended_Addressing.c> 
+OPTFFF 4,45,1,0,0,0,0,0,<..\Common\Get_Random_Number.c><Get_Random_Number.c> 
+OPTFFF 4,46,1,0,0,0,0,0,<..\Common\Set_Execute_Only_Status.c><Set_Execute_Only_Status.c> 
+OPTFFF 4,47,1,0,0,0,0,0,<..\Common\Set_Protection_Status.c><Set_Protection_Status.c> 
+OPTFFF 4,48,1,0,0,0,0,0,<..\Common\Erase_UCM_Blocks__R6R7_Passing.c><Erase_UCM_Blocks__R6R7_Passing.c> 
+OPTFFF 4,49,1,0,0,0,0,0,<..\Common\Mass_Erase_UCM.c><Mass_Erase_UCM.c> 
+OPTFFF 4,50,2,385875968,0,15,26,0,<.\INIT.A51><INIT.A51> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,88,0,0,0,116,0,0,0,14,2,0,0,4,2,0,0 }
+
+ExtF <.\FIRMWARE_API_JUMPTABLE.H> 29,29,0,{ 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,88,0,0,0,116,0,0,0,212,1,0,0,4,2,0,0 }
+ExtF <..\COMMON_TITANIUM\THESEUS_TITANIUM_FAMILY.H> 7,17,0,{ 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,110,0,0,0,145,0,0,0,234,1,0,0,33,2,0,0 }
+ExtF <.\EMOSYN_HELPER_FUNCTIONS.H> 23,24,0,{ 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,132,0,0,0,174,0,0,0,0,2,0,0,62,2,0,0 }
+ExtF <..\COMMON\GLOBAL_VARS.H> 23,25,0,{ 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,0,0,0,0,0,0,0,0,124,1,0,0,144,1,0,0 }
+ExtF <C:\KEIL\C51\INC\ABSACC.H> 1,17,0,{ 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,22,0,0,0,29,0,0,0,146,1,0,0,173,1,0,0 }
+
+TARGOPT 1, (Theseus Titanium 120 Example C Code)
+ CLK51=40000000
+  OPTTT 0,1,1,0
+  OPTHX 1,65535,0,0,0
+  OPTLX 120,65,8,<.\>
+  OPTOX 16
+  OPTLT 1,1,1,0,1,1,0,1,0,0,0,0
+  OPTXL 1,1,1,1,1,1,1,0,0
+  OPTFL 1,0,1
+  OPTDL (S8051.DLL)(-c390)(DP51.DLL)(-p390)(S8051.DLL)(-c390)(TP51.DLL)(-p390)
+  OPTDBG 48126,-1,()()()()()()()()()() (C:\Keil\Emosyn\TheseusKeil.dll)()()()
+  OPTDF 0x0
+  OPTLE <>
+  OPTLC <>
+EndOpt
+

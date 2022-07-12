@@ -1,0 +1,1 @@
+"..\Common_Platinum\Chip_Init.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Chip_Init.lst) OBJECT(.\Chip_Init.obj)

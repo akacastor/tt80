@@ -1,0 +1,455 @@
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.00b
+OBJECT MODULE PLACED IN TP40_STARTUP.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE TP40_STARTUP.A51 NOMOD51 SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;******************************************************************************************
+                             **************
+                       2     ;
+                       3     ; Name:         TP40_Startup.A51
+                       4     ; Description:  Modified startup code based on Keil's Startup.a51
+                       5     ; Copyright:    Emosyn Inc. 2005
+                       6     ; 
+                       7     ;******************************************************************************************
+                             **************
+                       8     ; The Example Code hereinbelow is provided "AS IS" and at your sole risk.  
+                       9     ; As to this Code, EMOSYN expressly disclaims all Warranties, including, but not limited to
+                              the implied 
+                      10     ; warranties of merchantability and fitness for a particular purpose. EMOSYN does not warra
+                             nt that the 
+                      11     ; functions contained in this code will meet your requirements, or that the operation of th
+                             e code will 
+                      12     ; be accurate, error-free, or non-infringing.  No oral or written information or advice giv
+                             en by EMOSYN 
+                      13     ; or an authorized representative shall create or affect any Warranty.
+                      14     ;******************************************************************************************
+                             **************
+                      15     ; $Revision: 1.1 $
+                      16     ; $Author: chin $ 
+                      17     ; $Date: 2005/08/09 11:53:42 $
+                      18     ;******************************************************************************************
+                             **************
+                      19     
+                      20     ;$include (Firmware_API_JumpTable.inc) ; External declarations for jumptable library
+                +1    21     
+                +1    22     
+                +1    23     
+                +1    24     
+                +1    25     
+                +1    26     
+                +1    27     
+                +1    28     
+                +1    29     
+                +1    30     
+                +1    31     
+                +1    32     
+                +1    33     
+                +1    34     
+                +1    35     
+                +1    36     
+                +1    37     
+                +1    38     
+                +1    39     
+                +1    40     
+                +1    41     
+                +1    42     
+                +1    43     ;$include (../Common_Platinum/Theseus_Platinum_Family.h)
+                +2    44     
+                +2    45     
+                +2    46     
+                +2    47     
+                +2    48     
+                +2    49     
+                +2    50     
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     2
+
+                +2    51     
+                +2    52     
+                +2    53     
+                +2    54     
+                +2    55     
+                +2    56     
+                +2    57     
+                +2    58     
+                +2    59     
+                +2    60     
+                +2    61     
+                +2    62     
+                +2    63     
+                +2    64     
+                +2    65     
+                +2    66     
+                +2    67     
+                +2    68     
+                +2    69     
+                +2    70     
+                +2    71     
+                +2    72     
+                +2    73     
+                +2    74     
+                +2    75     
+  0080          +2    76     sfr NVFSMCON            = 0x80;
+  0081          +2    77     sfr SP                  = 0x81;
+  0082          +2    78     sfr DPL                 = 0x82;
+  0083          +2    79     sfr DPH                 = 0x83;
+  0082          +2    80     sfr DPL0                = 0x82;
+  0083          +2    81     sfr DPH0                = 0x83;
+  0084          +2    82     sfr DPL1                = 0x84;
+  0085          +2    83     sfr DPH1                = 0x85;
+  0086          +2    84     sfr DPS                 = 0x86;
+  0087          +2    85     sfr PCON                = 0x87;
+  0088          +2    86     sfr TCON                = 0x88;
+  0089          +2    87     sfr TMOD                = 0x89;
+  008A          +2    88     sfr TL0                 = 0x8A;
+  008B          +2    89     sfr TL1                 = 0x8B;
+  008C          +2    90     sfr TH0                 = 0x8C;
+  008D          +2    91     sfr TH1                 = 0x8D;
+                +2    92     
+                +2    93     
+                +2    94     
+                +2    95     
+  0098          +2    96     sfr SCON                = 0x98;
+  0099          +2    97     sfr SBUF                = 0x99;
+                +2    98     
+  00A1          +2    99     sfr CBSL                = 0xA1;
+                +2   100     
+                +2           
+                +2           
+  00A2          +2   103     sfr MPTR                = 0xA2;
+                +2   104     
+                +2   105     
+                +2   106     
+  00B0          +2   107     sfr SECURITYSTATUS      = 0xB0;
+  00B2          +2   108     sfr ISOCON              = 0xB2;
+  00B4          +2   109     sfr ISOTMR              = 0xB4;
+                +2   110     
+  00C0          +2   111     sfr PROGIO              = 0xC0;
+                +2   112     
+  00D0          +2   113     sfr PSW                 = 0xD0;
+                +2   114     
+  00E0          +2   115     sfr ACC                 = 0xE0;
+                +2   116     
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     3
+
+  00F0          +2   117     sfr B                   = 0xF0;
+                +2   118     
+  00F7          +2   119     sfr MFCON               = 0xF7;
+                +2   120     
+                +2   121     
+                +2   122     
+                +2   123     
+                +2   124     
+                +2   125     
+                +2   126     
+                +2   127     
+                +2   128     
+                +2   129     
+  00D7          +2   130     sbit CY                 = PSW^7;
+  00D6          +2   131     sbit AC                 = PSW^6;
+  00D5          +2   132     sbit F0                 = PSW^5;
+  00D4          +2   133     sbit RS1                = PSW^4;
+  00D3          +2   134     sbit RS0                = PSW^3;
+  00D2          +2   135     sbit OV                 = PSW^2;
+  00D1          +2   136     sbit M                  = PSW^1;
+  00D0          +2   137     sbit P                  = PSW^0; 
+                +2   138     
+                +2   139     
+                +2   140     
+                +2   141     
+  0099          +2   142     sbit TI                 = SCON^1;
+  0098          +2   143     sbit RI                 = SCON^0;
+                +2   144     
+                +2   145     
+                +2   146     
+                +2   147     
+  008F          +2   148     sbit TF1                = TCON^7;
+  008E          +2   149     sbit TR1                = TCON^6;
+  008D          +2   150     sbit TF0                = TCON^5;
+  008C          +2   151     sbit TR0                = TCON^4;
+                +2   152     
+                +2   153     
+                +2   154     
+                +2   155     
+                +2   156     
+                +2   157     
+                +2   158     
+                +2   159     
+                +2   160     
+                +2   161     
+                +2   162     
+                +1   163     
+                +1   164     
+  0003          +1   165     APDU_JUMPTABLE_SIZE             equ     0x03
+  0000          +1   166     XDATA_START_ADDRESS             equ     0x000000
+  5D00          +1   167     SD_BOOTLOADER_START_ADDRESS     equ     0x5D00
+                +1   168     
+                +1   169     extrn code (Firmware_WriteByteEE)
+                +1   170     extrn code (Firmware_WriteByteUCM)
+                +1   171     extrn code (Firmware_WriteUCM)
+                +1   172     extrn code (Firmware_MassEraseUCM)
+                +1   173     extrn code (Firmware_EraseEE8Bytes)
+                +1   174     extrn code (Firmware_EraseEE64Bytes)
+                +1   175     extrn code (Firmware_WriteEE)
+                +1   176     extrn code (Firmware_MassEraseEE)
+                +1   177     extrn code (Firmware_GetChipID)
+                +1   178     extrn code (Firmware_GetClockSourceSelectSFR)
+                +1   179     extrn code (Firmware_SetClock)
+                +1   180     extrn code (Firmware_GetInterruptEnable)
+                +1   181     extrn code (Firmware_SetInterruptEnable)
+                +1   182     extrn code (Firmware_GetFirmwareVersion)
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     4
+
+                +1   183     extrn code (Firmware_SetSecurityAction)
+                +1   184     extrn code (Firmware_SetSecurityMask)
+                +1   185     extrn code (Firmware_GetClockControlSFR)
+                +1   186     extrn code (Firmware_SetProtectStatus)
+                +1   187     extrn code (Firmware_ErasePageUCM)
+                +1   188     
+                +1   189     extrn code (Firmware_Erase24K_OTP)
+                +1   190     extrn code (Firmware_EraseOTPBlock)
+                +1   191     extrn code (Firmware_SetExecuteOnlyStatus)
+                +1   192     extrn code (Firmware_EraseConfigBlock)
+                     193     
+                     194     ;
+                     195     ;------------------------------------------------------------------------------
+                     196     ;
+                     197     ;  User-defined Power-On Initialization of Memory
+                     198     ;
+                     199     ;  With the following EQU statements the initialization of memory
+                     200     ;  at processor reset can be defined:
+                     201     ;
+                     202     ;               ; the absolute start-address of IDATA memory is always 0
+  0100               203     IDATALEN        EQU     100H    ; the length of IDATA memory in bytes.
+                     204     ;
+  0000               205     XDATASTART      EQU     0H      ; the absolute start-address of XDATA memory
+  0180               206     XDATALEN        EQU     180H    ; the length of XDATA memory in bytes.
+                     207     ;
+  0000               208     PDATASTART      EQU     0H      ; the absolute start-address of PDATA memory
+  0000               209     PDATALEN        EQU     0H      ; the length of PDATA memory in bytes.
+                     210     ;
+                     211     ;  Notes:  The IDATA space overlaps physically the DATA and BIT areas of the
+                     212     ;          8051 CPU. At minimum the memory space occupied from the C51 
+                     213     ;          run-time routines must be set to zero.
+                     214     ;------------------------------------------------------------------------------
+                     215     ; 
+                     216     ;  Reentrant Stack Initilization
+                     217     ;
+                     218     ;  The following EQU statements define the stack pointer for reentrant
+                     219     ;  functions and initialized it:
+                     220     ;
+                     221     ;  Stack Space for reentrant functions in the SMALL model.
+  0000               222     IBPSTACK        EQU     0       ; set to 1 if small reentrant is used.
+  0100               223     IBPSTACKTOP     EQU     0FFH+1  ; set top of stack to highest location+1.
+                     224     ; 
+                     225     ;  Stack Space for reentrant functions in the LARGE model.      
+  0000               226     XBPSTACK        EQU     0       ; set to 1 if large reentrant is used.
+  0000               227     XBPSTACKTOP     EQU     0FFFFH+1; set top of stack to highest location+1.
+                     228     ;
+                     229     ;  Stack Space for reentrant functions in the COMPACT model.    
+  0000               230     PBPSTACK        EQU     0       ; set to 1 if compact reentrant is used.
+  0000               231     PBPSTACKTOP     EQU     0FFFFH+1; set top of stack to highest location+1.
+                     232     ;
+                     233     ;------------------------------------------------------------------------------
+                     234     ;
+                     235     ;  Page Definition for Using the Compact Model with 64 KByte xdata RAM
+                     236     ;
+                     237     ;  The following EQU statements define the xdata page used for pdata
+                     238     ;  variables. The EQU PPAGE must conform with the PPAGE control used
+                     239     ;  in the linker invocation.
+                     240     ;
+  0000               241     PPAGEENABLE     EQU     0       ; set to 1 if pdata object are used.
+  0000               242     PPAGE           EQU     0       ; define PPAGE number.
+                     243     ;
+                     244     ;------------------------------------------------------------------------------
+                     245     
+                     246                     NAME    ?C_STARTUP
+                     247     
+                     248     
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     5
+
+                     249     ?C_C51STARTUP   SEGMENT   CODE
+                     250     
+                     251     ?STACK          SEGMENT   IDATA 
+                     252     
+----                 253                     RSEG    ?STACK
+0000                 254                     DS      15
+                     255     
+                     256                     EXTRN CODE (?C_START)
+                     257                     PUBLIC  ?C_STARTUP
+                     258     
+----                 259                     CSEG    AT      8000h
+8000 020000   F      260     ?C_STARTUP:     LJMP    STARTUP1
+                     261     
+----                 262                     RSEG    ?C_C51STARTUP
+                     263     
+0000                 264     STARTUP1:
+                     265     
+                     266     IF IDATALEN <> 0
+0000 78FF            267                     MOV     R0,#IDATALEN - 1
+0002 E4              268                     CLR     A
+0003 F6              269     IDATALOOP:      MOV     @R0,A
+0004 D8FD            270                     DJNZ    R0,IDATALOOP
+                     271     ENDIF
+                     272     
+                     273     IF XDATALEN <> 0
+0006 900000          274                     MOV     DPTR,#XDATASTART
+0009 7F80            275                     MOV     R7,#LOW (XDATALEN)
+                     276       IF (LOW (XDATALEN)) <> 0
+000B 7E02            277                     MOV     R6,#(HIGH XDATALEN) +1
+                     278       ELSE
+                                             MOV     R6,#HIGH (XDATALEN)
+                               ENDIF
+000D E4              281                     CLR     A
+000E F0              282     XDATALOOP:      MOVX    @DPTR,A
+000F A3              283                     INC     DPTR
+0010 DFFC            284                     DJNZ    R7,XDATALOOP
+0012 DEFA            285                     DJNZ    R6,XDATALOOP
+                     286     ENDIF
+                     287     
+                     288     IF PPAGEENABLE <> 0
+                                             MOV     P2,#PPAGE
+                             ENDIF
+                     291     
+                     292     IF PDATALEN <> 0
+                                             MOV     R0,#PDATASTART
+                                             MOV     R7,#LOW (PDATALEN)
+                                             CLR     A
+                             PDATALOOP:      MOVX    @R0,A
+                                             INC     R0
+                                             DJNZ    R7,PDATALOOP
+                             ENDIF
+                     300     
+                     301     IF IBPSTACK <> 0
+                             EXTRN DATA (?C_IBP)
+                             
+                                             MOV     ?C_IBP,#LOW IBPSTACKTOP
+                             ENDIF
+                     306     
+                     307     IF XBPSTACK <> 0
+                             EXTRN DATA (?C_XBP)
+                             
+                                             MOV     ?C_XBP,#HIGH XBPSTACKTOP
+                                             MOV     ?C_XBP+1,#LOW XBPSTACKTOP
+                             ENDIF
+                     313     
+                     314     IF PBPSTACK <> 0
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     6
+
+                             EXTRN DATA (?C_PBP)
+                                             MOV     ?C_PBP,#LOW PBPSTACKTOP
+                             ENDIF
+                     318     
+0014 758100   F      319                     MOV     SP,#?STACK-1
+0017 020000   F      320                     LJMP    ?C_START
+                     321     
+                     322                     END
+                             
+                             
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                           T Y P E  V A L U E   ATTRIBUTES
+
+?C_C51STARTUP. . . . . . . . . .  C SEG    001AH       REL=UNIT
+?C_START . . . . . . . . . . . .  C ADDR   -----       EXT
+?C_STARTUP . . . . . . . . . . .  C ADDR   8000H   A   
+?STACK . . . . . . . . . . . . .  I SEG    000FH       REL=UNIT
+AC . . . . . . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . . . . . . . . .  D ADDR   00E0H   A   
+APDU_JUMPTABLE_SIZE. . . . . . .  N NUMB   0003H   A   
+B. . . . . . . . . . . . . . . .  D ADDR   00F0H   A   
+CBSL . . . . . . . . . . . . . .  D ADDR   00A1H   A   
+CY . . . . . . . . . . . . . . .  B ADDR   00D0H.7 A   
+DPH. . . . . . . . . . . . . . .  D ADDR   0083H   A   
+DPH0 . . . . . . . . . . . . . .  D ADDR   0083H   A   
+DPH1 . . . . . . . . . . . . . .  D ADDR   0085H   A   
+DPL. . . . . . . . . . . . . . .  D ADDR   0082H   A   
+DPL0 . . . . . . . . . . . . . .  D ADDR   0082H   A   
+DPL1 . . . . . . . . . . . . . .  D ADDR   0084H   A   
+DPS. . . . . . . . . . . . . . .  D ADDR   0086H   A   
+F0 . . . . . . . . . . . . . . .  B ADDR   00D0H.5 A   
+FIRMWARE_ERASE24K_OTP. . . . . .  C ADDR   -----       EXT
+FIRMWARE_ERASECONFIGBLOCK. . . .  C ADDR   -----       EXT
+FIRMWARE_ERASEEE64BYTES. . . . .  C ADDR   -----       EXT
+FIRMWARE_ERASEEE8BYTES . . . . .  C ADDR   -----       EXT
+FIRMWARE_ERASEOTPBLOCK . . . . .  C ADDR   -----       EXT
+FIRMWARE_ERASEPAGEUCM. . . . . .  C ADDR   -----       EXT
+FIRMWARE_GETCHIPID . . . . . . .  C ADDR   -----       EXT
+FIRMWARE_GETCLOCKCONTROLSFR. . .  C ADDR   -----       EXT
+FIRMWARE_GETCLOCKSOURCESELECTSFR  C ADDR   -----       EXT
+FIRMWARE_GETFIRMWAREVERSION. . .  C ADDR   -----       EXT
+FIRMWARE_GETINTERRUPTENABLE. . .  C ADDR   -----       EXT
+FIRMWARE_MASSERASEEE . . . . . .  C ADDR   -----       EXT
+FIRMWARE_MASSERASEUCM. . . . . .  C ADDR   -----       EXT
+FIRMWARE_SETCLOCK. . . . . . . .  C ADDR   -----       EXT
+FIRMWARE_SETEXECUTEONLYSTATUS. .  C ADDR   -----       EXT
+FIRMWARE_SETINTERRUPTENABLE. . .  C ADDR   -----       EXT
+FIRMWARE_SETPROTECTSTATUS. . . .  C ADDR   -----       EXT
+FIRMWARE_SETSECURITYACTION . . .  C ADDR   -----       EXT
+FIRMWARE_SETSECURITYMASK . . . .  C ADDR   -----       EXT
+FIRMWARE_WRITEBYTEEE . . . . . .  C ADDR   -----       EXT
+FIRMWARE_WRITEBYTEUCM. . . . . .  C ADDR   -----       EXT
+FIRMWARE_WRITEEE . . . . . . . .  C ADDR   -----       EXT
+FIRMWARE_WRITEUCM. . . . . . . .  C ADDR   -----       EXT
+IBPSTACK . . . . . . . . . . . .  N NUMB   0000H   A   
+IBPSTACKTOP. . . . . . . . . . .  N NUMB   0100H   A   
+IDATALEN . . . . . . . . . . . .  N NUMB   0100H   A   
+IDATALOOP. . . . . . . . . . . .  C ADDR   0003H   R   SEG=?C_C51STARTUP
+ISOCON . . . . . . . . . . . . .  D ADDR   00B2H   A   
+ISOTMR . . . . . . . . . . . . .  D ADDR   00B4H   A   
+M. . . . . . . . . . . . . . . .  B ADDR   00D0H.1 A   
+MFCON. . . . . . . . . . . . . .  D ADDR   00F7H   A   
+MPTR . . . . . . . . . . . . . .  D ADDR   00A2H   A   
+NVFSMCON . . . . . . . . . . . .  D ADDR   0080H   A   
+OV . . . . . . . . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . . . . . . . . .  B ADDR   00D0H.0 A   
+PBPSTACK . . . . . . . . . . . .  N NUMB   0000H   A   
+PBPSTACKTOP. . . . . . . . . . .  N NUMB   0000H   A   
+PCON . . . . . . . . . . . . . .  D ADDR   0087H   A   
+PDATALEN . . . . . . . . . . . .  N NUMB   0000H   A   
+PDATASTART . . . . . . . . . . .  N NUMB   0000H   A   
+PPAGE. . . . . . . . . . . . . .  N NUMB   0000H   A   
+PPAGEENABLE. . . . . . . . . . .  N NUMB   0000H   A   
+A51 MACRO ASSEMBLER  TP40_STARTUP                                                         05/08/2007 13:43:10 PAGE     8
+
+PROGIO . . . . . . . . . . . . .  D ADDR   00C0H   A   
+PSW. . . . . . . . . . . . . . .  D ADDR   00D0H   A   
+RI . . . . . . . . . . . . . . .  B ADDR   0098H.0 A   
+RS0. . . . . . . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . . . . . . . . .  B ADDR   00D0H.4 A   
+SBUF . . . . . . . . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . . . . . . . . .  D ADDR   0098H   A   
+SD_BOOTLOADER_START_ADDRESS. . .  N NUMB   5D00H   A   
+SECURITYSTATUS . . . . . . . . .  D ADDR   00B0H   A   
+SP . . . . . . . . . . . . . . .  D ADDR   0081H   A   
+STARTUP1 . . . . . . . . . . . .  C ADDR   0000H   R   SEG=?C_C51STARTUP
+TCON . . . . . . . . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . . . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . . . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . . . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . . . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . . . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . . . . . . . . .  D ADDR   008BH   A   
+TMOD . . . . . . . . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . . . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . . . . . . . . .  B ADDR   0088H.6 A   
+XBPSTACK . . . . . . . . . . . .  N NUMB   0000H   A   
+XBPSTACKTOP. . . . . . . . . . .  N NUMB   0000H   A   
+XDATALEN . . . . . . . . . . . .  N NUMB   0180H   A   
+XDATALOOP. . . . . . . . . . . .  C ADDR   000EH   R   SEG=?C_C51STARTUP
+XDATASTART . . . . . . . . . . .  N NUMB   0000H   A   
+XDATA_START_ADDRESS. . . . . . .  N NUMB   0000H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,43 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; TT80_Definitions.escrpt
+; =======================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Theseus Titanium 80 Memory Map Definitions
+;
+; This holds all the variables containing the addresses and sizes of the TT80 chip
+;
+;***********************************************************************************************************
+
+>SETVW: wChipType = 0080
+
+>SETVW: BOOTLOADER_START_ADDRESS = FD00						; Bootloader start address with SD Bootloader
+
+>SETVW: UCM_START_ADDRESS = 0800						; Base address of UCM memory	
+>SETVW: UCM_END_ADDRESS = 0000							; End address of UCM memory
+
+;>SETVW: UCM_TOTAL_SIZE = 0000
+;>CALC: UCM_TOTAL_SIZE = (BOOTLOADER_START_ADDRESS) - (UCM_START_ADDRESS)	; Size of entire UCM space (excluding Bootloader)
+
+; There is an extra 18K at B800h in XDATA space. This cannot be added to the total size as this has a limit of a word size (64K)
+
+>SETVW: BOOTLOADER_SIZE = 0000
+>CALC: BOOTLOADER_SIZE = (UCM_END_ADDRESS) - (BOOTLOADER_START_ADDRESS)		; Bootloader size
+
+>SETVW: UCM_PAGE_SIZE = 0100							; Size of a UCM page
+>SETVW: UCM_USABLE_START_ADDRESS = 2C00						; This is the address clear of the Generic software code
+
+>SETVW: XDATA_RAM_START_ADDRESS = 0400						; Base address of XDATA RAM in XDATA space
+>SETVW: XDATA_RAM_END_ADDRESS = 800						; End address of XDATA RAM in XDATA space
+
+>SETVW: XDATA_RAM_TOTAL_SIZE = 0000
+>CALC: XDATA_RAM_TOTAL_SIZE = (XDATA_RAM_END_ADDRESS) - (XDATA_RAM_START_ADDRESS)	; Total size of usable XDATA RAM 
+ 
+>ENDL

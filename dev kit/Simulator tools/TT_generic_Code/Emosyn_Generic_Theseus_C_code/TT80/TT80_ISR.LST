@@ -1,0 +1,147 @@
+C51 COMPILER V7.50   TT80_ISR                                                              12/28/2006 17:29:38 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE TT80_ISR
+OBJECT MODULE PLACED IN TT80_ISR.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE TT80_ISR.c OMF2 OPTIMIZE(SIZE) BROWSE INTVECTOR(0X0800) MODDP2 DEBUG
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         TT80_ISR.c
+   4          * Description:  Contains Interrupt Service Routines for the TT80
+   5          * Copyright:    Emosyn Inc. 2005
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.4 $
+  17          * $Author: amorris $ 
+  18          * $Date: 2005/11/26 18:24:19 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include "Firmware_API_JumpTable.h"
+  26          #include "Emosyn_Helper_Functions.h"
+  27          
+  28          
+  29          /******************************************************************************
+  30          * External and local function declarations 
+  31          ******************************************************************************/
+  32          
+  33          
+  34          /******************************************************************************
+  35          * External variable declarations
+  36          ******************************************************************************/
+  37          
+  38          
+  39          /******************************************************************************
+  40          *
+  41          * Keil's C driven ISR use the "interrupt X" syntax at the end of the function
+  42          * declartion. X is the Keil specific interrupt number.
+  43          * Listed below is the interrupt number based on the interrupt vector address
+  44          *
+  45          * 0   0003h    8   0043h    16  0083h    24  00C3h
+  46          * 1   000Bh    9   004Bh    17  008Bh    25  00CBh
+  47          * 2   0013h    10  0053h    18  0093h    26  00D3h
+  48          * 3   001Bh    11  005Bh    19  009Bh    27  00DBh
+  49          * 4   0023h    12  0063h    20  00A3h    28  00E3h
+  50          * 5   002Bh    13  006Bh    21  00ABh    29  00EBh
+  51          * 6   0033h    14  0073h    22  00B3h    30  00F3h
+  52          * 7   003Bh    15  007Bh    23  00BBh    31  00FBh
+  53          *
+  54          * The saving of the ACC, B, DPTR, PSW and registers are performed automatically
+  55          * by the compiler
+C51 COMPILER V7.50   TT80_ISR                                                              12/28/2006 17:29:38 PAGE 2   
+
+  56          ******************************************************************************/
+  57          
+  58          /******************************************************************************
+  59          *
+  60          * Function Name:     Timer0_ISR
+  61          * Function Inputs:   void
+  62          * Function Outputs:  void
+  63          * Description:       Code that executes when the Timer0 interrupt occurs
+  64          *
+  65          ******************************************************************************/
+  66          void Timer0_ISR (void) interrupt 1
+  67          {
+  68   1      
+  69   1      } /* End of function */
+  70          
+  71          
+  72          /******************************************************************************
+  73          *
+  74          * Function Name:     Serial_ISR
+  75          * Function Inputs:   void
+  76          * Function Outputs:  void
+  77          * Description:       Code that executes when the serial receive interrupt occurs
+  78          *
+  79          ******************************************************************************/
+  80          void Serial_ISR (void) interrupt 4
+  81          {
+  82   1      
+  83   1      } /* End of function */
+  84          
+  85          
+  86          /******************************************************************************
+  87          *
+  88          * Function Name:     Security_Fault_ISR
+  89          * Function Inputs:   void
+  90          * Function Outputs:  void
+  91          * Description:       Code that executes when the security interrupt occurs
+  92          *
+  93          ******************************************************************************/
+  94          void Security_Fault_ISR (void) interrupt 5
+  95          {
+  96   1              /* The user can report the security fault via the IO in the following way */
+  97   1      
+  98   1          PutChar (0x2B);             /* Output 2Bh to show ISR 2Bh has occured */
+  99   1      
+ 100   1          PutChar (SECURITYSTATUS);   /* Output the Security Status sfr */
+ 101   1      
+ 102   1          SECURITYSTATUS = 0x00;      /* Clear the Security Status sfr */
+ 103   1      
+ 104   1      
+ 105   1              /* The could also force a reset if a fatal error has occured */
+ 106   1      
+ 107   1      //  SECURITYSTATUS = 0x00;         /* First clear the Security Status sfr */
+ 108   1      
+ 109   1              /* Set security action SFR to cause a reset instead of an interrupt */
+ 110   1      //      Firmware_SetSecurityAction(0x8F, NOT_PERMANENT);  
+ 111   1              
+ 112   1              /* Set security action SFR to simulate a security fault */
+ 113   1      //      SECURITYSTATUS = 0xFF;
+ 114   1      
+ 115   1      
+ 116   1      } /* End of function */
+
+C51 COMPILER V7.50   TT80_ISR                                                              12/28/2006 17:29:38 PAGE 3   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     95    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

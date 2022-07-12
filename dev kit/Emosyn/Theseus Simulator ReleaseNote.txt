@@ -1,0 +1,58 @@
+
+Product:	Theseus Simulator - Emosyn-Keil Interface
+
+Version: 	1.08
+
+Immediate past Version:
+		1.07
+
+__________________________________________________________________________________
+
+Main issues that have been resolved in this release:
+
+i) Keil is more stable after stopping and starting a debug session or repeatedly running and halting. 
+ii) X Data vectors are displayed correctly. Izilla #79
+iii) Problem with typedef keywords being added to the watch windows has been fixed. Izilla #80
+iv) Program counter arrow being displayed correctly while stepping through code. Izilla #90
+v) Simulator response times have been speeded up considerably. Izilla #122 and #99
+vi) Repeated running and halting no longer causes Keil uV2 to crash. Izilla #101
+vii) Run to cursor line functioning correctly. Izilla #114
+viii) TT120 GNG file is now created correctly. Izilla #130
+
+ 
+Issues still to be resolved:
+
+i) Mass Erase for TP40 card is not functioning correctly. Izilla #74
+ii) Stack overflows are not handled correctly.
+iii) Call Stack display is cleared  sometimes. 
+iv) Problem when multiplying variables. Looks like problem in uVision as values in simulator look ok.
+v) COM ports not autodetected.
+vi) May still be a problem when Keil is not installed in it's default location of c:\keil.
+vii) Simulator does not alert user if an illegal address has been called. Izilla #96
+viii) Set Protect function not working correctly after a reset. Izilla #125 
+
+
+Unsupported features:
+
+i) Access Breakpoints not supported
+ii) Code Coverage not supported
+iii) Performance Analyser not supported
+iv) Conditional Breakpoints not supported
+
+
+
+Additional Instructions:
+
+*   The Save or Restore debug session options are only available for selection once the debug session is running 
+    and if the simulator is Halted.
+    To Restore a previously saved session, start debugger, go to peripheral menu->Restore Debug Session
+    and select the relevant file with a .sds file extension. On restoring a debug session in paddleboard mode
+    set the reset and Vcc high before pressing Run. The ATR will not be sent again unless you reset. 
+    To Save your current debug session, Halt the simulator but do not stop the debugger, 
+    Select Peripheral menu->Save Debug Session. You can overwrite an existing .sds file or create a new one.
+
+**  To start the simulation in paddle board mode it is now necessary to press the run button on the debugger 
+    menu or toolbar.
+
+
+

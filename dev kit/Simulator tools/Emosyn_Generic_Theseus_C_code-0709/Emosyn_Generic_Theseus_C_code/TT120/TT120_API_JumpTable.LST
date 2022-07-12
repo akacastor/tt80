@@ -1,0 +1,586 @@
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     1
+
+
+MACRO ASSEMBLER AX51 V2.14
+OBJECT MODULE PLACED IN TT120_API_JumpTable.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\AX51.EXE TT120_API_JumpTable.a51 MOD_CONT SET(SMALL,EXTENDED_ADDRESSING) DEBUG EP
+
+LOC    OBJ             LINE     SOURCE
+
+                          1     ;***************************************************************************************
+                               *****************
+                          2     ;
+                          3     ;    Name:          TT120_API_JumpTable.a51
+                          4     ;    Description:   Include file for the TT120 firmware and FSM interface
+                          5     ;    Copyright:     Emosyn Inc. 2006
+                          6     ;                                
+                          7     ;***************************************************************************************
+                               *****************
+                          8     ; The Example Code hereinbelow is provided "AS IS" and at your sole risk.  
+                          9     ; As to this Code, EMOSYN expressly disclaims all Warranties, including, but not limited
+                                to the implied 
+                         10     ; warranties of merchantability and fitness for a particular purpose. EMOSYN does not wa
+                               rrant that the 
+                         11     ; functions contained in this code will meet your requirements, or that the operation of
+                                the code will 
+                         12     ; be accurate, error-free, or non-infringing.  No oral or written information or advice 
+                               given by EMOSYN 
+                         13     ; or an authorized representative shall create or affect any Warranty.
+                         14     ;***************************************************************************************
+                               *****************
+                         15     ; $Revision: 1.1 $
+                         16     ; $Author: chin $ 
+                         17     ; $Date: 2006/03/08 18:50:14 $
+                         18     ;***************************************************************************************
+                               *****************
+                         19     
+                         20     ;#include "../Common_Titanium/Theseus_Titanium_Family.h"
+                    +1   21     
+                    +1   22     
+                    +1   23     
+                    +1   24     
+                    +1   25     
+                    +1   26     
+                    +1   27     
+                    +1   28     
+                    +1   29     
+                    +1   30     
+                    +1   31     
+                    +1   32     
+                    +1   33     
+                    +1   34     
+                    +1   35     
+                    +1   36     
+                    +1   37     
+                    +1   38     
+                    +1   39     
+                    +1   40     
+                    +1   41     
+                    +1   42     
+                    +1   43     
+                    +1   44     
+                    +1   45     
+                    +1   46     
+                    +1   47     
+                    +1   48     
+                    +1   49     
+                    +1   50     
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     2
+
+                    +1   51     
+                    +1   52     
+                    +1   53     
+  0080              +1   54     sfr NVFSMCON       = 0x80;
+  0081              +1   55     sfr SP             = 0x81;
+  0082              +1   56     sfr DPL            = 0x82;
+  0083              +1   57     sfr DPH            = 0x83;
+  0082              +1   58     sfr DPL0           = 0x82;
+  0083              +1   59     sfr DPH0           = 0x83;
+  0084              +1   60     sfr DPL1           = 0x84;
+  0085              +1   61     sfr DPH1           = 0x85;
+  0086              +1   62     sfr DPS            = 0x86;
+  0087              +1   63     sfr PCON           = 0x87;
+  0088              +1   64     sfr TCON           = 0x88;
+  0089              +1   65     sfr TMOD           = 0x89;
+  008A              +1   66     sfr TL0            = 0x8A;
+  008B              +1   67     sfr TL1            = 0x8B;
+  008C              +1   68     sfr TH0            = 0x8C;
+  008D              +1   69     sfr TH1            = 0x8D;
+                    +1   70     
+                    +1   71     
+                    +1   72     
+                    +1   73     
+  0093              +1   74     sfr DPX            = 0x93;
+  0093              +1   75     sfr DPX0           = 0x93;
+  0095              +1   76     sfr DPX1           = 0x95;
+                    +1   77     
+                    +1   78     
+                    +1   79     
+                    +1   80     
+  0098              +1   81     sfr SCON           = 0x98;
+  0099              +1   82     sfr SBUF           = 0x99;
+                    +1   83     
+  00A1              +1   84     sfr CBSL           = 0xA1;
+  00A2              +1   85     sfr MPTR           = 0xA2;
+  00A8              +1   86     sfr IE             = 0xA8;
+                    +1   87     
+  00B0              +1   88     sfr SECURITYSTATUS = 0xB0;
+  00B2              +1   89     sfr ISOCON         = 0xB2;
+  00B4              +1   90     sfr ISOTMR         = 0xB4;
+  00B8              +1   91     sfr IP             = 0xB8;
+                    +1   92     
+  00C0              +1   93     sfr PROGIO         = 0xC0;
+                    +1   94     
+  00C9              +1   95     sfr NvFsmMode      = 0xC9;
+                    +1   96     
+  00D0              +1   97     sfr PSW            = 0xD0;
+  00D8              +1   98     sfr SPSW           = 0xD8;
+                    +1   99     
+  00E0              +1  100     sfr ACC            = 0xE0;
+  00E8              +1  101     sfr EPSW           = 0xE8;
+                    +1  102     
+  00EA              +1  103     sfr MPTRX          = 0xEA;
+                    +1  104     
+  00F0              +1  105     sfr B              = 0xF0;
+                    +1  106     
+                    +1  107     
+                    +1  108     
+                    +1  109     
+  00F7              +1  110     sfr MFCON          = 0xF7;
+                    +1  111     
+                    +1  112     
+                    +1  113     
+                    +1  114     
+                    +1  115     
+                    +1  116     
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     3
+
+                    +1  117     
+                    +1  118     
+                    +1  119     
+                    +1  120     
+00D0.7              +1  121     sbit CY            = PSW^7;
+00D0.6              +1  122     sbit AC            = PSW^6;
+00D0.5              +1  123     sbit F0            = PSW^5;
+00D0.4              +1  124     sbit RS1           = PSW^4;
+00D0.3              +1  125     sbit RS0           = PSW^3;
+00D0.2              +1  126     sbit OV            = PSW^2;
+                    +1  127     
+00D0.0              +1  128     sbit P             = PSW^0; 
+                    +1  129     
+                    +1  130     
+                    +1  131     
+                    +1  132     
+0098.1              +1  133     sbit TI            = SCON^1;
+0098.0              +1  134     sbit RI            = SCON^0;
+                    +1  135     
+                    +1  136     
+                    +1  137     
+                    +1  138     
+0088.7              +1  139     sbit TF1           = TCON^7;
+0088.6              +1  140     sbit TR1           = TCON^6;
+0088.5              +1  141     sbit TF0           = TCON^5;
+0088.4              +1  142     sbit TR0           = TCON^4;
+0088.3              +1  143     sbit MFLT          = TCON^3;
+0088.1              +1  144     sbit SINT          = TCON^1;
+0088.1              +1  145     sbit USINT         = TCON^1;
+0088.0              +1  146     sbit SSINT         = TCON^0;
+                    +1  147     
+                    +1  148     
+                    +1  149     
+                    +1  150     
+00E8.0              +1  151     sbit AM            = EPSW^0;
+00E8.1              +1  152     sbit F1            = EPSW^1;
+                    +1  153     
+                    +1  154     
+                    +1  155     
+                    +1  156     
+                    +1  157     
+0080.0              +1  158     sbit FSM_FINISH    = NVFSMCON^0;
+0080.1              +1  159     sbit FSM_START     = NVFSMCON^1;
+0080.5              +1  160     sbit FSM_RESULT    = NVFSMCON^5;
+                    +1  161     
+                    +1  162     
+                    +1  163     
+                    +1  164     
+00C0.0              +1  165     sbit PULLUP_RES_STATE = PROGIO^0;
+                    +1  166     
+                    +1  167     
+                    +1  168     
+                    +1  169     
+                    +1  170     
+                    +1  171     
+                    +1  172     
+                    +1  173     
+                    +1  174     
+                        175     
+                        176     
+                        177     
+                        178     ; Library Functions
+                        179     
+                        180     
+                        181     ; FSM interface
+                        182     Public Firmware_MassEraseUCM, _Firmware_MassEraseUCM
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     4
+
+                        183     Public Firmware_ErasePageUCM, _Firmware_ErasePageUCM
+                        184     Public Firmware_EraseUCM256Bytes, _Firmware_EraseUCM256Bytes
+                        185     Public Firmware_EraseUCM512Bytes, _Firmware_EraseUCM512Bytes
+                        186     Public Firmware_WriteByteUCM, _Firmware_WriteByteUCM
+                        187     
+                        188     ;Public Firmware_API_Run_State_Machine
+                        189     
+                        190     ; Firmware jumptable
+                        191     Public Firmware_EraseUCMBlock, _Firmware_EraseUCMBlock
+                        192     Public Firmware_GetChipID, _Firmware_GetChipID
+                        193     Public Firmware_SetProtectStatus, _Firmware_SetProtectStatus
+                        194     Public Firmware_SetSecurityAction, _Firmware_SetSecurityAction
+                        195     Public Firmware_SetSecurityMask, _Firmware_SetSecurityMask
+                        196     Public Firmware_GetFirmwareVersion, _Firmware_GetFirmwareVersion
+                        197     Public Firmware_SetClock, _Firmware_SetClock
+                        198     Public Firmware_SetClockTrim, _Firmware_SetClockTrim
+                        199     Public Firmware_GetClockSourceSelectSFR, _Firmware_GetClockSourceSelectSFR
+                        200     Public Firmware_GetClockControlSFR, _Firmware_GetClockControlSFR
+                        201     Public Firmware_SetExecuteOnlyStatus, _Firmware_SetExecuteOnlyStatus
+                        202     Public Firmware_GetDiagnosticData, _Firmware_GetDiagnosticData
+                        203     Public Firmware_GetRandomNumber, _Firmware_GetRandomNumber
+                        204     Public Firmware_Set_IO_Pullup, _Firmware_Set_IO_Pullup
+                        205     
+                        206     
+0001CD                  207     CSEG at 0x1CD
+                        208     
+0001CD                  209     _Firmware_SetClockTrim:
+0001CD                  210     Firmware_SetClockTrim:                  ds 3
+                        211     
+0001D0                  212     _Firmware_EraseUCMBlock:
+0001D0                  213     Firmware_EraseUCMBlock:                 ds 3
+                        214     
+0001D3                  215     _Firmware_SetSecurityAction:
+0001D3                  216     Firmware_SetSecurityAction:             ds 3
+                        217     
+0001D6                  218     _Firmware_SetSecurityMask:
+0001D6                  219     Firmware_SetSecurityMask:               ds 3
+                        220     
+0001D9                  221     _Firmware_SetExecuteOnlyStatus:
+0001D9                  222     Firmware_SetExecuteOnlyStatus:          ds 3
+                        223     
+0001DC                  224     _Firmware_SetProtectStatus:
+0001DC                  225     Firmware_SetProtectStatus:              ds 3
+                        226     
+0001DF                  227     _Firmware_GetChipID:
+0001DF                  228     Firmware_GetChipID:                     ds 3
+                        229     
+0001E2                  230     _Firmware_GetFirmwareVersion:
+0001E2                  231     Firmware_GetFirmwareVersion:            ds 3
+                        232     
+0001E5                  233     _Firmware_SetClock:
+0001E5                  234     Firmware_SetClock:                      ds 3
+                        235     
+0001E8                  236     _Firmware_GetClockSourceSelectSFR:
+0001E8                  237     Firmware_GetClockSourceSelectSFR:       ds 3
+                        238     
+0001EB                  239     _Firmware_GetClockControlSFR:
+0001EB                  240     Firmware_GetClockControlSFR:            ds 3
+                        241     
+0001EE                  242     _Firmware_GetDiagnosticData:
+0001EE                  243     Firmware_GetDiagnosticData:             ds 3
+                        244     
+0001F1                  245     _Firmware_GetRandomNumber:
+0001F1                  246     Firmware_GetRandomNumber:               ds 3
+                        247     
+0001F4                  248     CSEG at 0x1F4
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     5
+
+                        249     
+0001F4                  250     _Firmware_Set_IO_Pullup:
+0001F4                  251     Firmware_Set_IO_Pullup:                 ds 3
+                        252     
+                        253     
+                        254     
+------                  255     ?PR?TT120_FSM_Interface_Segment?TT120_API_Jumptable SEGMENT CODE
+------                  256             RSEG     ?PR?TT120_FSM_Interface_Segment?TT120_API_Jumptable
+                        257     
+000000                  258     _Firmware_ErasePageUCM:
+000000                  259     Firmware_ErasePageUCM:
+000000                  260     _Firmware_EraseUCM256Bytes:
+000000                  261     Firmware_EraseUCM256Bytes:
+000000 110000     F     262             acall   Load_DPTR                                       ; Load DPTR with address
+                                the FSM will perform its operation on
+                        263                                                                     ; This function also doe
+                               s an address boundary check
+                        264     
+000003 705A             265             jnz     Address_Error                                   ; Return value from Load
+                               _DPTR is in the ACC
+                        266                                                                     ; Non zero value means a
+                               ddress boundary error
+                        267     
+000005 75C910           268             mov     NvFsmMode,#10h                                  ; 256 Byte UCM Erase
+000008 F0               269             movx    @dptr,a                                         ; Select memory address
+000009 010000     F     270             ajmp    Firmware_API_Run_State_Machine                  ; Run the State Machine,
+                                Setup Retcode and RET
+                        271     
+00000C 22               272             ret
+                        273     
+                        274     
+                        275     
+00000D                  276     _Firmware_EraseUCM512Bytes:
+00000D                  277     Firmware_EraseUCM512Bytes:
+00000D 110000     F     278             acall   Load_DPTR                                       ; Load DPTR with address
+                                the FSM will perform its operation on
+                        279                                                                     ; This function also doe
+                               s an address boundary check
+                        280     
+000010 704D             281             jnz     Address_Error                                   ; Return value from Load
+                               _DPTR is in the ACC
+                        282                                                                     ; Non zero value means a
+                               ddress boundary error
+                        283     
+000012 75C920           284             mov     NvFsmMode,#20h                                  ; 512 Byte UCM Erase
+000015 F0               285             movx    @dptr,a                                         ; Select memory address.
+000016 010000     F     286             ajmp    Firmware_API_Run_State_Machine                  ; Run the State Machine,
+                                Setup Retcode and RET
+                        287     
+000019 22               288             ret
+                        289     
+                        290     
+                        291     
+00001A                  292     _Firmware_MassEraseUCM:
+00001A                  293     Firmware_MassEraseUCM:
+                        294     ; Do the Mass Erase via the FSM
+                        295     ; NOTE - this erases all UCM...including bootloader and OS. 
+                        296     ; So there is nothing to execute on return of this function
+00001A 75C970           297             mov     NvFsmMode,#070h                                 ; Mass Erase UCM
+00001D 758002           298             mov     NvFsmCon,#02h                                   ; Set Start Bit
+000020 3080FD           299             jnb     NvFsmCon.0,$                                    ; Wait for the Done flag
+                        300     
+000023 22               301             ret
+                        302     
+                        303     
+                        304     
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     6
+
+000024                  305     _Firmware_WriteByteUCM:
+000024                  306     Firmware_WriteByteUCM:
+000024 110000     F     307             acall   Load_DPTR                                       ; Load DPTR with address
+                                the FSM will perform its operation on
+                        308                                                                     ; This function also doe
+                               s an address boundary check
+                        309     
+000027 7036             310             jnz     Address_Error                                   ; Return value from Load
+                               _DPTR is in the ACC
+                        311                                                                     ; Non zero value means a
+                               ddress boundary error
+                        312     
+000029 ED               313             mov     a,r5                                            ; Load the byte to write
+                                into ACC
+                        314     
+00002A 75C904           315             mov     NvFsmMode,#04h                                  ; Byte Write selected in
+                                FSM
+00002D F0               316             movx    @dptr,a                                         ; Setup the FSM with the
+                                desired address
+                        317     
+                        318     
+                        319     
+                        320     ; Set the NVM Finite Statem Machine running
+00002E                  321     Firmware_API_Run_State_Machine:
+00002E 438002           322             orl     NvFsmCon,#02h                                   ; Set Start Bit
+000031 3080FD           323             jnb     NvFsmCon.0,$                                    ; Wait for the NvInt fla
+                               g
+                        324                                                                     ; This tells us the FSM 
+                               has completed its task
+                        325     
+000034 C280             326             clr     NvFsmCon.0                                      ; Clear the NvInt flag
+                        327     
+                        328     
+                        329             ; Success will be 1 if FSM operation successful
+                        330             ; Will be 0 if FSM operation failed.
+000036 7F00             331             mov     r7,#0                                           ; Assume Success until w
+                               e check below
+000038 208502           332             jb      NvFsmCon.5,Firmware_API_Run_State_Machine__Return
+00003B 7FFF             333             mov     r7,#0FFh                                        ; If Success bit not set
+                                then return Fail
+                        334     
+00003D                  335     Firmware_API_Run_State_Machine__Return:
+                        336     
+00003D 22               337             ret
+                        338     
+                        339     
+                        340     
+00003E                  341     Load_DPTR:
+00003E 8B93             342             mov     DPX,r3                                          ; Load DPX value
+000040 8A83             343             mov     DPH,r2                                          ; Load DPH value
+000042 8982             344             mov     DPL,r1                                          ; Load DPL value
+                        345     
+                        346     ; Check that the page or byte is within the UCM boundary
+                        347     ; for the TT120 UCM
+                        348     ; e.g. above 800h and less than 1E800h
+000044 C3               349             clr     c
+000045 E593             350             mov     a,DPX
+000047 7008             351             jnz     Check_High_Address_Boundary             ; if non zero it is above the 64
+                               K range
+                        352     
+000049 E583             353             mov     a,DPH
+00004B 9408             354             subb    a,#08h                                  ; check the high address byte is
+                                above 08h
+00004D 400D             355             jc      Return_Error                            ; If carry flag set it means the
+                                address is not valid
+                        356     
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     7
+
+00004F E4               357             clr     a                                       ; Address is less than not above
+                                64K & above 800h 
+                        358                                                             ; Return 0 (success) in ACC
+000050 22               359             ret
+                        360     
+000051                  361     Check_High_Address_Boundary:
+000051 B40108           362             cjne    a,#01h,Return_Error                     ; Jump to error if DPX is not 01
+                                (value can only be 00 or 01)
+                        363     
+000054 E583             364             mov     a,DPH                                   ; Load in DPH value to test
+000056 2418             365             add     a,#018h                                 ; E8h + 18h will set carry flag 
+                               (1E800h is start of XRAM)
+000058 4002             366             jc      Return_Error                            ; If carry flag set it means the
+                                address is not valid
+                        367     
+00005A E4               368             clr     a                                       ; Address is less than 1E800h so
+                                return 0 (success) in ACC
+                        369     
+00005B 22               370             ret
+                        371     
+00005C                  372     Return_Error:   
+00005C 74FF             373             mov     a,#0FFh                                 ; return FFh in Acc to state add
+                               ress violation
+                        374     
+00005E 22               375             ret
+                        376     
+                        377     
+                        378     
+00005F                  379     Address_Error:
+00005F 7FFF             380             mov     r7,#0FFh                                ; code failed becuase of address
+                                boundary check
+                        381                                                             ; put FFh into r7 (NVM operation
+                                failed) & return to calling function
+000061 22               382             ret
+                        383     
+                        384     
+                        385     
+                        386     END
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     8
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                                    T Y P E  V A L U E     ATTRIBUTES
+
+?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JC  SEG E 000062H       REL=UNIT, ALN=BYTE
+_FIRMWARE_ERASEPAGEUCM. . . . . . . . .    C  ADDR  0000H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+_FIRMWARE_ERASEUCM256BYTES. . . . . . .    C  ADDR  0000H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+_FIRMWARE_ERASEUCM512BYTES. . . . . . .    C  ADDR  000DH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+_FIRMWARE_ERASEUCMBLOCK . . . . . . . .    C  ADDR  01D0H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_GETCHIPID . . . . . . . . . .    C  ADDR  01DFH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_GETCLOCKCONTROLSFR. . . . . .    C  ADDR  01EBH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_GETCLOCKSOURCESELECTSFR . . .    C  ADDR  01E8H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_GETDIAGNOSTICDATA . . . . . .    C  ADDR  01EEH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_GETFIRMWAREVERSION. . . . . .    C  ADDR  01E2H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_GETRANDOMNUMBER . . . . . . .    C  ADDR  01F1H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_MASSERASEUCM. . . . . . . . .    C  ADDR  001AH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+_FIRMWARE_SET_IO_PULLUP . . . . . . . .    C  ADDR  01F4H     R   SEG=?CO?TT120_API_JUMPTABLE?2
+_FIRMWARE_SETCLOCK. . . . . . . . . . .    C  ADDR  01E5H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_SETCLOCKTRIM. . . . . . . . .    C  ADDR  01CDH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_SETEXECUTEONLYSTATUS. . . . .    C  ADDR  01D9H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_SETPROTECTSTATUS. . . . . . .    C  ADDR  01DCH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_SETSECURITYACTION . . . . . .    C  ADDR  01D3H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_SETSECURITYMASK . . . . . . .    C  ADDR  01D6H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+_FIRMWARE_WRITEBYTEUCM. . . . . . . . .    C  ADDR  0024H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+AC. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.6   A   
+ACC . . . . . . . . . . . . . . . . . .    D  ADDR  00E0H     A   
+ADDRESS_ERROR . . . . . . . . . . . . .    C  ADDR  005FH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+AM. . . . . . . . . . . . . . . . . . .    B  ADDR  00E8H.0   A   
+B . . . . . . . . . . . . . . . . . . .    D  ADDR  00F0H     A   
+CBSL. . . . . . . . . . . . . . . . . .    D  ADDR  00A1H     A   
+CHECK_HIGH_ADDRESS_BOUNDARY . . . . . .    C  ADDR  0051H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+CY. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.7   A   
+DPH . . . . . . . . . . . . . . . . . .    D  ADDR  0083H     A   
+DPH0. . . . . . . . . . . . . . . . . .    D  ADDR  0083H     A   
+DPH1. . . . . . . . . . . . . . . . . .    D  ADDR  0085H     A   
+DPL . . . . . . . . . . . . . . . . . .    D  ADDR  0082H     A   
+DPL0. . . . . . . . . . . . . . . . . .    D  ADDR  0082H     A   
+DPL1. . . . . . . . . . . . . . . . . .    D  ADDR  0084H     A   
+DPS . . . . . . . . . . . . . . . . . .    D  ADDR  0086H     A   
+DPX . . . . . . . . . . . . . . . . . .    D  ADDR  0093H     A   
+DPX0. . . . . . . . . . . . . . . . . .    D  ADDR  0093H     A   
+DPX1. . . . . . . . . . . . . . . . . .    D  ADDR  0095H     A   
+EPSW. . . . . . . . . . . . . . . . . .    D  ADDR  00E8H     A   
+F0. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.5   A   
+F1. . . . . . . . . . . . . . . . . . .    B  ADDR  00E8H.1   A   
+FIRMWARE_API_RUN_STATE_MACHINE. . . . .    C  ADDR  002EH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FIRMWARE_API_RUN_STATE_MACHINE__RETURN.    C  ADDR  003DH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FIRMWARE_ERASEPAGEUCM . . . . . . . . .    C  ADDR  0000H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FIRMWARE_ERASEUCM256BYTES . . . . . . .    C  ADDR  0000H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FIRMWARE_ERASEUCM512BYTES . . . . . . .    C  ADDR  000DH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FIRMWARE_ERASEUCMBLOCK. . . . . . . . .    C  ADDR  01D0H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_GETCHIPID. . . . . . . . . . .    C  ADDR  01DFH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE     9
+
+FIRMWARE_GETCLOCKCONTROLSFR . . . . . .    C  ADDR  01EBH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_GETCLOCKSOURCESELECTSFR. . . .    C  ADDR  01E8H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_GETDIAGNOSTICDATA. . . . . . .    C  ADDR  01EEH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_GETFIRMWAREVERSION . . . . . .    C  ADDR  01E2H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_GETRANDOMNUMBER. . . . . . . .    C  ADDR  01F1H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_MASSERASEUCM . . . . . . . . .    C  ADDR  001AH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FIRMWARE_SET_IO_PULLUP. . . . . . . . .    C  ADDR  01F4H     R   SEG=?CO?TT120_API_JUMPTABLE?2
+FIRMWARE_SETCLOCK . . . . . . . . . . .    C  ADDR  01E5H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_SETCLOCKTRIM . . . . . . . . .    C  ADDR  01CDH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_SETEXECUTEONLYSTATUS . . . . .    C  ADDR  01D9H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_SETPROTECTSTATUS . . . . . . .    C  ADDR  01DCH     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_SETSECURITYACTION. . . . . . .    C  ADDR  01D3H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_SETSECURITYMASK. . . . . . . .    C  ADDR  01D6H     R   SEG=?CO?TT120_API_JUMPTABLE?1
+FIRMWARE_WRITEBYTEUCM . . . . . . . . .    C  ADDR  0024H     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+FSM_FINISH. . . . . . . . . . . . . . .    B  ADDR  0080H.0   A   
+FSM_RESULT. . . . . . . . . . . . . . .    B  ADDR  0080H.5   A   
+FSM_START . . . . . . . . . . . . . . .    B  ADDR  0080H.1   A   
+IE. . . . . . . . . . . . . . . . . . .    D  ADDR  00A8H     A   
+IP. . . . . . . . . . . . . . . . . . .    D  ADDR  00B8H     A   
+ISOCON. . . . . . . . . . . . . . . . .    D  ADDR  00B2H     A   
+ISOTMR. . . . . . . . . . . . . . . . .    D  ADDR  00B4H     A   
+LOAD_DPTR . . . . . . . . . . . . . . .    C  ADDR  003EH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+MFCON . . . . . . . . . . . . . . . . .    D  ADDR  00F7H     A   
+MFLT. . . . . . . . . . . . . . . . . .    B  ADDR  0088H.3   A   
+MPTR. . . . . . . . . . . . . . . . . .    D  ADDR  00A2H     A   
+MPTRX . . . . . . . . . . . . . . . . .    D  ADDR  00EAH     A   
+NVFSMCON. . . . . . . . . . . . . . . .    D  ADDR  0080H     A   
+NVFSMMODE . . . . . . . . . . . . . . .    D  ADDR  00C9H     A   
+OV. . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.2   A   
+P . . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.0   A   
+PCON. . . . . . . . . . . . . . . . . .    D  ADDR  0087H     A   
+PROGIO. . . . . . . . . . . . . . . . .    D  ADDR  00C0H     A   
+PSW . . . . . . . . . . . . . . . . . .    D  ADDR  00D0H     A   
+PULLUP_RES_STATE. . . . . . . . . . . .    B  ADDR  00C0H.0   A   
+RETURN_ERROR. . . . . . . . . . . . . .    C  ADDR  005CH     R   SEG=?PR?TT120_FSM_INTERFACE_SEGMENT?TT120_API_JUMPTABL
+                                    AX51 MAE
+RI. . . . . . . . . . . . . . . . . . .    B  ADDR  0098H.0   A   
+RS0 . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.3   A   
+RS1 . . . . . . . . . . . . . . . . . .    B  ADDR  00D0H.4   A   
+SBUF. . . . . . . . . . . . . . . . . .    D  ADDR  0099H     A   
+SCON. . . . . . . . . . . . . . . . . .    D  ADDR  0098H     A   
+SECURITYSTATUS. . . . . . . . . . . . .    D  ADDR  00B0H     A   
+SINT. . . . . . . . . . . . . . . . . .    B  ADDR  0088H.1   A   
+SP. . . . . . . . . . . . . . . . . . .    D  ADDR  0081H     A   
+SPSW. . . . . . . . . . . . . . . . . .    D  ADDR  00D8H     A   
+SSINT . . . . . . . . . . . . . . . . .    B  ADDR  0088H.0   A   
+TCON. . . . . . . . . . . . . . . . . .    D  ADDR  0088H     A   
+TF0 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.5   A   
+TF1 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.7   A   
+TH0 . . . . . . . . . . . . . . . . . .    D  ADDR  008CH     A   
+TH1 . . . . . . . . . . . . . . . . . .    D  ADDR  008DH     A   
+TI. . . . . . . . . . . . . . . . . . .    B  ADDR  0098H.1   A   
+TL0 . . . . . . . . . . . . . . . . . .    D  ADDR  008AH     A   
+TL1 . . . . . . . . . . . . . . . . . .    D  ADDR  008BH     A   
+TMOD. . . . . . . . . . . . . . . . . .    D  ADDR  0089H     A   
+TR0 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.4   A   
+TR1 . . . . . . . . . . . . . . . . . .    B  ADDR  0088H.6   A   
+USINT . . . . . . . . . . . . . . . . .    B  ADDR  0088H.1   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S).
+AX51 MACRO ASSEMBLER  TT120_API_JUMPTABLE                                                   12/12/06 14:05:37 PAGE    10
+

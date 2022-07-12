@@ -1,0 +1,124 @@
+C51 COMPILER V7.50   SET_CLOCK                                                             12/29/2006 16:28:17 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE SET_CLOCK
+OBJECT MODULE PLACED IN .\Set_Clock.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common\Set_Clock.c BROWSE INTVECTOR(0X8000) DEBUG OBJECTEXTEND PRINT(.\S
+                    -et_Clock.lst) OBJECT(.\Set_Clock.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         Set_Clock.c
+   4          * Description:  Contains function to change the chip clock settings
+   5          * Copyright:    Emosyn Inc. 2005
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.3 $
+  17          * $Author: amorris $ 
+  18          * $Date: 2005/10/25 17:30:09 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include "Firmware_API_JumpTable.h"
+  26          #include "Emosyn_Helper_Functions.h"
+  27          
+  28          
+  29          /******************************************************************************
+  30          * External and local function declarations 
+  31          ******************************************************************************/
+  32          
+  33          
+  34          /******************************************************************************
+  35          * External variable declarations
+  36          ******************************************************************************/
+  37          
+  38          
+  39          /******************************************************************************
+  40          *
+  41          * Function Name:      Set_Clock
+  42          * Function Inputs:    void
+  43          * Function Outputs:   uint SW1SW2  9000h for success or
+  44          *                                  6F00 for General error or
+  45          *                                  6A86 for wrong data value or
+  46          *                                  6700 for wrong LC
+  47          * Description:        Changes the clock settings for the chip
+  48          *
+  49          * APDU Syntax:        E5 18 00 00 03
+  50          * APDU Inputs:        DataByte1  Clock Source
+  51          *                     DataByte2  Clock Multiplier
+  52          *                     DataByte3  Clock Divider
+  53          *                         See Device Reference Guide for clock setting details
+  54          * APDU Outputs:       None
+C51 COMPILER V7.50   SET_CLOCK                                                             12/29/2006 16:28:17 PAGE 2   
+
+  55          *
+  56          * Example usage:      Change system clock source to internal oscillator running at 60 MHz
+  57          * To Card             ->  E5 18 00 00 03
+  58          * ACK from Card       <-  18
+  59          * Data from Card      ->  00 (Clock Source) 00 (Multiplier) 0F (Divider)
+  60          * Response from Card  <-  90 00
+  61          *
+  62          ******************************************************************************/
+  63          uint Set_Clock (void)
+  64          {
+  65   1          if (PARA3 != 0x03)
+  66   1          {
+  67   2              SW1SW2 = SW1SW2_WRONG_LC_LENGTH;
+  68   2          }
+  69   1          else
+  70   1          {
+  71   2              /* Get the 3 data bytes containing the data */
+  72   2              Serial_Receive_X_Bytes (0x03, &TEMP_BUF);
+  73   2      
+  74   2              /* Check clock source is not greater than 2 */
+  75   2              /* & multiplier and divider are less than 0x0F */
+  76   2              if ((TEMPVARIABLE1 > 2) || (TEMPVARIABLE2 & 0xF0) || (TEMPVARIABLE3 & 0xF0))
+  77   2              {
+  78   3                  SW1SW2 = SW1SW2_INCORRECT_DATA;
+  79   3              }
+  80   2              else
+  81   2              {
+  82   3                  /* Actual firmware API call */
+  83   3                  cRet_Val_Char = Firmware_SetClock (TEMPVARIABLE1, TEMPVARIABLE2, TEMPVARIABLE3);
+  84   3      
+  85   3                  if (cRet_Val_Char != 0)
+  86   3                  {
+  87   4                      SW1SW2 = SW1SW2_GENERAL_ERROR; /* If MSB of return value set it */
+  88   4                  }                                  /* indicates a memory operation error */
+  89   3                  else
+  90   3                  {
+  91   4                      SW1SW2 = SW1SW2_OK; /* Firmware return value was 0 */
+  92   4                  }
+  93   3              }
+  94   2          }
+  95   1      
+  96   1          return SW1SW2;
+  97   1      
+  98   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     80    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

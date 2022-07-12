@@ -1,0 +1,1 @@
+"..\Common\Mass_Erase_UCM.c" BROWSE INTVECTOR(0x8000) DEBUG OBJECTEXTEND PRINT(.\Mass_Erase_UCM.lst) OBJECT(.\Mass_Erase_UCM.obj)

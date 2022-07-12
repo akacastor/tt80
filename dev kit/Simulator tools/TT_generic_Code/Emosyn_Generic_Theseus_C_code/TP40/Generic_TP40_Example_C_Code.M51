@@ -1,0 +1,2257 @@
+BL51 BANKED LINKER/LOCATER V5.11                                                        12/29/2006  16:28:18  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.11, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE .\TP40_API_JumpTable.LIB, TP40_Get_OS_Version.obj, TP40_MassEraseEE_Bootloader_Safe.obj, TP40_S
+>> end_ATR.obj, TP40_STARTUP.obj, TP40_ISR.obj, .\TP40_TP62_Erase_Back_To_Factory_State.obj, .\TP40_TP62_Memory_Write.ob
+>> j, .\Chip_Init.obj, .\Global_Vars.obj, .\IO.obj, .\CRC16_Normal.obj, .\Set_Idle_Mode.obj, .\ISO_Select_Speed.obj, .\M
+>> ain.obj, .\SHA-1.obj, .\Change_ISO_Speed.obj, .\Get_Security_Status.obj, .\Set_Security_Status.obj, .\Write_UCM_Bytes
+>> _Flash_Mode_From_IRAM_Buffer.obj, .\Write_EE_Bytes_Flash_Mode_From_IRAM_Buffer.obj, .\CODE_Memory_Dump.obj, .\XDATA_M
+>> emory_Dump.obj, .\IDATA_Memory_Dump.obj, .\Write_To_RAM.obj, .\Get_Response.obj, .\Conv_Two_Bytes_To_Int.obj, .\Erase
+>> _EE_64_Bytes.obj, .\Mass_Erase_EE.obj, .\Get_Clock_Source.obj, .\Get_Clock_Control.obj, .\Set_Execute_Only_Status.obj
+>> , .\Set_Protection_Status.obj, .\Set_Security_Action.obj, .\Set_Security_Mask.obj, .\Write_Byte_EE_Flash_Mode.obj, .\
+>> Write_Byte_UCM_Flash_Mode.obj, .\Erase_24K_Block.obj, .\Erase_EE_8_Bytes.obj, .\Get_Firmware_Version.obj, .\Erase_UCM
+>> _Page.obj, .\Get_Chip_ID.obj, .\Set_Interrupt_Enable.obj, .\Get_Interrupt_Enable.obj, .\Set_Clock.obj, .\Erase_UCM_Co
+>> nfigurable_Block.obj, .\Mass_Erase_UCM.obj TO Generic_TP40_Example_C_Code RAMSIZE (256) CODE (0X8000-0XF7FF) XDATA (0
+>> X0000-0X017F)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  TP40_Get_OS_Version.obj (TP40_GET_OS_VERSION)
+  TP40_MassEraseEE_Bootloader_Safe.obj (TP40_MASSERASEEE_BOOTLOADER_SAFE)
+  TP40_Send_ATR.obj (TP40_SEND_ATR)
+  TP40_STARTUP.obj (?C_STARTUP)
+  TP40_ISR.obj (TP40_ISR)
+  .\TP40_TP62_Erase_Back_To_Factory_State.obj (TP40_TP62_ERASE_BACK_TO_FACTORY_STATE)
+  .\TP40_TP62_Memory_Write.obj (TP40_TP62_MEMORY_WRITE)
+  .\Chip_Init.obj (CHIP_INIT)
+  .\Global_Vars.obj (GLOBAL_VARS)
+  .\IO.obj (IO)
+  .\CRC16_Normal.obj (CRC16_NORMAL)
+  .\Set_Idle_Mode.obj (SET_IDLE_MODE)
+  .\ISO_Select_Speed.obj (ISO_SELECT_SPEED)
+  .\Main.obj (MAIN)
+  .\SHA-1.obj (SHA_1)
+  .\Change_ISO_Speed.obj (CHANGE_ISO_SPEED)
+  .\Get_Security_Status.obj (GET_SECURITY_STATUS)
+  .\Set_Security_Status.obj (SET_SECURITY_STATUS)
+  .\Write_UCM_Bytes_Flash_Mode_From_IRAM_Buffer.obj (WRITE_UCM_BYTES_FLASH_MODE_FROM_IRAM_BUFF)
+  .\Write_EE_Bytes_Flash_Mode_From_IRAM_Buffer.obj (WRITE_EE_BYTES_FLASH_MODE_FROM_IRAM_BUFFE)
+  .\CODE_Memory_Dump.obj (CODE_MEMORY_DUMP)
+  .\XDATA_Memory_Dump.obj (XDATA_MEMORY_DUMP)
+  .\IDATA_Memory_Dump.obj (IDATA_MEMORY_DUMP)
+  .\Write_To_RAM.obj (WRITE_TO_RAM)
+  .\Get_Response.obj (GET_RESPONSE)
+  .\Conv_Two_Bytes_To_Int.obj (CONV_TWO_BYTES_TO_INT)
+  .\Erase_EE_64_Bytes.obj (ERASE_EE_64_BYTES)
+  .\Mass_Erase_EE.obj (MASS_ERASE_EE)
+  .\Get_Clock_Source.obj (GET_CLOCK_SOURCE)
+  .\Get_Clock_Control.obj (GET_CLOCK_CONTROL)
+  .\Set_Execute_Only_Status.obj (SET_EXECUTE_ONLY_STATUS)
+  .\Set_Protection_Status.obj (SET_PROTECTION_STATUS)
+  .\Set_Security_Action.obj (SET_SECURITY_ACTION)
+  .\Set_Security_Mask.obj (SET_SECURITY_MASK)
+  .\Write_Byte_EE_Flash_Mode.obj (WRITE_BYTE_EE_FLASH_MODE)
+  .\Write_Byte_UCM_Flash_Mode.obj (WRITE_BYTE_UCM_FLASH_MODE)
+  .\Erase_24K_Block.obj (ERASE_24K_BLOCK)
+  .\Erase_EE_8_Bytes.obj (ERASE_EE_8_BYTES)
+  .\Get_Firmware_Version.obj (GET_FIRMWARE_VERSION)
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 2
+
+
+  .\Erase_UCM_Page.obj (ERASE_UCM_PAGE)
+  .\Get_Chip_ID.obj (GET_CHIP_ID)
+  .\Set_Interrupt_Enable.obj (SET_INTERRUPT_ENABLE)
+  .\Get_Interrupt_Enable.obj (GET_INTERRUPT_ENABLE)
+  .\Set_Clock.obj (SET_CLOCK)
+  .\Erase_UCM_Configurable_Block.obj (ERASE_UCM_CONFIGURABLE_BLOCK)
+  .\Mass_Erase_UCM.obj (MASS_ERASE_UCM)
+  .\TP40_API_JumpTable.LIB (TP40_JUMPTABLE)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LNOT)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?ULCMP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?ULSHR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LSHL)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LLDIDATA)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LLDIDATA0)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LSTIDATA)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LSTKIDATA)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?ICALL)
+
+
+LINK MAP OF MODULE:  Generic_TP40_Example_C_Code (TP40_GET_OS_VERSION)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     003BH     UNIT         _DATA_GROUP_
+            DATA    0043H     0005H     UNIT         ?DT?GLOBAL_VARS
+            IDATA   0048H     0040H     UNIT         _IDATA_GROUP_
+            IDATA   0088H     001BH     UNIT         ?ID?GLOBAL_VARS
+            IDATA   00A3H     000FH     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0040H     UNIT         ?XD?GLOBAL_VARS
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+                    0000H     03D0H                  *** GAP ***
+            CODE    03D0H     0030H     ABSOLUTE     
+                    0400H     7C00H                  *** GAP ***
+            CODE    8000H     0003H     ABSOLUTE     
+            CODE    8003H     0020H     UNIT         ?PR?GET_SECURITY_STATUS?GET_SECURITY_STATUS
+            CODE    8023H     0003H     ABSOLUTE     
+            CODE    8026H     0005H     UNIT         ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_BYTES_TO_INT
+            CODE    802BH     0003H     ABSOLUTE     
+            CODE    802EH     05B4H     UNIT         ?PR?_SHA_1_HASH?SHA_1
+            CODE    85E2H     0231H     UNIT         ?PR?_THESEUS_EEPROM_WRITE?TP40_TP62_MEMORY_WRITE
+            CODE    8813H     0200H     UNIT         ?CO?CRC16_NORMAL
+            CODE    8A13H     01ABH     UNIT         ?PR?_ISO_SELECT_SPEED?ISO_SELECT_SPEED
+            CODE    8BBEH     0100H     UNIT         ?CO?MAIN
+            CODE    8CBEH     00F6H     UNIT         ?C?LIB_CODE
+            CODE    8DB4H     009AH     UNIT         ?C_C51STARTUP
+            CODE    8E4EH     008AH     UNIT         ?PR?WRITE_X_BYTES_TO_EEPROM?TP40_TP62_MEMORY_WRITE
+            CODE    8ED8H     0086H     UNIT         ?PR?FILL_EEPROM_WITH_BYTE?TP40_TP62_MEMORY_WRITE
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 3
+
+
+            CODE    8F5EH     0081H     UNIT         ?PR?CALL_SHA1?SHA_1
+            CODE    8FDFH     0075H     UNIT         ?PR?PROCESS_APDU_COMMAND?MAIN
+            CODE    9054H     0060H     UNIT         ?PR?_ENTER_IDLE_MODE?MAIN
+            CODE    90B4H     0050H     UNIT         ?PR?SET_CLOCK?SET_CLOCK
+            CODE    9104H     004FH     UNIT         ?PR?CREATE_CRC16_HASH_OF_XDATA?CRC16_NORMAL
+            CODE    9153H     004EH     UNIT         ?PR?_CALCULATECRC?CRC16_NORMAL
+            CODE    91A1H     004DH     UNIT         ?PR?WRITE_TO_RAM?WRITE_TO_RAM
+            CODE    91EEH     0045H     UNIT         ?PR?SECURITY_FAULT_ISR?TP40_ISR
+            CODE    9233H     0045H     UNIT         ?PR?WRITE_UCM_BYTES_FLASH_MODE_FROM_IRAM_BUFFER?WRITE_UCM_BYTES_FLA
+>> SH_MODE_FROM_IRAM_BUFF
+            CODE    9278H     0045H     UNIT         ?PR?WRITE_EE_BYTES_FLASH_MODE_FROM_IRAM_BUFFER?WRITE_EE_BYTES_FLASH
+>> _MODE_FROM_IRAM_BUFFE
+            CODE    92BDH     0043H     UNIT         ?PR?THESEUSPLATINUM_EE_MASSERASE_BOOTLOADER_SAFE?TP40_MASSERASEEE_B
+>> OOTLOADER_SAFE
+            CODE    9300H     0043H     UNIT         ERASEBACKTOFACTORYSTATE_SEGMENT
+            CODE    9343H     0042H     UNIT         ?PR?SET_EXECUTE_ONLY_STATUS?SET_EXECUTE_ONLY_STATUS
+            CODE    9385H     0042H     UNIT         ?PR?SET_PROTECTION_STATUS?SET_PROTECTION_STATUS
+            CODE    93C7H     0042H     UNIT         ?PR?WRITE_BYTE_EE_FLASH_MODE?WRITE_BYTE_EE_FLASH_MODE
+            CODE    9409H     0042H     UNIT         ?PR?WRITE_BYTE_UCM_FLASH_MODE?WRITE_BYTE_UCM_FLASH_MODE
+            CODE    944BH     003FH     UNIT         ?PR?GET_RESPONSE?GET_RESPONSE
+            CODE    948AH     003FH     UNIT         ?PR?GET_CHIP_ID?GET_CHIP_ID
+            CODE    94C9H     0039H     UNIT         ?PR?MAIN?MAIN
+            CODE    9502H     0030H     UNIT         ?PR?CODE_MEMORY_DUMP?CODE_MEMORY_DUMP
+            CODE    9532H     002FH     UNIT         ?PR?XDATA_MEMORY_DUMP?XDATA_MEMORY_DUMP
+            CODE    9561H     002AH     UNIT         ?PR?ERASE_EE_64_BYTES?ERASE_EE_64_BYTES
+            CODE    958BH     002AH     UNIT         ?PR?ERASE_EE_8_BYTES?ERASE_EE_8_BYTES
+            CODE    95B5H     002AH     UNIT         ?PR?ERASE_UCM_PAGE?ERASE_UCM_PAGE
+            CODE    95DFH     002AH     UNIT         ?PR?ERASE_UCM_CONFIGURABLE_BLOCK?ERASE_UCM_CONFIGURABLE_BLOCK
+            CODE    9609H     0029H     UNIT         ?PR?SEND_ATR?TP40_SEND_ATR
+            CODE    9632H     0027H     UNIT         ?PR?SET_SECURITY_ACTION?SET_SECURITY_ACTION
+            CODE    9659H     0027H     UNIT         ?PR?SET_SECURITY_MASK?SET_SECURITY_MASK
+            CODE    9680H     0022H     UNIT         ?PR?GET_IDLE_MODE?SET_IDLE_MODE
+            CODE    96A2H     0021H     UNIT         ?PR?GET_CLOCK_SOURCE?GET_CLOCK_SOURCE
+            CODE    96C3H     0021H     UNIT         ?PR?GET_CLOCK_CONTROL?GET_CLOCK_CONTROL
+            CODE    96E4H     0021H     UNIT         ?PR?GET_FIRMWARE_VERSION?GET_FIRMWARE_VERSION
+            CODE    9705H     0020H     UNIT         ?PR?ERASE_24K_BLOCK?ERASE_24K_BLOCK
+            CODE    9725H     001CH     UNIT         ?PR?CHIP_INIT?CHIP_INIT
+            CODE    9741H     001AH     UNIT         ?PR?IDATA_MEMORY_DUMP?IDATA_MEMORY_DUMP
+            CODE    975BH     0014H     UNIT         ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+            CODE    976FH     0014H     UNIT         ?PR?_SERIAL_TRANSMIT_X_BYTES?IO
+            CODE    9783H     0012H     UNIT         ?PR?_PUTCHAR?IO
+            CODE    9795H     0012H     UNIT         ?PR?CHANGE_ISO_SPEED?CHANGE_ISO_SPEED
+            CODE    97A7H     0010H     UNIT         ?PR?PROCESS_PPS_COMMAND?MAIN
+            CODE    97B7H     000FH     UNIT         ?PR?GET_OS_VERSION?TP40_GET_OS_VERSION
+            CODE    97C6H     000DH     UNIT         ?PR?SET_IDLE_MODE?SET_IDLE_MODE
+            CODE    97D3H     000CH     UNIT         ?PR?SET_INTERRUPT_ENABLE?SET_INTERRUPT_ENABLE
+            CODE    97DFH     000BH     UNIT         ?PR?GET_INTERRUPT_ENABLE?GET_INTERRUPT_ENABLE
+            CODE    97EAH     000AH     UNIT         ?PR?SET_SECURITY_STATUS?SET_SECURITY_STATUS
+            CODE    97F4H     0008H     UNIT         ?PR?GETCHAR?IO
+            CODE    97FCH     0008H     UNIT         ?PR?MASS_ERASE_EE?MASS_ERASE_EE
+            CODE    9804H     0008H     UNIT         ?PR?MASS_ERASE_UCM?MASS_ERASE_UCM
+            CODE    980CH     0004H     UNIT         ?C_INITSEG
+            CODE    9810H     0001H     UNIT         ?PR?SERIAL_ISR?TP40_ISR
+
+
+
+OVERLAY MAP OF MODULE:   Generic_TP40_Example_C_Code (TP40_GET_OS_VERSION)
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 4
+
+
+
+
+SEGMENT                                            DATA_GROUP          IDATA_GROUP
+  +--> CALLED SEGMENT                            START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                    -----    -----      -----    -----
+  +--> ?PR?CHIP_INIT?CHIP_INIT
+  +--> ?PR?SEND_ATR?TP40_SEND_ATR
+  +--> ?PR?_ENTER_IDLE_MODE?MAIN
+  +--> ?PR?GETCHAR?IO
+  +--> ?PR?PROCESS_PPS_COMMAND?MAIN
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+  +--> ?PR?PROCESS_APDU_COMMAND?MAIN
+
+?PR?CHIP_INIT?CHIP_INIT                          -----    -----      -----    -----
+  +--> ?PR?_ISO_SELECT_SPEED?ISO_SELECT_SPEED
+
+?PR?_ISO_SELECT_SPEED?ISO_SELECT_SPEED           0008H    0001H      0048H    0006H
+  +--> ?PR?_SERIAL_TRANSMIT_X_BYTES?IO
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?_SERIAL_TRANSMIT_X_BYTES?IO                  -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?SEND_ATR?TP40_SEND_ATR                       -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?PROCESS_PPS_COMMAND?MAIN                     -----    -----      -----    -----
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+  +--> ?PR?_ISO_SELECT_SPEED?ISO_SELECT_SPEED
+
+?PR?_SERIAL_RECEIVE_X_BYTES?IO                   -----    -----      -----    -----
+  +--> ?PR?GETCHAR?IO
+
+?PR?PROCESS_APDU_COMMAND?MAIN                    -----    -----      -----    -----
+  +--> ?CO?MAIN
+  +--> ?PR?_PUTCHAR?IO
+  +--> ?PR?_SERIAL_TRANSMIT_X_BYTES?IO
+
+?CO?MAIN                                         -----    -----      -----    -----
+  +--> ?PR?ERASE_EE_64_BYTES?ERASE_EE_64_BYTES
+  +--> ?PR?ERASE_EE_8_BYTES?ERASE_EE_8_BYTES
+  +--> ?PR?WRITE_EE_BYTES_FLASH_MODE_FROM_IR...
+  +--> ?PR?MASS_ERASE_EE?MASS_ERASE_EE
+  +--> ?PR?GET_CHIP_ID?GET_CHIP_ID
+  +--> ?PR?GET_CLOCK_SOURCE?GET_CLOCK_SOURCE
+  +--> ?PR?GET_CLOCK_CONTROL?GET_CLOCK_CONTROL
+  +--> ?PR?SET_PROTECTION_STATUS?SET_PROTECT...
+  +--> ?PR?SET_EXECUTE_ONLY_STATUS?SET_EXECU...
+  +--> ?PR?SET_SECURITY_ACTION?SET_SECURITY_...
+  +--> ?PR?SET_SECURITY_MASK?SET_SECURITY_MASK
+  +--> ?PR?SET_CLOCK?SET_CLOCK
+  +--> ?PR?SET_INTERRUPT_ENABLE?SET_INTERRUP...
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 5
+
+
+  +--> ?PR?GET_INTERRUPT_ENABLE?GET_INTERRUP...
+  +--> ?PR?GET_FIRMWARE_VERSION?GET_FIRMWARE...
+  +--> ?PR?WRITE_UCM_BYTES_FLASH_MODE_FROM_I...
+  +--> ?PR?ERASE_24K_BLOCK?ERASE_24K_BLOCK
+  +--> ?PR?WRITE_BYTE_EE_FLASH_MODE?WRITE_BY...
+  +--> ?PR?WRITE_BYTE_UCM_FLASH_MODE?WRITE_B...
+  +--> ?PR?ERASE_UCM_CONFIGURABLE_BLOCK?ERAS...
+  +--> ?PR?ERASE_UCM_PAGE?ERASE_UCM_PAGE
+  +--> ?PR?MASS_ERASE_UCM?MASS_ERASE_UCM
+  +--> ?PR?CHANGE_ISO_SPEED?CHANGE_ISO_SPEED
+  +--> ?PR?SET_SECURITY_STATUS?SET_SECURITY_...
+  +--> ?PR?GET_SECURITY_STATUS?GET_SECURITY_...
+  +--> ?PR?SET_IDLE_MODE?SET_IDLE_MODE
+  +--> ?PR?WRITE_X_BYTES_TO_EEPROM?TP40_TP62...
+  +--> ?PR?FILL_EEPROM_WITH_BYTE?TP40_TP62_M...
+  +--> ?PR?CALL_SHA1?SHA_1
+  +--> ?PR?CODE_MEMORY_DUMP?CODE_MEMORY_DUMP
+  +--> ?PR?IDATA_MEMORY_DUMP?IDATA_MEMORY_DUMP
+  +--> ?PR?XDATA_MEMORY_DUMP?XDATA_MEMORY_DUMP
+  +--> ?PR?CREATE_CRC16_HASH_OF_XDATA?CRC16_...
+  +--> ?PR?THESEUSPLATINUM_EE_MASSERASE_BOOT...
+  +--> ?PR?WRITE_TO_RAM?WRITE_TO_RAM
+  +--> ?PR?GET_OS_VERSION?TP40_GET_OS_VERSION
+  +--> ?PR?GET_RESPONSE?GET_RESPONSE
+
+?PR?ERASE_EE_64_BYTES?ERASE_EE_64_BYTES          -----    -----      -----    -----
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?ERASE_EE_8_BYTES?ERASE_EE_8_BYTES            -----    -----      -----    -----
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?WRITE_EE_BYTES_FLASH_MODE_FROM_IR...         -----    -----      -----    -----
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?GET_CHIP_ID?GET_CHIP_ID                      -----    -----      -----    -----
+  +--> ?PR?_SERIAL_TRANSMIT_X_BYTES?IO
+
+?PR?GET_CLOCK_SOURCE?GET_CLOCK_SOURCE            -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?GET_CLOCK_CONTROL?GET_CLOCK_CONTROL          -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?SET_PROTECTION_STATUS?SET_PROTECT...         -----    -----      -----    -----
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?SET_EXECUTE_ONLY_STATUS?SET_EXECU...         -----    -----      -----    -----
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?SET_CLOCK?SET_CLOCK                          -----    -----      -----    -----
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+
+?PR?GET_INTERRUPT_ENABLE?GET_INTERRUP...         -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 6
+
+
+
+?PR?GET_FIRMWARE_VERSION?GET_FIRMWARE...         -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?WRITE_UCM_BYTES_FLASH_MODE_FROM_I...         -----    -----      -----    -----
+  +--> ?PR?_SERIAL_RECEIVE_X_BYTES?IO
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?WRITE_BYTE_EE_FLASH_MODE?WRITE_BY...         -----    -----      -----    -----
+  +--> ?PR?GETCHAR?IO
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?WRITE_BYTE_UCM_FLASH_MODE?WRITE_B...         -----    -----      -----    -----
+  +--> ?PR?GETCHAR?IO
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?ERASE_UCM_CONFIGURABLE_BLOCK?ERAS...         -----    -----      -----    -----
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?ERASE_UCM_PAGE?ERASE_UCM_PAGE                -----    -----      -----    -----
+  +--> ?PR?_CONV_TWO_BYTES_TO_INT?CONV_TWO_B...
+
+?PR?CHANGE_ISO_SPEED?CHANGE_ISO_SPEED            -----    -----      -----    -----
+  +--> ?PR?_ISO_SELECT_SPEED?ISO_SELECT_SPEED
+
+?PR?GET_SECURITY_STATUS?GET_SECURITY_...         -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?WRITE_X_BYTES_TO_EEPROM?TP40_TP62...         0008H    0016H      -----    -----
+  +--> ?PR?GETCHAR?IO
+  +--> ?PR?_THESEUS_EEPROM_WRITE?TP40_TP62_M...
+
+?PR?_THESEUS_EEPROM_WRITE?TP40_TP62_M...         001EH    0023H      -----    -----
+
+?PR?FILL_EEPROM_WITH_BYTE?TP40_TP62_M...         0008H    0005H      -----    -----
+  +--> ?PR?GETCHAR?IO
+  +--> ?PR?_THESEUS_EEPROM_WRITE?TP40_TP62_M...
+
+?PR?CALL_SHA1?SHA_1                              0008H    0005H      -----    -----
+  +--> ?PR?_SHA_1_HASH?SHA_1
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?_SHA_1_HASH?SHA_1                            000DH    0036H      0048H    0040H
+
+?PR?CODE_MEMORY_DUMP?CODE_MEMORY_DUMP            -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?IDATA_MEMORY_DUMP?IDATA_MEMORY_DUMP          -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?XDATA_MEMORY_DUMP?XDATA_MEMORY_DUMP          -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?CREATE_CRC16_HASH_OF_XDATA?CRC16_...         0008H    0002H      -----    -----
+  +--> ?PR?_CALCULATECRC?CRC16_NORMAL
+  +--> ?PR?_PUTCHAR?IO
+
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 7
+
+
+?PR?_CALCULATECRC?CRC16_NORMAL                   000AH    0004H      -----    -----
+  +--> ?CO?CRC16_NORMAL
+
+?PR?WRITE_TO_RAM?WRITE_TO_RAM                    -----    -----      -----    -----
+  +--> ?PR?GETCHAR?IO
+
+?PR?GET_OS_VERSION?TP40_GET_OS_VERSION           -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+?PR?GET_RESPONSE?GET_RESPONSE                    -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+*** NEW ROOT ***************************************************
+
+?PR?SECURITY_FAULT_ISR?TP40_ISR                  -----    -----      -----    -----
+  +--> ?PR?_PUTCHAR?IO
+
+
+
+SYMBOL TABLE OF MODULE:  Generic_TP40_Example_C_Code (TP40_GET_OS_VERSION)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TP40_GET_OS_VERSION
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:97B7H         PUBLIC        Get_OS_Version
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_OS_VERSION
+  C:97B7H         LINE#         57
+  C:97B7H         LINE#         58
+  C:97B7H         LINE#         59
+  C:97BCH         LINE#         60
+  C:97C1H         LINE#         62
+  C:97C5H         LINE#         64
+  -------         ENDPROC       GET_OS_VERSION
+  -------         ENDMOD        TP40_GET_OS_VERSION
+
+  -------         MODULE        TP40_MASSERASEEE_BOOTLOADER_SAFE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:92BDH         PUBLIC        TheseusPlatinum_EE_MassErase_Bootloader_Safe
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          THESEUSPLATINUM_EE_MASSERASE_BOOTLOADER_SAFE
+  C:92BDH         LINE#         56
+  C:92BDH         LINE#         57
+  C:92BDH         LINE#         59
+  C:92C4H         LINE#         62
+  C:92D8H         LINE#         63
+  C:92D8H         LINE#         64
+  C:92E3H         LINE#         65
+  C:92E3H         LINE#         66
+  C:92EAH         LINE#         67
+  C:92ECH         LINE#         68
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 8
+
+
+  C:92ECH         LINE#         69
+  C:92F8H         LINE#         72
+  C:92FFH         LINE#         74
+  -------         ENDPROC       THESEUSPLATINUM_EE_MASSERASE_BOOTLOADER_SAFE
+  -------         ENDMOD        TP40_MASSERASEEE_BOOTLOADER_SAFE
+
+  -------         MODULE        TP40_SEND_ATR
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9609H         PUBLIC        Send_ATR
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SEND_ATR
+  C:9609H         LINE#         47
+  C:9609H         LINE#         48
+  C:9609H         LINE#         49
+  C:960EH         LINE#         51
+  C:9613H         LINE#         53
+  C:9618H         LINE#         55
+  C:961DH         LINE#         57
+  C:9622H         LINE#         59
+  C:9627H         LINE#         61
+  C:962EH         LINE#         63
+  C:9631H         LINE#         67
+  -------         ENDPROC       SEND_ATR
+  -------         ENDMOD        TP40_SEND_ATR
+
+  -------         MODULE        ?C_STARTUP
+  C:8DB4H         SEGMENT       ?C_C51STARTUP
+  I:00A3H         SEGMENT       ?STACK
+  C:8000H         PUBLIC        ?C_STARTUP
+  B:00D0H.6       SYMBOL        AC
+  D:00E0H         SYMBOL        ACC
+  N:0003H         SYMBOL        APDU_JUMPTABLE_SIZE
+  D:00F0H         SYMBOL        B
+  D:00A1H         SYMBOL        CBSL
+  B:00D0H.7       SYMBOL        CY
+  D:0083H         SYMBOL        DPH
+  D:0083H         SYMBOL        DPH0
+  D:0085H         SYMBOL        DPH1
+  D:0082H         SYMBOL        DPL
+  D:0082H         SYMBOL        DPL0
+  D:0084H         SYMBOL        DPL1
+  D:0086H         SYMBOL        DPS
+  B:00D0H.5       SYMBOL        F0
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0100H         SYMBOL        IDATALEN
+  C:8DB7H         SYMBOL        IDATALOOP
+  D:00B2H         SYMBOL        ISOCON
+  D:00B4H         SYMBOL        ISOTMR
+  B:00D0H.1       SYMBOL        M
+  D:00F7H         SYMBOL        MFCON
+  D:00A2H         SYMBOL        MPTR
+  D:0080H         SYMBOL        NVFSMCON
+  B:00D0H.2       SYMBOL        OV
+  B:00D0H.0       SYMBOL        P
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 9
+
+
+  N:0000H         SYMBOL        PBPSTACK
+  N:0000H         SYMBOL        PBPSTACKTOP
+  D:0087H         SYMBOL        PCON
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00C0H         SYMBOL        PROGIO
+  D:00D0H         SYMBOL        PSW
+  B:0098H.0       SYMBOL        RI
+  B:00D0H.3       SYMBOL        RS0
+  B:00D0H.4       SYMBOL        RS1
+  D:0099H         SYMBOL        SBUF
+  D:0098H         SYMBOL        SCON
+  N:5D00H         SYMBOL        SD_BOOTLOADER_START_ADDRESS
+  D:00B0H         SYMBOL        SECURITYSTATUS
+  D:0081H         SYMBOL        SP
+  C:8DB4H         SYMBOL        STARTUP1
+  D:0088H         SYMBOL        TCON
+  B:0088H.5       SYMBOL        TF0
+  B:0088H.7       SYMBOL        TF1
+  D:008CH         SYMBOL        TH0
+  D:008DH         SYMBOL        TH1
+  B:0098H.1       SYMBOL        TI
+  D:008AH         SYMBOL        TL0
+  D:008BH         SYMBOL        TL1
+  D:0089H         SYMBOL        TMOD
+  B:0088H.4       SYMBOL        TR0
+  B:0088H.6       SYMBOL        TR1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0180H         SYMBOL        XDATALEN
+  C:8DC2H         SYMBOL        XDATALOOP
+  N:0000H         SYMBOL        XDATASTART
+  N:0000H         SYMBOL        XDATA_START_ADDRESS
+  C:8000H         LINE#         88
+  C:8DB4H         LINE#         95
+  C:8DB6H         LINE#         96
+  C:8DB7H         LINE#         97
+  C:8DB8H         LINE#         98
+  C:8DBAH         LINE#         102
+  C:8DBDH         LINE#         103
+  C:8DBFH         LINE#         105
+  C:8DC1H         LINE#         109
+  C:8DC2H         LINE#         110
+  C:8DC3H         LINE#         111
+  C:8DC4H         LINE#         112
+  C:8DC6H         LINE#         113
+  C:8DC8H         LINE#         147
+  C:8DCBH         LINE#         148
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        TP40_ISR
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:91EEH         PUBLIC        Security_Fault_ISR
+  C:9810H         PUBLIC        Serial_ISR
+  D:0098H         PUBLIC        SCON
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 10
+
+
+  D:0088H         PUBLIC        TCON
+  D:00B0H         PUBLIC        SECURITYSTATUS
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SERIAL_ISR
+  C:9810H         LINE#         67
+  C:9810H         LINE#         70
+  -------         ENDPROC       SERIAL_ISR
+  -------         PROC          SECURITY_FAULT_ISR
+  C:91EEH         LINE#         81
+  C:920BH         LINE#         83
+  C:9210H         LINE#         85
+  C:9215H         LINE#         87
+  C:9218H         LINE#         89
+  -------         ENDPROC       SECURITY_FAULT_ISR
+  -------         ENDMOD        TP40_ISR
+
+  -------         MODULE        TP40_TP62_ERASE_BACK_TO_FACTORY_STATE
+  C:9300H         SEGMENT       ERASEBACKTOFACTORYSTATE_SEGMENT
+  C:9300H         PUBLIC        ERASENVM
+  C:9300H         PUBLIC        ERASE_BACK_TO_FACTORY_STATE
+  C:9300H         PUBLIC        _ERASENVM
+  C:9300H         PUBLIC        _ERASE_BACK_TO_FACTORY_STATE
+  B:00D0H.6       SYMBOL        AC
+  D:00E0H         SYMBOL        ACC
+  N:0003H         SYMBOL        APDU_JUMPTABLE_SIZE
+  D:00F0H         SYMBOL        B
+  D:00A1H         SYMBOL        CBSL
+  C:932DH         SYMBOL        CODE_TO_GO_INTO_RAM
+  C:930BH         SYMBOL        COPY_CODE_AND_JUMP_FOREVER_LOOP_TO_XRAM_AND_JUMP_TO_IT
+  C:9311H         SYMBOL        COPY_XRAM_CODE_LOOP
+  B:00D0H.7       SYMBOL        CY
+  D:0083H         SYMBOL        DPH
+  D:0083H         SYMBOL        DPH0
+  D:0085H         SYMBOL        DPH1
+  D:0082H         SYMBOL        DPL
+  D:0082H         SYMBOL        DPL0
+  D:0084H         SYMBOL        DPL1
+  D:0086H         SYMBOL        DPS
+  B:00D0H.5       SYMBOL        F0
+  D:00B2H         SYMBOL        ISOCON
+  D:00B4H         SYMBOL        ISOTMR
+  B:00D0H.1       SYMBOL        M
+  D:00F7H         SYMBOL        MFCON
+  D:00A2H         SYMBOL        MPTR
+  D:0080H         SYMBOL        NVFSMCON
+  B:00D0H.2       SYMBOL        OV
+  B:00D0H.0       SYMBOL        P
+  D:0087H         SYMBOL        PCON
+  D:00C0H         SYMBOL        PROGIO
+  D:00D0H         SYMBOL        PSW
+  B:0098H.0       SYMBOL        RI
+  B:00D0H.3       SYMBOL        RS0
+  B:00D0H.4       SYMBOL        RS1
+  D:0099H         SYMBOL        SBUF
+  D:0098H         SYMBOL        SCON
+  N:5D00H         SYMBOL        SD_BOOTLOADER_START_ADDRESS
+  D:00B0H         SYMBOL        SECURITYSTATUS
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 11
+
+
+  D:0081H         SYMBOL        SP
+  D:0088H         SYMBOL        TCON
+  B:0088H.5       SYMBOL        TF0
+  B:0088H.7       SYMBOL        TF1
+  D:008CH         SYMBOL        TH0
+  D:008DH         SYMBOL        TH1
+  B:0098H.1       SYMBOL        TI
+  D:008AH         SYMBOL        TL0
+  D:008BH         SYMBOL        TL1
+  D:0089H         SYMBOL        TMOD
+  B:0088H.4       SYMBOL        TR0
+  B:0088H.6       SYMBOL        TR1
+  N:0000H         SYMBOL        XDATA_START_ADDRESS
+  C:9300H         LINE#         63
+  C:9303H         LINE#         65
+  C:9305H         LINE#         66
+  C:9308H         LINE#         67
+  C:930BH         LINE#         70
+  C:930EH         LINE#         71
+  C:9311H         LINE#         74
+  C:9314H         LINE#         75
+  C:9315H         LINE#         76
+  C:9316H         LINE#         77
+  C:9319H         LINE#         78
+  C:931AH         LINE#         79
+  C:931BH         LINE#         80
+  C:931DH         LINE#         84
+  C:9320H         LINE#         85
+  C:9322H         LINE#         86
+  C:9323H         LINE#         87
+  C:9324H         LINE#         88
+  C:9326H         LINE#         89
+  C:9327H         LINE#         90
+  C:9328H         LINE#         91
+  C:9329H         LINE#         92
+  C:932AH         LINE#         95
+  C:932DH         LINE#         100
+  C:9330H         LINE#         101
+  C:9333H         LINE#         102
+  C:9336H         LINE#         103
+  C:9338H         LINE#         105
+  C:933BH         LINE#         106
+  C:933EH         LINE#         107
+  C:9340H         LINE#         109
+  -------         ENDMOD        TP40_TP62_ERASE_BACK_TO_FACTORY_STATE
+
+  -------         MODULE        TP40_TP62_MEMORY_WRITE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:8E4EH         PUBLIC        Write_X_Bytes_To_EEPROM
+  C:8ED8H         PUBLIC        Fill_EEPROM_With_Byte
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:85E2H         PUBLIC        _Theseus_EEPROM_Write
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          WRITE_X_BYTES_TO_EEPROM
+  -------         DO            
+  D:0008H         SYMBOL        cFunctionReturn
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 12
+
+
+  D:0009H         SYMBOL        uiNumber_To_Write
+  D:000BH         SYMBOL        uiAddress
+  D:000DH         SYMBOL        ucTemp_Buffer
+  D:001DH         SYMBOL        ucCounter
+  -------         ENDDO         
+  C:8E4EH         LINE#         60
+  C:8E4EH         LINE#         61
+  C:8E4EH         LINE#         62
+  C:8E51H         LINE#         68
+  C:8E5AH         LINE#         69
+  C:8E5AH         LINE#         70
+  C:8E5EH         LINE#         71
+  C:8E60H         LINE#         74
+  C:8E60H         LINE#         75
+  C:8E68H         LINE#         76
+  C:8E6CH         LINE#         79
+  C:8E79H         LINE#         80
+  C:8E79H         LINE#         81
+  C:8E80H         LINE#         82
+  C:8E82H         LINE#         84
+  C:8E82H         LINE#         85
+  C:8E88H         LINE#         87
+  C:8E93H         LINE#         88
+  C:8E93H         LINE#         89
+  C:8E9DH         LINE#         90
+  C:8EA1H         LINE#         92
+  C:8EB9H         LINE#         94
+  C:8EC4H         LINE#         95
+  C:8EC4H         LINE#         96
+  C:8EC9H         LINE#         97
+  C:8ECBH         LINE#         99
+  C:8ECBH         LINE#         100
+  C:8ED0H         LINE#         101
+  C:8ED0H         LINE#         102
+  C:8ED0H         LINE#         103
+  C:8ED0H         LINE#         105
+  C:8ED7H         LINE#         107
+  -------         ENDPROC       WRITE_X_BYTES_TO_EEPROM
+  -------         PROC          FILL_EEPROM_WITH_BYTE
+  -------         DO            
+  D:0005H         SYMBOL        cFunctionReturn
+  D:0008H         SYMBOL        uiLength
+  D:000AH         SYMBOL        uiAddress
+  D:000CH         SYMBOL        ucByte_To_Fill_With
+  -------         ENDDO         
+  C:8ED8H         LINE#         136
+  C:8ED8H         LINE#         137
+  C:8ED8H         LINE#         138
+  C:8EDAH         LINE#         144
+  C:8EE2H         LINE#         145
+  C:8EE2H         LINE#         146
+  C:8EE6H         LINE#         147
+  C:8EE8H         LINE#         150
+  C:8EE8H         LINE#         151
+  C:8EF0H         LINE#         152
+  C:8EF4H         LINE#         155
+  C:8F01H         LINE#         156
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 13
+
+
+  C:8F01H         LINE#         157
+  C:8F08H         LINE#         158
+  C:8F0AH         LINE#         160
+  C:8F0AH         LINE#         161
+  C:8F0FH         LINE#         163
+  C:8F17H         LINE#         164
+  C:8F1EH         LINE#         165
+  C:8F2BH         LINE#         167
+  C:8F40H         LINE#         169
+  C:8F4AH         LINE#         170
+  C:8F4AH         LINE#         171
+  C:8F4FH         LINE#         172
+  C:8F51H         LINE#         174
+  C:8F51H         LINE#         175
+  C:8F56H         LINE#         176
+  C:8F56H         LINE#         177
+  C:8F56H         LINE#         178
+  C:8F56H         LINE#         180
+  C:8F5DH         LINE#         182
+  -------         ENDPROC       FILL_EEPROM_WITH_BYTE
+  -------         PROC          _THESEUS_EEPROM_WRITE
+  D:001EH         SYMBOL        EEPROM_Address
+  D:0020H         SYMBOL        Source_Address
+  D:0023H         SYMBOL        Length
+  D:0025H         SYMBOL        Mode
+  -------         DO            
+  D:0026H         SYMBOL        Temp_Counter
+  D:0028H         SYMBOL        Temp_buffer
+  D:0036H         SYMBOL        ReturnValue
+  D:0006H         SYMBOL        Temp_Address
+  D:0037H         SYMBOL        Counter
+  D:0039H         SYMBOL        Temp_EEPROM_Address
+  D:003BH         SYMBOL        Temp_Source_Address
+  D:003EH         SYMBOL        Input_Data
+  D:0006H         SYMBOL        ExistingByte
+  D:0005H         SYMBOL        ByteToWrite
+  D:003FH         SYMBOL        Number_To_Backup_Before_New_Data
+  D:0040H         SYMBOL        Number_To_Backup_After_New_Data
+  D:0007H         SYMBOL        WeNeedToErasePageFirst
+  D:0082H         SYMBOL        ucpTempPointer
+  -------         ENDDO         
+  C:85E2H         LINE#         198
+  C:85ECH         LINE#         199
+  C:85ECH         LINE#         200
+  C:85F1H         LINE#         208
+  C:85F6H         LINE#         216
+  C:85F8H         LINE#         224
+  C:85FEH         LINE#         225
+  C:8604H         LINE#         234
+  C:8613H         LINE#         235
+  C:8613H         LINE#         236
+  C:8624H         LINE#         237
+  C:8636H         LINE#         239
+  C:863BH         LINE#         240
+  C:863BH         LINE#         241
+  C:863DH         LINE#         242
+  C:863FH         LINE#         243
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 14
+
+
+  C:863FH         LINE#         244
+  C:8649H         LINE#         248
+  C:864FH         LINE#         249
+  C:8658H         LINE#         254
+  C:865BH         LINE#         255
+  C:865BH         LINE#         256
+  C:866AH         LINE#         257
+  C:866AH         LINE#         258
+  C:866FH         LINE#         259
+  C:866FH         LINE#         260
+  C:867DH         LINE#         261
+  C:867FH         LINE#         263
+  C:867FH         LINE#         264
+  C:86A0H         LINE#         265
+  C:86A0H         LINE#         267
+  C:86A9H         LINE#         268
+  C:86A9H         LINE#         269
+  C:86B3H         LINE#         271
+  C:86B6H         LINE#         272
+  C:86B6H         LINE#         274
+  C:86B6H         LINE#         304
+  C:86BAH         LINE#         307
+  C:86C3H         LINE#         311
+  C:86CAH         LINE#         315
+  C:86D8H         LINE#         318
+  C:86F1H         LINE#         319
+  C:86F1H         LINE#         320
+  C:86FAH         LINE#         321
+  C:86FAH         LINE#         322
+  C:8704H         LINE#         323
+  C:8706H         LINE#         325
+  C:8706H         LINE#         326
+  C:8723H         LINE#         327
+  C:872CH         LINE#         328
+  C:872CH         LINE#         329
+  C:8736H         LINE#         331
+  C:873BH         LINE#         332
+  C:8744H         LINE#         342
+  C:8768H         LINE#         343
+  C:8768H         LINE#         345
+  C:876EH         LINE#         346
+  C:876EH         LINE#         348
+  C:877BH         LINE#         349
+  C:877BH         LINE#         350
+  C:8786H         LINE#         351
+  C:8786H         LINE#         353
+  C:8794H         LINE#         354
+  C:8796H         LINE#         355
+  C:87AAH         LINE#         356
+  C:87AAH         LINE#         357
+  C:87AFH         LINE#         358
+  C:87AFH         LINE#         359
+  C:87BDH         LINE#         360
+  C:87BFH         LINE#         362
+  C:87BFH         LINE#         363
+  C:87DBH         LINE#         364
+  C:87DBH         LINE#         365
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 15
+
+
+  C:87DDH         LINE#         367
+  C:87DDH         LINE#         368
+  C:87FCH         LINE#         369
+  C:87FCH         LINE#         371
+  C:8805H         LINE#         372
+  C:8805H         LINE#         374
+  C:8810H         LINE#         376
+  C:8812H         LINE#         377
+  C:8812H         LINE#         379
+  -------         ENDPROC       _THESEUS_EEPROM_WRITE
+  -------         ENDMOD        TP40_TP62_MEMORY_WRITE
+
+  -------         MODULE        CHIP_INIT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00B2H         PUBLIC        ISOCON
+  D:00D0H         PUBLIC        PSW
+  C:9725H         PUBLIC        Chip_Init
+  -------         PROC          CHIP_INIT
+  C:9725H         LINE#         54
+  C:9725H         LINE#         55
+  C:9725H         LINE#         58
+  C:972DH         LINE#         61
+  C:9732H         LINE#         64
+  C:9735H         LINE#         67
+  C:973CH         LINE#         70
+  C:9740H         LINE#         72
+  -------         ENDPROC       CHIP_INIT
+  -------         ENDMOD        CHIP_INIT
+
+  -------         MODULE        GLOBAL_VARS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  I:0088H         PUBLIC        ulTemp_Var
+  I:008CH         PUBLIC        uiTemp_Address
+  I:008EH         PUBLIC        IDLE_MODE
+  I:008FH         PUBLIC        iRet_Val_Int
+  I:0091H         PUBLIC        Timer0_Int_Count
+  I:0092H         PUBLIC        SW1SW2
+  D:0043H         PUBLIC        IDATA_PTR
+  D:0044H         PUBLIC        XDATA_PTR
+  X:0000H         PUBLIC        IO_Buffer
+  I:0094H         PUBLIC        APDU_CMD
+  I:0099H         PUBLIC        ucCount
+  D:0046H         PUBLIC        CODE_PTR
+  I:009AH         PUBLIC        TEMP_BUF
+  I:00A2H         PUBLIC        cRet_Val_Char
+  -------         ENDMOD        GLOBAL_VARS
+
+  -------         MODULE        IO
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:975BH         PUBLIC        _Serial_Receive_X_Bytes
+  C:9783H         PUBLIC        _PutChar
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  C:976FH         PUBLIC        _Serial_Transmit_X_Bytes
+  C:97F4H         PUBLIC        GetChar
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 16
+
+
+  D:0099H         PUBLIC        SBUF
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00B2H         PUBLIC        ISOCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _PUTCHAR
+  D:0007H         SYMBOL        ByteToTx
+  C:9783H         LINE#         52
+  C:9783H         LINE#         53
+  C:9783H         LINE#         54
+  C:9783H         LINE#         55
+  C:9783H         LINE#         56
+  C:9785H         LINE#         58
+  C:9788H         LINE#         60
+  C:978AH         LINE#         62
+  C:978FH         LINE#         63
+  C:978FH         LINE#         64
+  C:978FH         LINE#         65
+  C:978FH         LINE#         67
+  C:9792H         LINE#         68
+  C:9794H         LINE#         70
+  -------         ENDPROC       _PUTCHAR
+  -------         PROC          GETCHAR
+  C:97F4H         LINE#         84
+  C:97F4H         LINE#         85
+  C:97F4H         LINE#         86
+  C:97F7H         LINE#         88
+  C:97F9H         LINE#         90
+  C:97FBH         LINE#         92
+  -------         ENDPROC       GETCHAR
+  -------         PROC          _SERIAL_RECEIVE_X_BYTES
+  D:0006H         SYMBOL        Num_of_Bytes_To_RX
+  D:0000H         SYMBOL        Buffer_to_Fill
+  C:975BH         LINE#         104
+  C:975FH         LINE#         105
+  C:975FH         LINE#         106
+  C:9765H         LINE#         107
+  C:9765H         LINE#         108
+  C:976AH         LINE#         110
+  C:976BH         LINE#         112
+  C:976CH         LINE#         113
+  C:976EH         LINE#         115
+  -------         ENDPROC       _SERIAL_RECEIVE_X_BYTES
+  -------         PROC          _SERIAL_TRANSMIT_X_BYTES
+  D:0006H         SYMBOL        Num_of_Bytes_To_TX
+  D:0000H         SYMBOL        Buffer_to_Send
+  C:976FH         LINE#         127
+  C:9773H         LINE#         128
+  C:9773H         LINE#         129
+  C:9779H         LINE#         130
+  C:9779H         LINE#         131
+  C:977EH         LINE#         133
+  C:977FH         LINE#         135
+  C:9780H         LINE#         136
+  C:9782H         LINE#         138
+  -------         ENDPROC       _SERIAL_TRANSMIT_X_BYTES
+  -------         ENDMOD        IO
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 17
+
+
+
+  -------         MODULE        CRC16_NORMAL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9104H         PUBLIC        Create_CRC16_Hash_Of_XDATA
+  C:8813H         PUBLIC        CRC16_LookUp_Table
+  C:9153H         PUBLIC        _CalculateCRC
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          CREATE_CRC16_HASH_OF_XDATA
+  -------         DO            
+  D:0008H         SYMBOL        CRC_Value
+  -------         ENDDO         
+  C:9104H         LINE#         96
+  C:9104H         LINE#         97
+  C:9104H         LINE#         98
+  C:9109H         LINE#         100
+  C:9110H         LINE#         101
+  C:9110H         LINE#         102
+  C:9121H         LINE#         104
+  C:9131H         LINE#         106
+  C:9137H         LINE#         107
+  C:913EH         LINE#         109
+  C:9142H         LINE#         110
+  C:9144H         LINE#         112
+  C:9144H         LINE#         113
+  C:914BH         LINE#         114
+  C:914BH         LINE#         116
+  C:9152H         LINE#         118
+  -------         ENDPROC       CREATE_CRC16_HASH_OF_XDATA
+  -------         PROC          _CALCULATECRC
+  D:000AH         SYMBOL        ucpStartAddress
+  D:000CH         SYMBOL        uiInitRemainder
+  D:0002H         SYMBOL        uiLen
+  C:9153H         LINE#         131
+  C:915BH         LINE#         132
+  C:915BH         LINE#         133
+  C:9164H         LINE#         134
+  C:9164H         LINE#         135
+  C:9195H         LINE#         136
+  C:919CH         LINE#         138
+  C:91A0H         LINE#         140
+  -------         ENDPROC       _CALCULATECRC
+  -------         ENDMOD        CRC16_NORMAL
+
+  -------         MODULE        SET_IDLE_MODE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9680H         PUBLIC        Get_Idle_Mode
+  C:97C6H         PUBLIC        Set_Idle_Mode
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_IDLE_MODE
+  C:97C6H         LINE#         57
+  C:97C6H         LINE#         58
+  C:97C6H         LINE#         59
+  C:97CEH         LINE#         61
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 18
+
+
+  C:97D2H         LINE#         63
+  -------         ENDPROC       SET_IDLE_MODE
+  -------         PROC          GET_IDLE_MODE
+  C:9680H         LINE#         86
+  C:9680H         LINE#         87
+  C:9680H         LINE#         88
+  C:9686H         LINE#         89
+  C:9686H         LINE#         90
+  C:968DH         LINE#         92
+  C:9691H         LINE#         93
+  C:9693H         LINE#         95
+  C:9693H         LINE#         96
+  C:969AH         LINE#         97
+  C:969AH         LINE#         99
+  C:96A1H         LINE#         101
+  -------         ENDPROC       GET_IDLE_MODE
+  -------         ENDMOD        SET_IDLE_MODE
+
+  -------         MODULE        ISO_SELECT_SPEED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00B4H         PUBLIC        ISOTMR
+  C:8A13H         PUBLIC        _ISO_Select_Speed
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _ISO_SELECT_SPEED
+  D:0007H         SYMBOL        FiDi
+  D:0008H         SYMBOL        ucCommand_Type
+  -------         DO            
+  I:0048H         SYMBOL        F
+  I:004AH         SYMBOL        D
+  I:004CH         SYMBOL        ISO_Timer_Val
+  -------         ENDDO         
+  C:8A13H         LINE#         58
+  C:8A15H         LINE#         59
+  C:8A15H         LINE#         60
+  C:8A1CH         LINE#         61
+  C:8A22H         LINE#         62
+  C:8A28H         LINE#         64
+  C:8A68H         LINE#         65
+  C:8A68H         LINE#         66
+  C:8A71H         LINE#         67
+  C:8A7AH         LINE#         68
+  C:8A83H         LINE#         69
+  C:8A8CH         LINE#         70
+  C:8A95H         LINE#         71
+  C:8A9BH         LINE#         72
+  C:8AA1H         LINE#         73
+  C:8AA7H         LINE#         74
+  C:8AADH         LINE#         75
+  C:8AB6H         LINE#         76
+  C:8ABDH         LINE#         77
+  C:8ABDH         LINE#         79
+  C:8AEDH         LINE#         80
+  C:8AEDH         LINE#         81
+  C:8AF6H         LINE#         82
+  C:8AFFH         LINE#         83
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 19
+
+
+  C:8B08H         LINE#         84
+  C:8B11H         LINE#         85
+  C:8B1AH         LINE#         86
+  C:8B23H         LINE#         87
+  C:8B2CH         LINE#         88
+  C:8B33H         LINE#         89
+  C:8B33H         LINE#         92
+  C:8B52H         LINE#         102
+  C:8B62H         LINE#         103
+  C:8B62H         LINE#         104
+  C:8B67H         LINE#         105
+  C:8B67H         LINE#         107
+  C:8B6EH         LINE#         108
+  C:8B6EH         LINE#         110
+  C:8B73H         LINE#         111
+  C:8B73H         LINE#         112
+  C:8B7AH         LINE#         113
+  C:8B81H         LINE#         114
+  C:8B81H         LINE#         117
+  C:8B8BH         LINE#         120
+  C:8B90H         LINE#         121
+  C:8B91H         LINE#         124
+  C:8B91H         LINE#         125
+  C:8B96H         LINE#         126
+  C:8B96H         LINE#         127
+  C:8B9BH         LINE#         128
+  C:8BA0H         LINE#         129
+  C:8BA5H         LINE#         130
+  C:8BAAH         LINE#         131
+  C:8BAAH         LINE#         133
+  C:8BAFH         LINE#         134
+  C:8BAFH         LINE#         135
+  C:8BB6H         LINE#         136
+  C:8BBDH         LINE#         137
+  C:8BBDH         LINE#         138
+  C:8BBDH         LINE#         140
+  -------         ENDPROC       _ISO_SELECT_SPEED
+  -------         ENDMOD        ISO_SELECT_SPEED
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:8BBEH         PUBLIC        INS_FPTR
+  C:8FDFH         PUBLIC        Process_APDU_Command
+  C:94C9H         PUBLIC        main
+  C:9054H         PUBLIC        _Enter_Idle_Mode
+  D:0087H         PUBLIC        PCON
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:97A7H         PUBLIC        Process_PPS_Command
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:94C9H         LINE#         60
+  C:94C9H         LINE#         61
+  C:94C9H         LINE#         62
+  C:94CCH         LINE#         64
+  C:94CFH         LINE#         66
+  C:94D6H         LINE#         74
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 20
+
+
+  C:94DDH         LINE#         76
+  C:94E0H         LINE#         77
+  C:94E0H         LINE#         78
+  C:94E3H         LINE#         79
+  C:94E5H         LINE#         81
+  C:94E5H         LINE#         82
+  C:94ECH         LINE#         83
+  C:94EFH         LINE#         84
+  C:94EFH         LINE#         91
+  C:94EFH         LINE#         92
+  C:94EFH         LINE#         94
+  C:94F6H         LINE#         97
+  C:94FDH         LINE#         99
+  C:9500H         LINE#         100
+  -------         ENDPROC       MAIN
+  -------         PROC          PROCESS_PPS_COMMAND
+  C:97A7H         LINE#         113
+  C:97A7H         LINE#         114
+  C:97A7H         LINE#         116
+  C:97AEH         LINE#         119
+  -------         ENDPROC       PROCESS_PPS_COMMAND
+  -------         PROC          _ENTER_IDLE_MODE
+  D:0007H         SYMBOL        ucIdleMode
+  C:9054H         LINE#         132
+  C:9054H         LINE#         133
+  C:9054H         LINE#         134
+  C:9057H         LINE#         135
+  C:9057H         LINE#         136
+  C:905AH         LINE#         138
+  C:905BH         LINE#         139
+  C:905CH         LINE#         140
+  C:905DH         LINE#         141
+  C:905EH         LINE#         142
+  C:905FH         LINE#         143
+  C:9060H         LINE#         144
+  C:9065H         LINE#         145
+  C:9065H         LINE#         148
+  C:906CH         LINE#         150
+  C:9070H         LINE#         152
+  C:9079H         LINE#         154
+  C:9080H         LINE#         168
+  C:9083H         LINE#         169
+  C:9083H         LINE#         170
+  C:9085H         LINE#         171
+  C:9087H         LINE#         172
+  C:908DH         LINE#         173
+  C:908DH         LINE#         174
+  C:908FH         LINE#         175
+  C:9091H         LINE#         177
+  C:9091H         LINE#         178
+  C:9095H         LINE#         179
+  C:9095H         LINE#         182
+  C:909EH         LINE#         184
+  C:90A1H         LINE#         186
+  C:90A2H         LINE#         187
+  C:90A3H         LINE#         188
+  C:90A4H         LINE#         189
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 21
+
+
+  C:90A5H         LINE#         190
+  C:90A6H         LINE#         193
+  C:90B3H         LINE#         195
+  C:90B3H         LINE#         197
+  -------         ENDPROC       _ENTER_IDLE_MODE
+  -------         PROC          PROCESS_APDU_COMMAND
+  C:8FDFH         LINE#         218
+  C:8FDFH         LINE#         219
+  C:8FDFH         LINE#         221
+  C:8FE6H         LINE#         222
+  C:8FE6H         LINE#         223
+  C:8FEAH         LINE#         224
+  C:8FECH         LINE#         227
+  C:8FF3H         LINE#         228
+  C:8FF3H         LINE#         229
+  C:8FF7H         LINE#         230
+  C:8FF9H         LINE#         246
+  C:9012H         LINE#         253
+  C:9012H         LINE#         270
+  C:9019H         LINE#         279
+  C:903CH         LINE#         287
+  C:903EH         LINE#         291
+  C:903EH         LINE#         292
+  C:9045H         LINE#         293
+  C:9045H         LINE#         296
+  C:904CH         LINE#         297
+  C:904CH         LINE#         298
+  C:9053H         LINE#         299
+  C:9053H         LINE#         301
+  -------         ENDPROC       PROCESS_APDU_COMMAND
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        SHA_1
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:802EH         PUBLIC        _SHA_1_Hash
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:8F5EH         PUBLIC        Call_SHA1
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          CALL_SHA1
+  -------         DO            
+  D:0008H         SYMBOL        ucpSHA1_Hash_Output
+  -------         DO            
+  D:000BH         SYMBOL        ucPtr_Data_To_Hash
+  -------         ENDDO         
+  -------         ENDDO         
+  C:8F5EH         LINE#         64
+  C:8F5EH         LINE#         65
+  C:8F5EH         LINE#         68
+  C:8F65H         LINE#         69
+  C:8F65H         LINE#         71
+  C:8F69H         LINE#         74
+  C:8F75H         LINE#         75
+  C:8F75H         LINE#         76
+  C:8F89H         LINE#         77
+  C:8F8EH         LINE#         79
+  C:8F93H         LINE#         82
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 22
+
+
+  C:8FA8H         LINE#         84
+  C:8FACH         LINE#         85
+  C:8FACH         LINE#         86
+  C:8FC1H         LINE#         87
+  C:8FCAH         LINE#         89
+  C:8FCEH         LINE#         90
+  C:8FD0H         LINE#         92
+  C:8FD0H         LINE#         93
+  C:8FD7H         LINE#         94
+  C:8FD7H         LINE#         96
+  C:8FDEH         LINE#         98
+  -------         ENDPROC       CALL_SHA1
+  -------         PROC          _SHA_1_HASH
+  D:000DH         SYMBOL        ucpDataBytesPtr
+  D:0010H         SYMBOL        uiNumberToHash
+  -------         DO            
+  D:0012H         SYMBOL        H
+  D:0026H         SYMBOL        A
+  D:002AH         SYMBOL        B
+  D:002EH         SYMBOL        C
+  D:0032H         SYMBOL        D
+  D:0036H         SYMBOL        E
+  I:0048H         SYMBOL        W
+  D:003AH         SYMBOL        ulTEMP
+  D:003EH         SYMBOL        uiBytesAlreadyHashed
+  D:0040H         SYMBOL        s
+  D:0041H         SYMBOL        t
+  D:0042H         SYMBOL        ucPaddingDone
+  -------         ENDDO         
+  C:802EH         LINE#         110
+  C:8038H         LINE#         111
+  C:8038H         LINE#         119
+  C:803BH         LINE#         131
+  C:8047H         LINE#         132
+  C:8053H         LINE#         133
+  C:805FH         LINE#         134
+  C:806BH         LINE#         135
+  C:8077H         LINE#         141
+  C:807BH         LINE#         146
+  C:808FH         LINE#         147
+  C:808FH         LINE#         148
+  C:8092H         LINE#         149
+  C:8092H         LINE#         150
+  C:80A2H         LINE#         151
+  C:80A9H         LINE#         153
+  C:80ACH         LINE#         155
+  C:80B7H         LINE#         156
+  C:80B7H         LINE#         158
+  C:80B7H         LINE#         159
+  C:8103H         LINE#         160
+  C:810EH         LINE#         161
+  C:8110H         LINE#         162
+  C:812AH         LINE#         163
+  C:812AH         LINE#         165
+  C:8143H         LINE#         166
+  C:8143H         LINE#         167
+  C:8146H         LINE#         171
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 23
+
+
+  C:814DH         LINE#         172
+  C:814DH         LINE#         173
+  C:8153H         LINE#         175
+  C:815FH         LINE#         177
+  C:8167H         LINE#         179
+  C:817AH         LINE#         180
+  C:817AH         LINE#         182
+  C:818AH         LINE#         183
+  C:818CH         LINE#         185
+  C:818CH         LINE#         186
+  C:81A0H         LINE#         187
+  C:81A0H         LINE#         189
+  C:81B2H         LINE#         190
+  C:81B4H         LINE#         192
+  C:81B4H         LINE#         193
+  C:81CAH         LINE#         194
+  C:81CAH         LINE#         196
+  C:81DAH         LINE#         197
+  C:81DCH         LINE#         199
+  C:81DCH         LINE#         201
+  C:81F2H         LINE#         202
+  C:81F2H         LINE#         203
+  C:81F2H         LINE#         204
+  C:81F2H         LINE#         206
+  C:81F5H         LINE#         207
+  C:81F5H         LINE#         209
+  C:8201H         LINE#         210
+  C:8201H         LINE#         211
+  C:8217H         LINE#         214
+  C:821DH         LINE#         215
+  C:8220H         LINE#         216
+  C:8220H         LINE#         217
+  C:8220H         LINE#         227
+  C:825CH         LINE#         229
+  C:825FH         LINE#         230
+  C:825FH         LINE#         231
+  C:8265H         LINE#         232
+  C:82E3H         LINE#         234
+  C:82EAH         LINE#         235
+  C:82EAH         LINE#         236
+  C:832CH         LINE#         237
+  C:832CH         LINE#         238
+  C:8333H         LINE#         239
+  C:8333H         LINE#         240
+  C:8382H         LINE#         241
+  C:8385H         LINE#         243
+  C:8385H         LINE#         244
+  C:838CH         LINE#         245
+  C:838CH         LINE#         246
+  C:83C4H         LINE#         247
+  C:83C7H         LINE#         249
+  C:83C7H         LINE#         250
+  C:83D0H         LINE#         251
+  C:83D0H         LINE#         252
+  C:8436H         LINE#         253
+  C:8438H         LINE#         255
+  C:8438H         LINE#         256
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 24
+
+
+  C:846EH         LINE#         257
+  C:846EH         LINE#         258
+  C:846EH         LINE#         259
+  C:846EH         LINE#         261
+  C:84E0H         LINE#         263
+  C:84ECH         LINE#         264
+  C:84F8H         LINE#         265
+  C:8532H         LINE#         266
+  C:853EH         LINE#         267
+  C:854AH         LINE#         269
+  C:8555H         LINE#         275
+  C:856DH         LINE#         276
+  C:8585H         LINE#         277
+  C:859DH         LINE#         278
+  C:85B5H         LINE#         279
+  C:85CDH         LINE#         281
+  C:85D8H         LINE#         283
+  C:85DBH         LINE#         291
+  C:85E1H         LINE#         293
+  -------         ENDPROC       _SHA_1_HASH
+  -------         ENDMOD        SHA_1
+
+  -------         MODULE        CHANGE_ISO_SPEED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9795H         PUBLIC        Change_ISO_Speed
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          CHANGE_ISO_SPEED
+  C:9795H         LINE#         62
+  C:9795H         LINE#         63
+  C:9795H         LINE#         66
+  C:979EH         LINE#         69
+  C:97A4H         LINE#         71
+  C:97A6H         LINE#         73
+  -------         ENDPROC       CHANGE_ISO_SPEED
+  -------         ENDMOD        CHANGE_ISO_SPEED
+
+  -------         MODULE        GET_SECURITY_STATUS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:8003H         PUBLIC        Get_Security_Status
+  D:00B0H         PUBLIC        SECURITYSTATUS
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_SECURITY_STATUS
+  C:8003H         LINE#         58
+  C:8003H         LINE#         59
+  C:8003H         LINE#         60
+  C:8009H         LINE#         61
+  C:8009H         LINE#         62
+  C:800EH         LINE#         64
+  C:8012H         LINE#         65
+  C:8014H         LINE#         67
+  C:8014H         LINE#         68
+  C:801BH         LINE#         69
+  C:801BH         LINE#         71
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 25
+
+
+  C:8022H         LINE#         74
+  -------         ENDPROC       GET_SECURITY_STATUS
+  -------         ENDMOD        GET_SECURITY_STATUS
+
+  -------         MODULE        SET_SECURITY_STATUS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:97EAH         PUBLIC        Set_Security_Status
+  D:00B0H         PUBLIC        SECURITYSTATUS
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_SECURITY_STATUS
+  C:97EAH         LINE#         56
+  C:97EAH         LINE#         57
+  C:97EAH         LINE#         58
+  C:97EFH         LINE#         60
+  C:97F3H         LINE#         62
+  -------         ENDPROC       SET_SECURITY_STATUS
+  -------         ENDMOD        SET_SECURITY_STATUS
+
+  -------         MODULE        WRITE_UCM_BYTES_FLASH_MODE_FROM_IRAM_BUFF
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9233H         PUBLIC        Write_UCM_Bytes_Flash_Mode_From_IRAM_Buffer
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          WRITE_UCM_BYTES_FLASH_MODE_FROM_IRAM_BUFFER
+  C:9233H         LINE#         61
+  C:9233H         LINE#         62
+  C:9233H         LINE#         63
+  C:923AH         LINE#         64
+  C:923AH         LINE#         66
+  C:9241H         LINE#         69
+  C:9259H         LINE#         71
+  C:925EH         LINE#         72
+  C:925EH         LINE#         73
+  C:9263H         LINE#         74
+  C:9265H         LINE#         76
+  C:9265H         LINE#         77
+  C:9267H         LINE#         78
+  C:9267H         LINE#         79
+  C:9269H         LINE#         82
+  C:9269H         LINE#         83
+  C:9270H         LINE#         84
+  C:9270H         LINE#         86
+  C:9277H         LINE#         88
+  -------         ENDPROC       WRITE_UCM_BYTES_FLASH_MODE_FROM_IRAM_BUFFER
+  -------         ENDMOD        WRITE_UCM_BYTES_FLASH_MODE_FROM_IRAM_BUFF
+
+  -------         MODULE        WRITE_EE_BYTES_FLASH_MODE_FROM_IRAM_BUFFE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9278H         PUBLIC        Write_EE_Bytes_Flash_Mode_From_IRAM_Buffer
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          WRITE_EE_BYTES_FLASH_MODE_FROM_IRAM_BUFFER
+  C:9278H         LINE#         63
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 26
+
+
+  C:9278H         LINE#         64
+  C:9278H         LINE#         65
+  C:927FH         LINE#         66
+  C:927FH         LINE#         68
+  C:9286H         LINE#         71
+  C:929EH         LINE#         73
+  C:92A3H         LINE#         74
+  C:92A3H         LINE#         75
+  C:92A8H         LINE#         76
+  C:92AAH         LINE#         78
+  C:92AAH         LINE#         79
+  C:92ACH         LINE#         80
+  C:92ACH         LINE#         81
+  C:92AEH         LINE#         84
+  C:92AEH         LINE#         85
+  C:92B5H         LINE#         86
+  C:92B5H         LINE#         88
+  C:92BCH         LINE#         90
+  -------         ENDPROC       WRITE_EE_BYTES_FLASH_MODE_FROM_IRAM_BUFFER
+  -------         ENDMOD        WRITE_EE_BYTES_FLASH_MODE_FROM_IRAM_BUFFE
+
+  -------         MODULE        CODE_MEMORY_DUMP
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9502H         PUBLIC        CODE_Memory_Dump
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          CODE_MEMORY_DUMP
+  C:9502H         LINE#         59
+  C:9502H         LINE#         60
+  C:9502H         LINE#         61
+  C:9513H         LINE#         66
+  C:9513H         LINE#         67
+  C:9528H         LINE#         68
+  C:952EH         LINE#         70
+  C:9531H         LINE#         72
+  -------         ENDPROC       CODE_MEMORY_DUMP
+  -------         ENDMOD        CODE_MEMORY_DUMP
+
+  -------         MODULE        XDATA_MEMORY_DUMP
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9532H         PUBLIC        XDATA_Memory_Dump
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          XDATA_MEMORY_DUMP
+  C:9532H         LINE#         59
+  C:9532H         LINE#         60
+  C:9532H         LINE#         61
+  C:9543H         LINE#         66
+  C:9543H         LINE#         67
+  C:9557H         LINE#         68
+  C:955DH         LINE#         70
+  C:9560H         LINE#         72
+  -------         ENDPROC       XDATA_MEMORY_DUMP
+  -------         ENDMOD        XDATA_MEMORY_DUMP
+
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 27
+
+
+  -------         MODULE        IDATA_MEMORY_DUMP
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9741H         PUBLIC        IDATA_Memory_Dump
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          IDATA_MEMORY_DUMP
+  C:9741H         LINE#         60
+  C:9741H         LINE#         61
+  C:9741H         LINE#         62
+  C:9746H         LINE#         67
+  C:9746H         LINE#         68
+  C:9751H         LINE#         69
+  C:9757H         LINE#         71
+  C:975AH         LINE#         73
+  -------         ENDPROC       IDATA_MEMORY_DUMP
+  -------         ENDMOD        IDATA_MEMORY_DUMP
+
+  -------         MODULE        WRITE_TO_RAM
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:91A1H         PUBLIC        Write_To_RAM
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          WRITE_TO_RAM
+  C:91A1H         LINE#         71
+  C:91A1H         LINE#         72
+  C:91A1H         LINE#         73
+  C:91A7H         LINE#         74
+  C:91A7H         LINE#         75
+  C:91ABH         LINE#         80
+  C:91ABH         LINE#         81
+  C:91B6H         LINE#         82
+  C:91BCH         LINE#         84
+  C:91BEH         LINE#         87
+  C:91BEH         LINE#         89
+  C:91CFH         LINE#         94
+  C:91CFH         LINE#         95
+  C:91E3H         LINE#         96
+  C:91E9H         LINE#         98
+  C:91E9H         LINE#         100
+  C:91EDH         LINE#         102
+  -------         ENDPROC       WRITE_TO_RAM
+  -------         ENDMOD        WRITE_TO_RAM
+
+  -------         MODULE        GET_RESPONSE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:944BH         PUBLIC        Get_Response
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_RESPONSE
+  C:944BH         LINE#         58
+  C:944BH         LINE#         59
+  C:944BH         LINE#         60
+  C:9453H         LINE#         61
+  C:9453H         LINE#         63
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 28
+
+
+  C:9461H         LINE#         64
+  C:9461H         LINE#         65
+  C:9470H         LINE#         66
+  C:9475H         LINE#         67
+  C:9479H         LINE#         68
+  C:947BH         LINE#         70
+  C:947BH         LINE#         71
+  C:9482H         LINE#         72
+  C:9482H         LINE#         74
+  C:9489H         LINE#         76
+  -------         ENDPROC       GET_RESPONSE
+  -------         ENDMOD        GET_RESPONSE
+
+  -------         MODULE        CONV_TWO_BYTES_TO_INT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:8026H         PUBLIC        _Conv_Two_Bytes_To_Int
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _CONV_TWO_BYTES_TO_INT
+  D:0007H         SYMBOL        ucHiByteAddr
+  D:0005H         SYMBOL        ucLoByteAddr
+  C:8026H         LINE#         48
+  C:8026H         LINE#         49
+  C:8026H         LINE#         50
+  C:802AH         LINE#         52
+  -------         ENDPROC       _CONV_TWO_BYTES_TO_INT
+  -------         ENDMOD        CONV_TWO_BYTES_TO_INT
+
+  -------         MODULE        ERASE_EE_64_BYTES
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:9561H         PUBLIC        Erase_EE_64_Bytes
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          ERASE_EE_64_BYTES
+  C:9561H         LINE#         57
+  C:9561H         LINE#         58
+  C:9561H         LINE#         60
+  C:9572H         LINE#         63
+  C:9577H         LINE#         64
+  C:9577H         LINE#         65
+  C:957CH         LINE#         66
+  C:957EH         LINE#         68
+  C:957EH         LINE#         69
+  C:9583H         LINE#         70
+  C:9583H         LINE#         72
+  C:958AH         LINE#         74
+  -------         ENDPROC       ERASE_EE_64_BYTES
+  -------         ENDMOD        ERASE_EE_64_BYTES
+
+  -------         MODULE        MASS_ERASE_EE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:97FCH         PUBLIC        Mass_Erase_EE
+  D:00D0H         PUBLIC        PSW
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 29
+
+
+  -------         PROC          MASS_ERASE_EE
+  C:97FCH         LINE#         57
+  C:97FCH         LINE#         58
+  C:97FCH         LINE#         59
+  C:97FFH         LINE#         61
+  C:9803H         LINE#         63
+  -------         ENDPROC       MASS_ERASE_EE
+  -------         ENDMOD        MASS_ERASE_EE
+
+  -------         MODULE        GET_CLOCK_SOURCE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:96A2H         PUBLIC        Get_Clock_Source
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_CLOCK_SOURCE
+  C:96A2H         LINE#         53
+  C:96A2H         LINE#         54
+  C:96A2H         LINE#         55
+  C:96A8H         LINE#         56
+  C:96A8H         LINE#         58
+  C:96AEH         LINE#         60
+  C:96B2H         LINE#         61
+  C:96B4H         LINE#         63
+  C:96B4H         LINE#         64
+  C:96BBH         LINE#         65
+  C:96BBH         LINE#         67
+  C:96C2H         LINE#         69
+  -------         ENDPROC       GET_CLOCK_SOURCE
+  -------         ENDMOD        GET_CLOCK_SOURCE
+
+  -------         MODULE        GET_CLOCK_CONTROL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:96C3H         PUBLIC        Get_Clock_Control
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_CLOCK_CONTROL
+  C:96C3H         LINE#         53
+  C:96C3H         LINE#         54
+  C:96C3H         LINE#         55
+  C:96C9H         LINE#         56
+  C:96C9H         LINE#         58
+  C:96CFH         LINE#         60
+  C:96D3H         LINE#         61
+  C:96D5H         LINE#         63
+  C:96D5H         LINE#         64
+  C:96DCH         LINE#         65
+  C:96DCH         LINE#         67
+  C:96E3H         LINE#         69
+  -------         ENDPROC       GET_CLOCK_CONTROL
+  -------         ENDMOD        GET_CLOCK_CONTROL
+
+  -------         MODULE        SET_EXECUTE_ONLY_STATUS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 30
+
+
+  C:9343H         PUBLIC        Set_Execute_Only_Status
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_EXECUTE_ONLY_STATUS
+  C:9343H         LINE#         64
+  C:9343H         LINE#         65
+  C:9343H         LINE#         66
+  C:934AH         LINE#         67
+  C:934AH         LINE#         68
+  C:9351H         LINE#         71
+  C:9366H         LINE#         74
+  C:936BH         LINE#         75
+  C:936BH         LINE#         76
+  C:9370H         LINE#         77
+  C:9372H         LINE#         79
+  C:9372H         LINE#         80
+  C:9374H         LINE#         81
+  C:9374H         LINE#         82
+  C:9376H         LINE#         85
+  C:9376H         LINE#         86
+  C:937DH         LINE#         87
+  C:937DH         LINE#         89
+  C:9384H         LINE#         91
+  -------         ENDPROC       SET_EXECUTE_ONLY_STATUS
+  -------         ENDMOD        SET_EXECUTE_ONLY_STATUS
+
+  -------         MODULE        SET_PROTECTION_STATUS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:9385H         PUBLIC        Set_Protection_Status
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_PROTECTION_STATUS
+  C:9385H         LINE#         64
+  C:9385H         LINE#         65
+  C:9385H         LINE#         66
+  C:938CH         LINE#         67
+  C:938CH         LINE#         68
+  C:9393H         LINE#         71
+  C:93A8H         LINE#         74
+  C:93ADH         LINE#         75
+  C:93ADH         LINE#         76
+  C:93B2H         LINE#         77
+  C:93B4H         LINE#         79
+  C:93B4H         LINE#         80
+  C:93B6H         LINE#         81
+  C:93B6H         LINE#         82
+  C:93B8H         LINE#         85
+  C:93B8H         LINE#         86
+  C:93BFH         LINE#         87
+  C:93BFH         LINE#         89
+  C:93C6H         LINE#         91
+  -------         ENDPROC       SET_PROTECTION_STATUS
+  -------         ENDMOD        SET_PROTECTION_STATUS
+
+  -------         MODULE        SET_SECURITY_ACTION
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:9632H         PUBLIC        Set_Security_Action
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 31
+
+
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_SECURITY_ACTION
+  C:9632H         LINE#         59
+  C:9632H         LINE#         60
+  C:9632H         LINE#         62
+  C:9640H         LINE#         65
+  C:9645H         LINE#         66
+  C:9645H         LINE#         67
+  C:964AH         LINE#         68
+  C:964CH         LINE#         70
+  C:964CH         LINE#         71
+  C:9651H         LINE#         72
+  C:9651H         LINE#         74
+  C:9658H         LINE#         76
+  -------         ENDPROC       SET_SECURITY_ACTION
+  -------         ENDMOD        SET_SECURITY_ACTION
+
+  -------         MODULE        SET_SECURITY_MASK
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9659H         PUBLIC        Set_Security_Mask
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_SECURITY_MASK
+  C:9659H         LINE#         59
+  C:9659H         LINE#         60
+  C:9659H         LINE#         62
+  C:9667H         LINE#         65
+  C:966CH         LINE#         66
+  C:966CH         LINE#         67
+  C:9671H         LINE#         68
+  C:9673H         LINE#         70
+  C:9673H         LINE#         71
+  C:9678H         LINE#         72
+  C:9678H         LINE#         74
+  C:967FH         LINE#         76
+  -------         ENDPROC       SET_SECURITY_MASK
+  -------         ENDMOD        SET_SECURITY_MASK
+
+  -------         MODULE        WRITE_BYTE_EE_FLASH_MODE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:93C7H         PUBLIC        Write_Byte_EE_Flash_Mode
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          WRITE_BYTE_EE_FLASH_MODE
+  C:93C7H         LINE#         61
+  C:93C7H         LINE#         62
+  C:93C7H         LINE#         63
+  C:93CEH         LINE#         64
+  C:93CEH         LINE#         66
+  C:93D5H         LINE#         69
+  C:93EAH         LINE#         72
+  C:93EFH         LINE#         73
+  C:93EFH         LINE#         74
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 32
+
+
+  C:93F4H         LINE#         75
+  C:93F6H         LINE#         77
+  C:93F6H         LINE#         78
+  C:93F8H         LINE#         79
+  C:93F8H         LINE#         80
+  C:93FAH         LINE#         83
+  C:93FAH         LINE#         84
+  C:9401H         LINE#         85
+  C:9401H         LINE#         87
+  C:9408H         LINE#         89
+  -------         ENDPROC       WRITE_BYTE_EE_FLASH_MODE
+  -------         ENDMOD        WRITE_BYTE_EE_FLASH_MODE
+
+  -------         MODULE        WRITE_BYTE_UCM_FLASH_MODE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:9409H         PUBLIC        Write_Byte_UCM_Flash_Mode
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          WRITE_BYTE_UCM_FLASH_MODE
+  C:9409H         LINE#         61
+  C:9409H         LINE#         62
+  C:9409H         LINE#         63
+  C:9410H         LINE#         64
+  C:9410H         LINE#         66
+  C:9417H         LINE#         69
+  C:942CH         LINE#         72
+  C:9431H         LINE#         73
+  C:9431H         LINE#         74
+  C:9436H         LINE#         75
+  C:9438H         LINE#         77
+  C:9438H         LINE#         78
+  C:943AH         LINE#         79
+  C:943AH         LINE#         80
+  C:943CH         LINE#         83
+  C:943CH         LINE#         84
+  C:9443H         LINE#         85
+  C:9443H         LINE#         87
+  C:944AH         LINE#         89
+  -------         ENDPROC       WRITE_BYTE_UCM_FLASH_MODE
+  -------         ENDMOD        WRITE_BYTE_UCM_FLASH_MODE
+
+  -------         MODULE        ERASE_24K_BLOCK
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:9705H         PUBLIC        Erase_24K_Block
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          ERASE_24K_BLOCK
+  C:9705H         LINE#         57
+  C:9705H         LINE#         58
+  C:9705H         LINE#         60
+  C:970CH         LINE#         62
+  C:9711H         LINE#         63
+  C:9711H         LINE#         64
+  C:9716H         LINE#         65
+  C:9718H         LINE#         67
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 33
+
+
+  C:9718H         LINE#         68
+  C:971DH         LINE#         69
+  C:971DH         LINE#         71
+  C:9724H         LINE#         73
+  -------         ENDPROC       ERASE_24K_BLOCK
+  -------         ENDMOD        ERASE_24K_BLOCK
+
+  -------         MODULE        ERASE_EE_8_BYTES
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:958BH         PUBLIC        Erase_EE_8_Bytes
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          ERASE_EE_8_BYTES
+  C:958BH         LINE#         57
+  C:958BH         LINE#         58
+  C:958BH         LINE#         60
+  C:959CH         LINE#         63
+  C:95A1H         LINE#         64
+  C:95A1H         LINE#         65
+  C:95A6H         LINE#         66
+  C:95A8H         LINE#         68
+  C:95A8H         LINE#         69
+  C:95ADH         LINE#         70
+  C:95ADH         LINE#         72
+  C:95B4H         LINE#         74
+  -------         ENDPROC       ERASE_EE_8_BYTES
+  -------         ENDMOD        ERASE_EE_8_BYTES
+
+  -------         MODULE        GET_FIRMWARE_VERSION
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:96E4H         PUBLIC        Get_Firmware_Version
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_FIRMWARE_VERSION
+  C:96E4H         LINE#         58
+  C:96E4H         LINE#         59
+  C:96E4H         LINE#         60
+  C:96EAH         LINE#         61
+  C:96EAH         LINE#         63
+  C:96F0H         LINE#         65
+  C:96F4H         LINE#         66
+  C:96F6H         LINE#         69
+  C:96F6H         LINE#         70
+  C:96FDH         LINE#         71
+  C:96FDH         LINE#         73
+  C:9704H         LINE#         75
+  -------         ENDPROC       GET_FIRMWARE_VERSION
+  -------         ENDMOD        GET_FIRMWARE_VERSION
+
+  -------         MODULE        ERASE_UCM_PAGE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:95B5H         PUBLIC        Erase_UCM_Page
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 34
+
+
+  -------         PROC          ERASE_UCM_PAGE
+  C:95B5H         LINE#         57
+  C:95B5H         LINE#         58
+  C:95B5H         LINE#         60
+  C:95C6H         LINE#         63
+  C:95CBH         LINE#         64
+  C:95CBH         LINE#         65
+  C:95D0H         LINE#         66
+  C:95D2H         LINE#         68
+  C:95D2H         LINE#         69
+  C:95D7H         LINE#         70
+  C:95D7H         LINE#         73
+  C:95DEH         LINE#         75
+  -------         ENDPROC       ERASE_UCM_PAGE
+  -------         ENDMOD        ERASE_UCM_PAGE
+
+  -------         MODULE        GET_CHIP_ID
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:948AH         PUBLIC        Get_Chip_ID
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_CHIP_ID
+  C:948AH         LINE#         58
+  C:948AH         LINE#         59
+  C:948AH         LINE#         60
+  C:9491H         LINE#         61
+  C:9491H         LINE#         62
+  C:949DH         LINE#         63
+  C:949DH         LINE#         64
+  C:94A3H         LINE#         65
+  C:94A8H         LINE#         67
+  C:94ADH         LINE#         69
+  C:94B4H         LINE#         71
+  C:94B8H         LINE#         72
+  C:94BAH         LINE#         75
+  C:94BAH         LINE#         76
+  C:94C1H         LINE#         77
+  C:94C1H         LINE#         79
+  C:94C8H         LINE#         81
+  -------         ENDPROC       GET_CHIP_ID
+  -------         ENDMOD        GET_CHIP_ID
+
+  -------         MODULE        SET_INTERRUPT_ENABLE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:97D3H         PUBLIC        Set_Interrupt_Enable
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          SET_INTERRUPT_ENABLE
+  C:97D3H         LINE#         56
+  C:97D3H         LINE#         57
+  C:97D3H         LINE#         59
+  C:97DAH         LINE#         61
+  C:97DEH         LINE#         63
+  -------         ENDPROC       SET_INTERRUPT_ENABLE
+  -------         ENDMOD        SET_INTERRUPT_ENABLE
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 35
+
+
+
+  -------         MODULE        GET_INTERRUPT_ENABLE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:97DFH         PUBLIC        Get_Interrupt_Enable
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_INTERRUPT_ENABLE
+  C:97DFH         LINE#         57
+  C:97DFH         LINE#         58
+  C:97DFH         LINE#         60
+  C:97E5H         LINE#         62
+  C:97E9H         LINE#         64
+  -------         ENDPROC       GET_INTERRUPT_ENABLE
+  -------         ENDMOD        GET_INTERRUPT_ENABLE
+
+  -------         MODULE        SET_CLOCK
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  C:90B4H         PUBLIC        Set_Clock
+  -------         PROC          SET_CLOCK
+  C:90B4H         LINE#         63
+  C:90B4H         LINE#         64
+  C:90B4H         LINE#         65
+  C:90BBH         LINE#         66
+  C:90BBH         LINE#         67
+  C:90BFH         LINE#         68
+  C:90C1H         LINE#         70
+  C:90C1H         LINE#         72
+  C:90C8H         LINE#         76
+  C:90DFH         LINE#         77
+  C:90DFH         LINE#         78
+  C:90E6H         LINE#         79
+  C:90E8H         LINE#         81
+  C:90E8H         LINE#         83
+  C:90EFH         LINE#         85
+  C:90F3H         LINE#         86
+  C:90F3H         LINE#         87
+  C:90F5H         LINE#         88
+  C:90F7H         LINE#         90
+  C:90F7H         LINE#         91
+  C:90FCH         LINE#         92
+  C:90FCH         LINE#         93
+  C:90FCH         LINE#         94
+  C:90FCH         LINE#         96
+  C:9103H         LINE#         98
+  -------         ENDPROC       SET_CLOCK
+  -------         ENDMOD        SET_CLOCK
+
+  -------         MODULE        ERASE_UCM_CONFIGURABLE_BLOCK
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:95DFH         PUBLIC        Erase_UCM_Configurable_Block
+  D:00D0H         PUBLIC        PSW
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 36
+
+
+  -------         PROC          ERASE_UCM_CONFIGURABLE_BLOCK
+  C:95DFH         LINE#         58
+  C:95DFH         LINE#         59
+  C:95DFH         LINE#         61
+  C:95F0H         LINE#         64
+  C:95F5H         LINE#         65
+  C:95F5H         LINE#         66
+  C:95FAH         LINE#         67
+  C:95FCH         LINE#         69
+  C:95FCH         LINE#         70
+  C:9601H         LINE#         71
+  C:9601H         LINE#         73
+  C:9608H         LINE#         75
+  -------         ENDPROC       ERASE_UCM_CONFIGURABLE_BLOCK
+  -------         ENDMOD        ERASE_UCM_CONFIGURABLE_BLOCK
+
+  -------         MODULE        MASS_ERASE_UCM
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:9804H         PUBLIC        Mass_Erase_UCM
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MASS_ERASE_UCM
+  C:9804H         LINE#         57
+  C:9804H         LINE#         58
+  C:9804H         LINE#         59
+  C:9807H         LINE#         61
+  C:980BH         LINE#         63
+  -------         ENDPROC       MASS_ERASE_UCM
+  -------         ENDMOD        MASS_ERASE_UCM
+
+  -------         MODULE        TP40_JUMPTABLE
+  C:03F6H         PUBLIC        FIRMWARE_ERASE1K_UCM
+  C:03D0H         PUBLIC        FIRMWARE_ERASE24K_OTP
+  C:03D0H         PUBLIC        FIRMWARE_ERASE24K_UCM
+  C:03F6H         PUBLIC        FIRMWARE_ERASECONFIGBLOCK
+  C:03D6H         PUBLIC        FIRMWARE_ERASEEE64BYTES
+  C:03D8H         PUBLIC        FIRMWARE_ERASEEE8BYTES
+  C:03D0H         PUBLIC        FIRMWARE_ERASEOTPBLOCK
+  C:03ECH         PUBLIC        FIRMWARE_ERASEPAGEOTP
+  C:03ECH         PUBLIC        FIRMWARE_ERASEPAGEUCM
+  C:03DEH         PUBLIC        FIRMWARE_GETCHIPID
+  C:03E2H         PUBLIC        FIRMWARE_GETCLOCKCONTROLSFR
+  C:03E0H         PUBLIC        FIRMWARE_GETCLOCKSOURCESELECTSFR
+  C:03F2H         PUBLIC        FIRMWARE_GETFIRMWAREVERSION
+  C:03F0H         PUBLIC        FIRMWARE_GETINTERRUPTENABLE
+  C:03DCH         PUBLIC        FIRMWARE_MASSERASEEE
+  C:03D4H         PUBLIC        FIRMWARE_MASSERASEOTP
+  C:03D4H         PUBLIC        FIRMWARE_MASSERASEUCM
+  C:03F4H         PUBLIC        FIRMWARE_SETCLOCK
+  C:03E6H         PUBLIC        FIRMWARE_SETEXECUTEONLYSTATUS
+  C:03EEH         PUBLIC        FIRMWARE_SETINTERRUPTENABLE
+  C:03E4H         PUBLIC        FIRMWARE_SETPROTECTSTATUS
+  C:03E8H         PUBLIC        FIRMWARE_SETSECURITYACTION
+  C:03EAH         PUBLIC        FIRMWARE_SETSECURITYMASK
+  C:03FEH         PUBLIC        FIRMWARE_WRITEBYTECONFIG
+  C:03FAH         PUBLIC        FIRMWARE_WRITEBYTEEE
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 37
+
+
+  C:03FCH         PUBLIC        FIRMWARE_WRITEBYTEOTP
+  C:03FCH         PUBLIC        FIRMWARE_WRITEBYTEUCM
+  C:03F8H         PUBLIC        FIRMWARE_WRITECONFIG
+  C:03DAH         PUBLIC        FIRMWARE_WRITEEE
+  C:03D2H         PUBLIC        FIRMWARE_WRITEOTP
+  C:03D2H         PUBLIC        FIRMWARE_WRITEUCM
+  C:03F6H         PUBLIC        _FIRMWARE_ERASE1K_UCM
+  C:03D0H         PUBLIC        _FIRMWARE_ERASE24K_OTP
+  C:03D0H         PUBLIC        _FIRMWARE_ERASE24K_UCM
+  C:03F6H         PUBLIC        _FIRMWARE_ERASECONFIGBLOCK
+  C:03D6H         PUBLIC        _FIRMWARE_ERASEEE64BYTES
+  C:03D8H         PUBLIC        _FIRMWARE_ERASEEE8BYTES
+  C:03D0H         PUBLIC        _FIRMWARE_ERASEOTPBLOCK
+  C:03ECH         PUBLIC        _FIRMWARE_ERASEPAGEOTP
+  C:03ECH         PUBLIC        _FIRMWARE_ERASEPAGEUCM
+  C:03DEH         PUBLIC        _FIRMWARE_GETCHIPID
+  C:03E2H         PUBLIC        _FIRMWARE_GETCLOCKCONTROLSFR
+  C:03E0H         PUBLIC        _FIRMWARE_GETCLOCKSOURCESELECTSFR
+  C:03F2H         PUBLIC        _FIRMWARE_GETFIRMWAREVERSION
+  C:03F0H         PUBLIC        _FIRMWARE_GETINTERRUPTENABLE
+  C:03DCH         PUBLIC        _FIRMWARE_MASSERASEEE
+  C:03D4H         PUBLIC        _FIRMWARE_MASSERASEOTP
+  C:03D4H         PUBLIC        _FIRMWARE_MASSERASEUCM
+  C:03F4H         PUBLIC        _FIRMWARE_SETCLOCK
+  C:03E6H         PUBLIC        _FIRMWARE_SETEXECUTEONLYSTATUS
+  C:03EEH         PUBLIC        _FIRMWARE_SETINTERRUPTENABLE
+  C:03E4H         PUBLIC        _FIRMWARE_SETPROTECTSTATUS
+  C:03E8H         PUBLIC        _FIRMWARE_SETSECURITYACTION
+  C:03EAH         PUBLIC        _FIRMWARE_SETSECURITYMASK
+  C:03FEH         PUBLIC        _FIRMWARE_WRITEBYTECONFIG
+  C:03FAH         PUBLIC        _FIRMWARE_WRITEBYTEEE
+  C:03FCH         PUBLIC        _FIRMWARE_WRITEBYTEOTP
+  C:03FCH         PUBLIC        _FIRMWARE_WRITEBYTEUCM
+  C:03F8H         PUBLIC        _FIRMWARE_WRITECONFIG
+  C:03DAH         PUBLIC        _FIRMWARE_WRITEEE
+  C:03D2H         PUBLIC        _FIRMWARE_WRITEOTP
+  C:03D2H         PUBLIC        _FIRMWARE_WRITEUCM
+  N:0000H         SYMBOL        TP40_JUMPTABLE
+  -------         ENDMOD        TP40_JUMPTABLE
+
+  -------         MODULE        ?C?CLDPTR
+  C:8CBEH         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:8CD7H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?LNOT
+  C:8D2CH         PUBLIC        ?C?LNOT
+  -------         ENDMOD        ?C?LNOT
+
+  -------         MODULE        ?C?ULCMP
+  C:8D39H         PUBLIC        ?C?ULCMP
+  -------         ENDMOD        ?C?ULCMP
+
+  -------         MODULE        ?C?ULSHR
+BL51 BANKED LINKER/LOCATER V5.11                                                      12/29/2006  16:28:18  PAGE 38
+
+
+  C:8D4AH         PUBLIC        ?C?ULSHR
+  -------         ENDMOD        ?C?ULSHR
+
+  -------         MODULE        ?C?LSHL
+  C:8D5DH         PUBLIC        ?C?LSHL
+  -------         ENDMOD        ?C?LSHL
+
+  -------         MODULE        ?C?LLDIDATA
+  C:8D70H         PUBLIC        ?C?LLDIDATA
+  -------         ENDMOD        ?C?LLDIDATA
+
+  -------         MODULE        ?C?LLDIDATA0
+  C:8D7CH         PUBLIC        ?C?LLDIDATA0
+  -------         ENDMOD        ?C?LLDIDATA0
+
+  -------         MODULE        ?C?LSTIDATA
+  C:8D89H         PUBLIC        ?C?LSTIDATA
+  -------         ENDMOD        ?C?LSTIDATA
+
+  -------         MODULE        ?C?LSTKIDATA
+  C:8D95H         PUBLIC        ?C?LSTKIDATA
+  -------         ENDMOD        ?C?LSTKIDATA
+
+  -------         MODULE        ?C?ICALL
+  C:8DAEH         PUBLIC        ?C?ICALL
+  C:8DB2H         PUBLIC        ?C?ICALL2
+  -------         ENDMOD        ?C?ICALL
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GET_IDLE_MODE?SET_IDLE_MODE
+
+Program Size: data=178.0 xdata=64 code=6209
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

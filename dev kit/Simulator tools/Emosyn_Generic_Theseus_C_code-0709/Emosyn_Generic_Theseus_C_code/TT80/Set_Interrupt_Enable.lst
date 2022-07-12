@@ -1,0 +1,96 @@
+C51 COMPILER V8.05a   SET_INTERRUPT_ENABLE                                                 04/16/2007 10:40:55 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE SET_INTERRUPT_ENABLE
+OBJECT MODULE PLACED IN .\Set_Interrupt_Enable.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common_Titanium\Set_Interrupt_Enable.c OMF2 OPTIMIZE(SIZE) BROWSE INTVEC
+                    -TOR(0X0800) MODDP2 DEBUG PRINT(.\Set_Interrupt_Enable.lst) OBJECT(.\Set_Interrupt_Enable.obj)
+
+line level    source
+
+   1          /******************************************************************************
+   2          *
+   3          * Name:         Set_Interrupt_Enable.c
+   4          * Description:  Contains function to set the IE SFR
+   5          * Copyright:    Emosyn Inc. 2005
+   6          *
+   7          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   8          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+   9          * not limited to the implied warranties of merchantability and fitness for a
+  10          * particular purpose. EMOSYN does not warrant that the functions contained in
+  11          * this code will meet your requirements, or that the operation of the code will
+  12          * be accurate, error-free, or non-infringing. No oral or written information or
+  13          * advice given by EMOSYN or an authorized representative shall create or affect
+  14          * any Warranty.
+  15          *******************************************************************************
+  16          * $Revision: 1.2 $
+  17          * $Author: dhunter $ 
+  18          * $Date: 2006/07/28 22:32:35 $
+  19          ******************************************************************************/
+  20          
+  21          
+  22          /******************************************************************************
+  23          * Header file inclusions
+  24          ******************************************************************************/
+  25          #include "Firmware_API_JumpTable.h"
+  26          #include "Emosyn_Helper_Functions.h"
+  27          
+  28          
+  29          /******************************************************************************
+  30          * External and local function declarations 
+  31          ******************************************************************************/
+  32          
+  33          
+  34          /******************************************************************************
+  35          * External variable declarations
+  36          ******************************************************************************/
+  37          
+  38          
+  39          /******************************************************************************
+  40          *
+  41          * Function Name:      Set_Interrupt_Enable
+  42          * Function Inputs:    void
+  43          * Function Outputs:   uint SW1SW2_OK  9000h
+  44          * Description:        Sets the IE register value with the user input
+  45          *
+  46          * APDU Syntax:        E5 1A PARA1 00 00
+  47          * APDU Inputs:        PARA1  Interrupt to load into IE sfr
+  48          * APDU Outputs:       None
+  49          *
+  50          * Example usage:      Load IE with 0x82
+  51          * To Card             ->  E5 1A 82 00 00
+  52          * ACK from Card       <-  1A
+  53          * Response from Card  <-  90 00
+  54          *
+C51 COMPILER V8.05a   SET_INTERRUPT_ENABLE                                                 04/16/2007 10:40:55 PAGE 2   
+
+  55          ******************************************************************************/
+  56          uint Set_Interrupt_Enable (void)
+  57          {
+  58   1      #ifdef EMULATOR
+                  Firmware_SetInterruptEnable (PARA1);
+              #else
+  61   1          IE = PARA1;         /* Set the IE SFR with the user input */
+  62   1      #endif
+  63   1      
+  64   1          return SW1SW2_OK;   /* Return a status word of 9000h */
+  65   1      
+  66   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     10    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

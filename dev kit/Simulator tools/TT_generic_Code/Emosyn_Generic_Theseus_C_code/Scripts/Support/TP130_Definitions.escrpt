@@ -1,0 +1,47 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; TP130_Definitions.escrpt
+; ========================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Theseus Platinum 130 Memory Map Definitions
+;
+; This holds all the variables containing the addresses and sizes of the TP130 chip
+;
+;***********************************************************************************************************
+
+>SETVW: wChipType = 0130
+
+>SETVW: EEPROM_START_ADDRESS = 1000						; Base address of EEPROM memory in XDATA space
+>SETVW: EEPROM_END_ADDRESS = D000						; End address of EEPROM memory in XDATA space
+
+>SETVW: BOOTLOADER_START_ADDRESS = C800						; Bootloader start address with K-Algorithm
+
+>SETVW: EEPROM_USABLE_SPACE = 0000
+>CALC: EEPROM_USABLE_SPACE = (BOOTLOADER_START_ADDRESS) - (EEPROM_START_ADDRESS)	; Usable EEPORM space (excluding Bootloader)
+>SETVW: BOOTLOADER_SIZE = 0000
+>CALC: BOOTLOADER_SIZE = (EEPROM_END_ADDRESS) - (BOOTLOADER_START_ADDRESS)		; Bootloader size
+
+>SETVW: UCM_START_ADDRESS = 1000						; Base address of UCM memory	
+>SETVW: UCM_END_ADDRESS = EC00							; End address of UCM memory
+
+>SETVW: UCM_TOTAL_SIZE = 0000
+>CALC: UCM_TOTAL_SIZE = (UCM_END_ADDRESS) - (UCM_START_ADDRESS)
+>CALC: UCM_TOTAL_SIZE = (UCM_TOTAL_SIZE) + 4C00					; Size of entire UCM space (including banks)
+
+>SETVW: UCM_PAGE_SIZE = 0100							; Size of a UCM page
+>SETVW: UCM_USABLE_START_ADDRESS = 4400						; This is the address clear of the Generic software code
+
+>SETVW: XDATA_RAM_START_ADDRESS = 0000						; Base address of XDATA RAM in XDATA space
+>SETVW: XDATA_RAM_END_ADDRESS = 1000						; End address of XDATA RAM in XDATA space
+
+>SETVW: XDATA_RAM_TOTAL_SIZE = 0000
+>CALC: XDATA_RAM_TOTAL_SIZE = (XDATA_RAM_END_ADDRESS) - (XDATA_RAM_START_ADDRESS)	; Total size of usable XDATA RAM 
+ 
+>ENDL

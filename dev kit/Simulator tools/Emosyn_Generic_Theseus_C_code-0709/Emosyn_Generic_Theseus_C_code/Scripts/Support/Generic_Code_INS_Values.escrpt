@@ -1,0 +1,121 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;***********************************************************************************************************
+; Generic_Code_INS_Value.escrpt
+; =============================
+;
+; $Revision: 1.6 $
+; $Author: chin $ 
+; $Date: 2006/02/21 12:23:34 $
+;
+; This lists all the APDU INS value instructions available
+;
+;***********************************************************************************************************
+
+>SETVB: Erase_EE_64 = 02
+>SETVB: Erase_EE_8 = 04
+>SETVB: Write_EE_Bytes_Flash_Mode_From_IDATA_Buffer = 06
+>SETVB: Mass_Erase_EE = 08
+>SETVB: Get_Chip_ID = 0A
+>SETVB: Get_Clock_Source_Select_SFR = 0C 
+>SETVB: Get_Clock_Control_SFR = 0E
+
+>SETVB: Set_Protection_Status = 10
+>SETVB: Set_Execute_Only_Status = 12
+>SETVB: Set_Security_Action = 14
+>SETVB: Set_Security_Mask = 16
+>SETVB: Set_Clock = 18
+>SETVB: Set_Interrupt_Enable = 1A
+>SETVB: Get_Interrupt_Enable = 1C
+>SETVB: Get_Firmware_Version = 1E
+
+>SETVB: Write_UCM_Bytes_Flash_Mode_From_IDATA_Buffer = 20
+>SETVB: Erase_24k_Block = 22
+>SETVB: Write_Byte_EE_Flash_Mode = 24
+>SETVB: Write_Byte_UCM_Flash_Mode = 26
+>SETVB: Set_Memory_Fault_Mask = 28
+>SETVB: Erase_UCM_Configurable_Block = 2A
+>SETVB: Classic_Erase_UCM_256 = 2C
+>SETVB: Erase_UCM_256 = 2C
+>SETVB: Erase_UCM_Page = 2C
+>SETVB: Get_MMU_Settings = 2E 
+
+>SETVB: Erase_Back_To_Factory_State = 30
+>SETVB: Mass_Erase_UCM = 32
+>SETVB: Set_MMU = 34
+>SETVB: Unify_Partition = 36
+>SETVB: Remove_Partition = 38
+>SETVB: Get_Random_Number = 3A
+>SETVB: Erase_UCM_Block = 3C
+>SETVB: Erase_UCM_512 = 3E
+
+>SETVB: Change_ISO_Speed = 40
+>SETVB: Set_Security_Status = 42
+>SETVB: Get_Security_Status = 44
+>SETVB: Command_In_Bank_0 = 46
+>SETVB: Command_In_Bank_1 = 48
+>SETVB: Turn_On_Timer_0 = 4A
+>SETVB: Turn_On_Timer_1 = 4C
+>SETVB: Stop_Timer_0 = 4E
+
+>SETVB: Stop_Timer_1 = 50
+>SETVB: Erase_UCM_Blocks__R6R7_Passing = 52
+>SETVB: Get_Diagnostic_Data = 54
+>SETVB: Command_In_Bank_2 = 56
+>SETVB: Command_In_Bank_3 = 58
+>SETVB: Set_Idle_Mode = 5A
+
+>SETVB: Fill_EEPROM_With_Byte = 76
+>SETVB: Call_SHA1 = 78
+>SETVB: CODE_Space_Memory_Dump = 7A
+>SETVB: IDATA_Memory_Dump = 7C
+>SETVB: XDATA_Space_Memory_Dump = 7E
+
+>SETVB: Create_CRC16_Hash_Of_XDATA = 88
+>SETVB: TheseusPlatinum_EE_MassErase_Bootloader_Safe = 8A
+>SETVB: Write_To_RAM = 8C
+>SETVB: Get_OS_Version = 8E
+
+>SETVB:	AES_Load_Key = A0
+>SETVB: AES_Load_Data = A2
+>SETVB: AES_Go = A4
+>SETVB: SRAM_Clear = A6
+>SETVB: Linear_Write_Byte_NVM = A8
+>SETVB: Classic_Write_Byte_NVM = A8
+>SETVB: Linear_Erase_EE_8 = AA 
+>SETVB: Linear_Erase_EE_64 = AC
+>SETVB: Linear_Erase_UCM_256 = AE
+
+>SETVB: Linear_Erase_UCM_512 = B0
+>SETVB: Classic_Erase_UCM_512 = B0
+
+>SETVB: Load_DPX = B2
+>SETVB: Linear_Erase_UCM_Block_1K = B4
+>SETVB: TDES_Load_Key = B6
+>SETVB: TDES_Load_Data = B8
+>SETVB: TDES_Get_Data = BA
+>SETVB: TDES_Go = BC
+>SETVB: TDES_Enable = BE
+
+>SETVB: Get_Response = C0
+>SETVB: Get_TDESDATA = C2
+>SETVB: Set_TDESDATA = C4
+>SETVB: Set_TDESKEY = C6
+>SETVB: Get_TDKSEL = C8
+>SETVB: Set_TDKSEL = CA
+>SETVB: Set_MFCON = CC
+>SETVB: Get_MFCON = CE
+
+>SETVB: Write_UCM_Bytes_From_IRAM_Buffer_Into_CODE_Space = D8
+>SETVB: Write_Byte_UCM_Flash_Mode_In_CODE_Space = DA
+>SETVB: Erase_256_UCM_In_CODE_Space = DC
+>SETVB: Erase_512_UCM_In_CODE_Space = DE
+
+>SETVB: Write_X_Bytes_To_UCM = E0
+>SETVB: Write_X_Bytes_To_UCM__256_Page_Backup_Handled = E2
+>SETVB: Get_Idle_Mode = E4
+>SETVB: Set_Pullup_Resistor = EE
+
+>SETVB: Get_Pullup_Resistor = F0

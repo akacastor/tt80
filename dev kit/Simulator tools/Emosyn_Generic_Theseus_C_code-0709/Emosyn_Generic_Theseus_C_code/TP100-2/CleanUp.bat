@@ -1,0 +1,13 @@
+del *.lst
+del *._ia
+del *.obj
+del *.__i
+del *.bak
+del *.lnp
+del *.opt
+del *.H0*
+del *.B0*
+del *.plg
+del *.sbr
+del *.plg
+del ..\*.lst

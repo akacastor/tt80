@@ -1,0 +1,102 @@
+C51 COMPILER V8.05a   GET_RESPONSE                                                         05/08/2007 13:43:16 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE GET_RESPONSE
+OBJECT MODULE PLACED IN .\Get_Response.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Common\Get_Response.c BROWSE INTVECTOR(0X8000) DEBUG OBJECTEXTEND PRINT(
+                    -.\Get_Response.lst) OBJECT(.\Get_Response.obj)
+
+line level    source
+
+   1          
+   2          /******************************************************************************
+   3          *
+   4          * Name:         Get_Response.c
+   5          * Description:  Contains function to output values set in the IO buffer
+   6          * Copyright:    Emosyn Inc. 2005
+   7          *
+   8          * The Example Code herein below is provided "AS IS" and at your sole risk.  
+   9          * As to this Code, EMOSYN expressly disclaims all warranties, including, but
+  10          * not limited to the implied warranties of merchantability and fitness for a
+  11          * particular purpose. EMOSYN does not warrant that the functions contained in
+  12          * this code will meet your requirements, or that the operation of the code will
+  13          * be accurate, error-free, or non-infringing. No oral or written information or
+  14          * advice given by EMOSYN or an authorized representative shall create or affect
+  15          * any Warranty.
+  16          *******************************************************************************
+  17          * $Revision: 1.3 $
+  18          * $Author: chin $ 
+  19          * $Date: 2005/10/25 12:50:44 $
+  20          ******************************************************************************/
+  21          
+  22          
+  23          /******************************************************************************
+  24          * Header file inclusions
+  25          ******************************************************************************/
+  26          #include "Firmware_API_JumpTable.h"
+  27          #include "Emosyn_Helper_Functions.h"
+  28          #include "global_vars.h"
+  29          
+  30          /******************************************************************************
+  31          * External and local function declarations 
+  32          ******************************************************************************/
+  33          
+  34          
+  35          /******************************************************************************
+  36          * External variable declarations
+  37          ******************************************************************************//*
+  38          
+  39          
+  40          /******************************************************************************
+  41          *
+  42          * Function Name:      Get_Response
+  43          * Function Inputs:    void
+  44          * Function Outputs:   uint SW1SW2_OK  9000h
+  45          * Description:        
+  46          *
+  47          * APDU Syntax:        E5 C0 00 00 PARA3
+  48          * APDU Inputs:        PARA3  Number of bytes form IO buffer to output
+  49          * APDU Outputs:       PARA3 number of bytes
+  50          *
+  51          * Example usage:       Read 8 bytes from IO buffer
+  52          * To Card             ->  E5 C0 00 00 08
+  53          * ACK from Card       <-  C0
+  54          * Data from Card      ->  11 22 33 44 55 66 77 88
+C51 COMPILER V8.05a   GET_RESPONSE                                                         05/08/2007 13:43:16 PAGE 2   
+
+  55          * Response from Card  <-  9000
+  56          *
+  57          ******************************************************************************/
+  58          uint Get_Response (void)
+  59          {
+  60   1              if (PARA3 <= IO_BUFFER_SIZE)
+  61   1              {
+  62   2                 /* Keep outputting chars from the buffer until the PARA3 value is reached */
+  63   2                  for (ucCount = 0; ucCount < PARA3; ucCount++) 
+  64   2                  {
+  65   3                              PutChar (IO_Buffer[ucCount]);
+  66   3                      }
+  67   2                      SW1SW2 = SW1SW2_OK;
+  68   2              }
+  69   1              else
+  70   1              {
+  71   2                      SW1SW2 = SW1SW2_WRONG_LE_LENGTH;
+  72   2              }
+  73   1      
+  74   1          return SW1SW2;   /* Return a status word */
+  75   1      
+  76   1      } /* End of function */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     63    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

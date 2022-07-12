@@ -1,0 +1,186 @@
+>ID:escrpt
+>VER1
+>LIST
+
+;******************************************************************************
+; Erase_UCM_Page_Linear_Addressing.escrpt
+; =======================================
+;
+; $Revision: 1.1 $
+; $Author: chin $ 
+; $Date: 2005/11/01 13:54:53 $
+;
+; Generic script that checks the erase UCM page call functions correctly in
+; linear addressing mode (3 byte addressing, over 64K address range)
+; 
+; 1. Set the DPX value in the chip to the correct start value
+; 2. Read UCM area checking it is all FFh
+; 3. Set the DPX value in the chip to the correct start value
+; 4. Write the pattern 55 AA 55 AA 55 AA 55 AA to the start and end of the page
+;    for all the UCM pages available
+; 5. Set the DPX value in the chip to the correct start value
+; 6. Read the start and end of page to ensure pattern has been written
+; 7. Erase page and then read back start and end of page, should all be FF's
+; 8. Move to next page and repeat step 6 and 7
+;******************************************************************************
+
+
+>SETVB: bDPX_Address = (UCM_USABLE_DPX_START_ADDRESS)				; Set the DPX start address to the UCM where GSW code ends
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Set the start address to the UCM where GSW code ends
+>SETVB: bContinue_Loop = 01							; Variable to exit process loops
+
+>SETVW: wPageStart = 0000							; Variable to remember page start
+>SETVW: wPageEnd = 0000								; Variable to remember page end
+>SETVB: bNumberBytesWritten = 0							; Variable to remember number of bytes written
+
+;*******************************************************************************
+; 1. Set the DPX value in the chip to the correct start value
+;*******************************************************************************
+>APDU: E5 (Load_DPX) (UCM_USABLE_DPX_START_ADDRESS) 00 -- --			; Set DPX to start where the generic code ends
+>COMP: SW1SW2 = 9000								; Check the operation was completed successfully
+
+;******************************************************************************
+; 2. Read UCM area checking it is all FFh
+;******************************************************************************
+>DISPLAY0: Checking UCM bytes are all FFh 
+
+>WHILE: (bContinue_Loop) = 01							; Keep looping until variable to exit is reset
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 00
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
+
+    >CALC: wAddress = (wAddress) + 0100						; Point to the next address
+
+    >IF: (wAddress) = 0000							; If address has reached 0000 increment DPX
+        >CALC: bDPX_Address = (bDPX_Address) + 01
+        >APDU: E5 (Load_DPX) (bDPX_Address) 00 -- --
+        >COMP: SW1SW2 = 9000							; Check the operation was completed successfully
+    >ENDIF
+
+    >IF: (wAddress) = (UCM_END_ADDRESS)						; Check if the end of usable UCM has been reached
+        >IF: (bDPX_Address) = (UCM_DPX_END_ADDRESS)				; Check if the end of usable UCM DPX has been reached
+            >SETVB: bContinue_Loop = 00						; If so reset variable to exit this loop
+        >ENDIF
+    >ENDIF
+>LOOP
+
+>SETVB: bDPX_Address = (UCM_USABLE_DPX_START_ADDRESS)				; Set the DPX start address to the UCM where GSW code ends
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Set the start address to the UCM where GSW code ends
+>SETVB: bContinue_Loop = 01							; Reset loop exit variable
+
+>SETVW: wPageStart = (wAddress)							; Set the page start variable
+>CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+
+;*******************************************************************************
+; 3. Set the DPX value in the chip to the correct start value
+;*******************************************************************************
+>APDU: E5 (Load_DPX) (UCM_USABLE_DPX_START_ADDRESS) 00 -- --			; Set DPX to start where the generic code ends
+>COMP: SW1SW2 = 9000								; Check the operation was completed successfully
+
+;******************************************************************************
+; 4. Write the pattern 55 AA 55 AA 55 AA 55 AA to the start and end of the page
+;    for all the UCM pages available
+;******************************************************************************
+>WHILE: (bContinue_Loop) = 01							; Keep looping until variable to exit is reset
+
+    >DISPLAY0: Writing pattern 55 AA 55 AA 55 AA 55 AA at address (bDPX_Address)(wAddress)h boundaries
+
+    >WHILE: (bNumberBytesWritten) < 10						; This loop writes 16 bytes per page
+
+        >APDU: E5 (Linear_Write_Byte_NVM)00 00 04 -- (bDPX_Address)(wAddress) 55 ; Write 55h to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+        >APDU: E5 (Linear_Write_Byte_NVM)00 00 04 -- (bDPX_Address)(wAddress) AA ; Write AAh to UCM
+        >COMP: SW1SW2 = 9000
+        >CALC: wAddress = (wAddress) + 0001					; point to next byte
+
+        >CALC: bNumberBytesWritten = (bNumberBytesWritten) + 2			; Increment number of bytes written in page
+
+        >IF: (bNumberBytesWritten) = 8						; After writing the pattern at the start
+            >SETVW: wAddress = (wPageEnd)					; point to the end of the page and then
+            >CALC: wAddress = (wAddress) - 8					; adjust so 8 bytes can be written at the end
+        >ENDIF
+
+        >IF: (wAddress) = 0000							; If address has reached 0000 increment DPX
+            >CALC: bDPX_Address = (bDPX_Address) + 01
+            >APDU: E5 (Load_DPX) (bDPX_Address) 00 -- --
+            >COMP: SW1SW2 = 9000						; Check the operation was completed successfully
+        >ENDIF
+
+        >IF: (wAddress) = (UCM_END_ADDRESS)					; Check if the end of usable UCM has been reached
+            >IF: (bDPX_Address) = (UCM_DPX_END_ADDRESS)				; Check if the end of usable UCM DPX has been reached
+                >SETVB: bContinue_Loop = 00					; If so reset variable to exit this loop
+            >ENDIF
+        >ENDIF
+    >LOOP
+
+    >SETVW: wPageStart = (wAddress)						; Set the page start variable to next page
+    >CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+    >SETVB: bNumberBytesWritten = 0						; Reset the number of bytes written
+>LOOP
+
+>SETVB: bDPX_Address = (UCM_USABLE_DPX_START_ADDRESS)				; Set the DPX start address to the UCM where GSW code ends
+>SETVW: wAddress = (UCM_USABLE_START_ADDRESS)					; Set the start address to the UCM where GSW code ends
+>SETVB: bContinue_Loop = 01							; Reset loop exit variable
+
+;*******************************************************************************
+; 5. Set the DPX value in the chip to the correct start value
+;*******************************************************************************
+>APDU: E5 (Load_DPX) (UCM_USABLE_DPX_START_ADDRESS) 00 -- --			; Set DPX to start where the generic code ends
+>COMP: SW1SW2 = 9000								; Check the operation was completed successfully
+
+;******************************************************************************
+; 6. Read the start and end of page to ensure pattern has been written
+;******************************************************************************
+>WHILE: (bContinue_Loop) = 01							; Keep looping until variable to exit is reset
+
+    >DISPLAY0: Checking page starting at (bDPX_Address)(wAddress)h has pattern 55 AA 55 AA 55 AA 55 AA its boundaries
+
+    >SETVW: wPageStart = (wAddress)						; Set the page start variable
+    >CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the first 8 bytes of the page
+    >COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA					; Should match the pattern
+
+    >SETVW: wAddress = (wPageEnd)						; Point to the end of the page and then
+    >CALC: wAddress = (wAddress) - 8						; adjust so 8 bytes can be written at the end
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the last 8 bytes of the page
+    >COMP: RAPDU = 55 AA 55 AA 55 AA 55 AA					; Should match the pattern
+
+;******************************************************************************
+; 7. Erase page and then read back start and end of page, should all be FF's
+;******************************************************************************
+    >SETVW: wAddress = 	(wPageStart)						; Set the page start variable again
+    >CALC: wPageEnd = (wPageStart) + (UCM_PAGE_SIZE)				; Set the page end variable
+
+    >DISPLAY1: Erasing page starting at (bDPX_Address)(wAddress)h and checking it is contents
+
+    >APDU: E5 (Linear_Erase_UCM_256) 00 00 03 -- (bDPX_Address) (wAddress)	; Erase the UCM page contenets
+    >COMP: SW1SW2 = 9000							; Check the firmware call return value
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the first 8 bytes of the page
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF					; Should all be FFh's
+
+    >SETVW: wAddress = (wPageEnd)						; Point to the end of the page and then
+    >CALC: wAddress = (wAddress) - 8						; adjust so 8 bytes can be written at the end
+
+    >APDU: E5 (XDATA_Space_Memory_Dump) (wAddress) -- 08			; Read the last 8 bytes of the page
+    >COMP: RAPDU = FF FF FF FF FF FF FF FF					; Should all be FFh's
+
+    >CALC: wAddress = (wAddress) + 0008						; Point to the next page
+
+    >IF: (wAddress) = 0000							; If address has reached 0000 increment DPX
+        >CALC: bDPX_Address = (bDPX_Address) + 01
+        >APDU: E5 (Load_DPX) (bDPX_Address) 00 -- --
+        >COMP: SW1SW2 = 9000							; Check the operation was completed successfully
+    >ENDIF
+
+    >IF: (wAddress) = (UCM_END_ADDRESS)						; Check if the end of usable UCM has been reached
+        >IF: (bDPX_Address) = (UCM_DPX_END_ADDRESS)				; Check if the end of usable UCM DPX has been reached
+            >SETVB: bContinue_Loop = 00						; If so reset variable to exit this loop
+        >ENDIF
+    >ENDIF
+>LOOP
+
+>ENDL
